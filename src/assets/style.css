@@ -118,7 +118,7 @@ a {
   padding: 12px 0;
 }
 
-.btn {
+.fat-btn {
   font-size: 16px;
   background: var(--background);
   color: var(--color);
@@ -291,6 +291,7 @@ a {
   padding: 40px;
   background-color: #FFF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  z-index: 50;
 }
 
 .card-title {
@@ -309,6 +310,18 @@ a {
   align-items: stretch;
 }
 
+.grid-full {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
+  grid-gap: 24px;
+  align-items: stretch;
+  grid-column: 1 / -1;
+}
+
+.grid-full input {
+  width: calc(100% - 5px);
+}
+
 @media only screen and (max-width: 600px) {
   .grid {
     grid-template-columns: 1fr;
@@ -324,6 +337,7 @@ a {
   align-content: flex-start;
   grid-template-rows: min-content;
   grid-gap: 8px;
+  color: var(--background);
 }
 
 .form-control {
@@ -333,4 +347,120 @@ a {
   border-radius: 6px;
   font-size: 16px;
   padding: 14px 10px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  outline: 0;
+  background: rgba(0, 9, 61, .15);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-dialog {
+  position: relative;
+  width: 90%;
+  max-width: 1028px;
+  padding: 24px;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: rgba(0, 9, 61, .45) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+
+@supports(-webkit-appearance: none) or (-moz-appearance: none) {
+  .btn {
+    --active: #275EFE;
+    --active-inner: #fff;
+    --focus: 2px rgba(39, 94, 254, .3);
+    --border: #BBC1E1;
+    --border-hover: #275EFE;
+    --background: #fff;
+    --disabled: #F6F8FF;
+    --disabled-inner: #E1E6F9;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    height: 21px;
+    outline: none;
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid var(--bc, var(--border));
+    background: var(--b, var(--background));
+    transition: background .3s, border-color .3s, box-shadow .2s;
+    border-radius: 7px;
+  }
+
+  .btn:after {
+    content: '';
+    display: block;
+    width: 5px;
+    height: 9px;
+    border: 2px solid var(--active-inner);
+    border-top: 0;
+    border-left: 0;
+    left: 7px;
+    top: 4px;
+    transform: rotate(var(--r, 20deg));
+    position: absolute;
+    transition: transform var(--d-t, .3s) var(--d-t-e, ease), opacity var(--d-o, .2s);
+  }
+
+  .btn:disabled {
+    --b: var(--disabled);
+    cursor: not-allowed;
+    opacity: .9;
+  }
+  .btn:disabled + label {
+    cursor: not-allowed;
+  }
+  .btn:hover:not(:disabled) {
+    --bc: var(--border-hover);
+  }
+  .btn:focus {
+    box-shadow: 0 0 0 var(--focus);
+  }
+  .btn + label {
+    font-size: 14px;
+    line-height: 21px;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+}
+
+.btn {
+  border-radius: 50px !important;
+  padding: 6px !important;
+  height: 30px;
+  width: 30px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e2235;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-weight: 900;
+}
+
+.display-none {
+  display: none;
 }

@@ -22,8 +22,42 @@ class Form {
     HTML;
   }
 
-  private function getInputClass (string $key): string 
-  {
+  public function number (string $key, string $label, string $value = "00.01"): string {
+    return <<<HTML
+      <div class="form-group">
+        <label for="field{$key}">{$label}</label>
+        <input type="number" min="0.01" step="0.01" max="2500" value="{$value}">
+      </div>
+    HTML;
+  }
+
+  public function select (string $key, string $label, array $options = [], string $value = ""): string {
+    $optionsHTML = [];
+    foreach($options as $k => $v) {
+      $selected = $v == $value ? " selected" : "";
+      $optionsHTML[] = "<option value=\"$v\" $selected>$v</option>";
+    }
+    $optionsHTML = implode('', $optionsHTML);
+    return <<<HTML
+      <div class="form-group">
+        <label for="field{$key}">{$label}</label>
+        <select id="field{$key}" class="{$this->getInputClass($key)}" name="{$key}" required>{$optionsHTML}</select>
+        {$this->getErrorFeedback($key)}
+      </div>
+    HTML;
+  }
+
+  public function date (string $key, string $label, string $value = ""): string {
+    return <<<HTML
+      <div class="form-group">
+        <label for="field{$key}">{$label}</label>
+        <input type="date" id="field{$key}" class="{$this->getInputClass($key)}" name="{$key}" value="{$value}" required>
+        {$this->getErrorFeedback($key)}
+      </div>
+    HTML;
+  }
+
+  private function getInputClass (string $key): string {
     $inputClass = 'form-control';
     if (isset($this->errors[$key])) {
         $inputClass .= ' is-invalid';

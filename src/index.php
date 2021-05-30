@@ -15,5 +15,7 @@
   ?>
   <?php require_once('./Views/Calendar.php'); ?>
   <?php require_once('./Views/employees/edit.php'); ?>
+
+  <script src="./assets/app.js"></script>
 </body>
 </html>
