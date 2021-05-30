@@ -1,2 +1,8 @@
 # env vars
 .env
+
+# lock files
+*.lock
+
+# vendor directory
+vendor/

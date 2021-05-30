@@ -1,0 +1,9 @@
+{
+  "name": "csi/scheduler",
+  "description": "Code source du scheduler",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
