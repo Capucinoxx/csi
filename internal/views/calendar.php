@@ -97,13 +97,17 @@
           <svg><use xlink:href="#circle"></svg>
         </a>
 
-        <a class="btn">
+        <a 
+          href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
+          class="btn"
+        >
         Semaine courante
         </a>
 
-        <a href="
-          <?php echo $_SERVER['PHP_SELF'].'?'.increaseHandler($dt); ?>
-        " class="arrow">
+        <a 
+          href="<?php echo $_SERVER['PHP_SELF'].'?'.increaseHandler($dt); ?>" 
+          class="arrow"
+        >
           <i></i>
           <svg><use xlink:href="#circle"></svg>
         </a>

@@ -25,6 +25,7 @@ body {
   height: 100vh;
   overflow: hidden;
   background: var(--white-bg);
+  color: var(--background);
 }
 
 body:before {
@@ -45,6 +46,10 @@ body:before {
 
 ul {
   padding: 0;
+}
+
+a {
+  text-decoration: none;
 }
 
 .scroll {
