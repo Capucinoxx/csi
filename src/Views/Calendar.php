@@ -99,7 +99,7 @@
 
         <a 
           href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
-          class="btn"
+          class="fat-btn"
         >
         Semaine courante
         </a>
