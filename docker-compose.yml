@@ -24,7 +24,7 @@ services:
     ports:
       - "8002:80"
     volumes:
-      - ${PROJECT_ROOT}/:/var/www/html/
+      - ${PROJECT_ROOT}/:/var/www/html
     container_name: apache
   mysql:
     image: mysql:${MYSQL_VERSION:-latest}
@@ -43,10 +43,10 @@ services:
     container_name: mysql
   composer:
     image: composer/composer
-    working_dir: /var/www/html/src
+    working_dir: /var/www/html
     command: install
     volumes:
-      - ${PROJECT_ROOT}:/var/www/html/src
+      - ${PROJECT_ROOT}/:/var/www/html
     container_name: 'composer'
 networks:
   frontend:
