@@ -11,6 +11,10 @@
   --alert-bg: #ffd3e288;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -38,8 +42,24 @@ body:before {
   opacity: .4;
 }
 
-.toto {
-  background: red;
+
+ul {
+  padding: 0;
+}
+
+.scroll {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  position: relative;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
 }
 
 .wrapper {
@@ -57,7 +77,7 @@ body:before {
   z-index: 1;
 }
 
-.wrapper-overflow {
+.wrapper-hidden {
   width: 100%;
   max-width: 100%;
   height: 100%;
@@ -86,6 +106,11 @@ body:before {
 .banner__actions {
   z-index: 1;
   display: flex;
+}
+
+.banner__inf {
+  color: var(--background);
+  padding: 12px 0;
 }
 
 .btn {
@@ -167,4 +192,87 @@ body:before {
 
 .arrow i:after {
   transform: rotate(40deg);
+}
+
+.schedule__events {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #E1E6F9;
+  overflow: hidden;
+  position: relative;
+}
+
+.schedule__events::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 20px;
+  border-radius: 0 0 15px 15px;
+  background: linear-gradient(rgba(white, 0), rgba(white, 1));
+}
+
+.schedule__events ul {
+  list-style: none;
+}
+
+.schedule__row {
+  width: 100%;
+  padding: 30px 0;
+  position: relative;
+}
+
+.schedule__row::after {
+  content: '';
+  position: absolute;
+  top: calc(50% - 2px);
+  height: 2px;
+  box-shadow: inset -1px -2px #cdcfd3;;
+  left: 60px;
+  right: 0;
+}
+
+.schedule__row.midi::after {
+  box-shadow: inset -1px -1px var(--progress);
+}
+
+.ml-60 {
+  display: flex;
+  position: absolute;
+  left: 80px;
+  top: 0;
+  bottom: 45px;
+  right: 0;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.schedule__group {
+  flex: 1 1 0;
+  height: 100%;
+}
+
+
+.py-30 {
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+.schedule__group:not(:first-child) {
+  border-left: #cdcfd3 2px solid;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+}
+
+.h-100 {
+  min-height: 100%;
 }

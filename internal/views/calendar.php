@@ -4,7 +4,7 @@
    * création des tableaux de références des jours de la semaine
    * et des mois de l'année
    -----------------------------------------------------------*/
-  $week_day = array(
+  $week_days = array(
     'dim', 
     'lun', 
     'mar', 
@@ -109,7 +109,7 @@
         </a>
       </div>
 
-      <div class="banner_inf">
+      <div class="banner__inf">
         <?php 
           $start_month = $sunday->format('n');
           $end_month = $saturday->format('n');
@@ -121,15 +121,37 @@
       </div>
     </div>
 
-    <ul>
-      <?php foreach (range(12,46) as $value): ?>
-        <li>
-          <span>
-            <?php echo format_date($value / 2.0); ?>
-          </span>
-        </li>
-      <?php endforeach; ?>
-    </ul>
+    <div class="schedule__events">
+      <div class="scroll">
+        <div style="position: relative">
+          <ul class="py-30">
+            <?php foreach (range(6, 23) as $value): ?>
+              <li 
+                class="schedule__row <?php echo $value == 12 ? 'midi' : ''?>">
+                <span>
+                  <?php echo format_date($value); ?>
+                </span>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+
+          <ul class="ml-60 z-10" style="align-items: stretch;">
+            <?php for($i = 0, $d = clone $sunday; $i < 7; $i++, $d->modify('+1 day')): ?>
+              <li class="schedule__group">
+                <div class="flex-center">
+                  <?php echo $week_days[$i]." ".$d->format('d'); ?>
+                </div>
+
+                <ul class="h-100">
+
+                </ul>
+              </li>
+            <?php endfor; ?>
+          </ul>
+
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
