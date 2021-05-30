@@ -79,6 +79,20 @@
 
      return $hour.":".$minute;
    };
+
+  /* Liste des évennements
+   * -------------------------------------------------
+   * 
+   -----------------------------------------------------------*/
+  // prend les données des évenneemnts de la semaine représentée
+  // $events = json_decode(
+  //   Employee::getTimesheet(
+  //      $_SESSION['id'], 
+  //      $sunday->getTimestamp() * 1000,
+  //      $saturday->getTimestamp() * 1000
+  //   ), true
+  // );
+
 ?>
 
 <div class="wrapper">
@@ -147,6 +161,7 @@
                 </div>
 
                 <ul class="h-100">
+
 
                 </ul>
               </li>
