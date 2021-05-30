@@ -364,13 +364,45 @@ a {
 }
 
 .modal-dialog {
+  min-height: 800px;
   position: relative;
   width: 90%;
   max-width: 1028px;
   padding: 24px;
   border-radius: 7px;
   background: #fff;
+  display: inline-flex;
+  flex-direction: column;
+  overflow: hidden;
   box-shadow: rgba(0, 9, 61, .45) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+}
+
+.list-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+  width: calc(100% - 50px);
+  height: calc(100% - 70px);
+}
+
+.form-modal {
+  position: absolute;
+  top: 150%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 50px);
+  height: calc(100% - 70px);
+  transition: all 0.2s ease;
+}
+
+.modal-dialog:hover .list-modal {
+  top: -50%;
+}
+
+.modal-dialog:hover .form-modal {
+  top: 50%;
 }
 
 @supports(-webkit-appearance: none) or (-moz-appearance: none) {
@@ -456,8 +488,8 @@ a {
 
 .close {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 0;
+  right: 10px;
   font-weight: 900;
 }
 
