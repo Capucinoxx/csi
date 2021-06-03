@@ -397,11 +397,11 @@ a {
   transition: all 0.2s ease;
 }
 
-.modal-dialog:hover .list-modal {
+.modal-dialog.selected .list-modal {
   top: -50%;
 }
 
-.modal-dialog:hover .form-modal {
+.modal-dialog.selected .form-modal {
   top: 50%;
 }
 
@@ -495,4 +495,34 @@ a {
 
 .display-none {
   display: none;
+}
+
+.flex-y {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-y >*:nth-child(2n) {
+  margin-left: 10px;
+}
+
+.arrow-top i::before {
+	border-style: solid;
+	border-width: 0.25em 0.25em 0 0;
+	content: '';
+	display: inline-block;
+	height: 0.45em;
+	/* left: 0.15em; */
+	position: relative;
+	/* top: 0.15em; */
+	transform: rotate(-45deg);
+	vertical-align: top;
+	width: 0.45em;
+  border-color: var(--background);
+}
+
+.arrow-top i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
