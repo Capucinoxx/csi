@@ -384,7 +384,41 @@ a {
   transform: translate(-50%, -50%);
   transition: all 0.2s ease;
   width: calc(100% - 50px);
-  height: calc(100% - 70px);
+}
+
+.list-container {
+  list-style: none;
+  margin-left: 10px;
+  margin-right: 10px;
+  box-shadow: rgba(0, 9, 61, 0.45) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+  height: 600px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background: rgba(197, 200, 216, .55);
+}
+
+.list-item {
+  width: 100%;
+  border-radius: 4px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  position: relative;
+  padding-left: 30px;
+  background: var(--color);
+}
+
+.list-item:hover {
+  background-color: rgba(55, 65, 122, 0.151);
+}
+
+.list-item:not(:first-child)::after {
+  content: '';
+  height: 2px;
+  left: 15px;
+  right: 15px;
+  background-color: rgba(0, 9, 61, .15);
+  position: absolute;
+  top: 0;
 }
 
 .form-modal {

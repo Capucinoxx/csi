@@ -19,7 +19,7 @@
       <div>
         <input class="form-control" type="text" onkeyup="" />
         <div class="scroll">
-          <ul>
+          <ul class="list-container">
             <? foreach($employees as $e): ?>
               <? if(!$e['employee']['deleted_at']): ?>
                 <li class="flex employee">
@@ -29,9 +29,8 @@
                 </li>
               <? endif; ?>
             <? endforeach; ?>
-            <li class="flex employee">
-                  <span>toto</span>
-                </li>
+            <li class="flex employee list-item"><span>toto</span></li>
+            <li class="flex employee list-item"><span>tato</span></li>
           </ul>
         </div>
       </div>

@@ -26,7 +26,7 @@ class Form {
     return <<<HTML
       <div class="form-group">
         <label for="field{$key}">{$label}</label>
-        <input type="number" min="0.01" step="0.01" max="2500" value="{$value}">
+        <input class="{$this->getInputClass($key)}" type="number" min="0.01" step="0.01" max="2500" value="{$value}">
       </div>
     HTML;
   }
