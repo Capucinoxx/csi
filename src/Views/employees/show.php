@@ -16,16 +16,14 @@
       <button type="button" class="btn flex-center close" aria-label="close">
         <span aria-hidden="true">x</span>
       </button>
-      <div>
-        <input class="form-control" type="text" onkeyup="" />
+      <div class="searchlist">
+        <input class="searchbox form-control" type="text" onkeyup="" />
         <div class="scroll">
           <ul class="list-container">
             <? foreach($employees as $e): ?>
               <? if(!$e['employee']['deleted_at']): ?>
                 <li class="flex employee">
-                  <span>
                     <?= $e['employee']['last_name'].', '.$e['employee']['first_name'] ?>
-                  </span>
                 </li>
               <? endif; ?>
             <? endforeach; ?>
