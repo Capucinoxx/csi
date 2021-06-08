@@ -96,12 +96,12 @@
 ?>
 
 <div class="wrapper">
-   <div class="wrapper-title">
-      <h2>Gestionnaire d'horaire</h2>
-   </div>
-   <div class="wrapper-hidden">
+  <? require_once(dirname(__FILE__) . '/Settings.php'); ?>
+  <div class="wrapper-title">
+    <h2>Gestionnaire d'horaire</h2>
+  </div>
+  <div class="wrapper-hidden">
     <div class="banner">
-
       <div class="banner__actions">
         <a 
           href="<?php echo $_SERVER['PHP_SELF'].'?'.decreaseHandler($dt); ?>" 

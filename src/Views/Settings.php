@@ -20,15 +20,15 @@
   }
 ?>
 
-<nav>
+<nav class="navbar">
   <ul class="navbar-nav">
-    <li class="nav-item">
+    <li class="arrow nav-item">
       t
     </li>
-    <li class="nav-item">
+    <li class="arrow nav-item">
       p
     </li>
-    <li class="nav-item">
+    <li class="arrow nav-item">
       s
 
       <div class="dropdown hidden">
