@@ -44,11 +44,11 @@ class Timesheet extends Database {
         JOIN labels ON (events.id_label = labels.id)
       WHERE timesheets.id_employee = :id AND at BETWEEN :from AND :to
         ORDER BY id_employee ASC;
-    "
+    ";
 
     $stmt = $this->db->prepare($sql);
     $stmt->execute([':id' => $id, ':from' => $from, ':to' => $to]);
-    return $stmt->fetch(PDO::FETCH_ASSOC)
+    return $stmt;
   }
 }
 

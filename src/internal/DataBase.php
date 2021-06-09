@@ -1,30 +1,34 @@
 <?php
 namespace App\Internal;
 use \PDO;
+use App\Utils\DotEnv;
 
 class DataBase {
-  private PDO $db_connection;
+  protected $db_connection;
 
-  public function make() {
+  public function __construct() {
+
     try {
-      $db_connection = new PDO (
-            "{$_ENV['DB_DRIVER']}:host={$_ENV['host']};dbname={$_ENV['DB_NAME']}",
+      (new DotEnv(__DIR__ . '/../.env'))->load();
+      
+      $this->db_connection = new PDO (
+            "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}",
             $_ENV['DB_USERNAME'],
-            $_ENV['DB_PASSWORD'],
-            array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION)
+            $_ENV['DB_PASSWORD']
       );
+      $this->db_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
       $sql = "SET NAMES 'utf8';";
 
-      $query = $db_connection->prepare($sql);
+      $query = $this->db_connection->prepare($sql);
       $query->execute();
 
     } catch(Exception $e) {
-        dd($e->getMessage());
+      echo "Connection failed: " . $e -> getMessage();
     }
   }
 
-  public function getConnection() {
+  public function getDBConnection() {
     return $this->db_connection;
   }
 }
