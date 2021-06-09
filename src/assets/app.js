@@ -46,7 +46,7 @@ const searchList = (listContainer) => {
  * ouverte
  */
 const bindModal = () => {
-  document.querySelectorAll('[data-modal]').forEarch(el => {
+  [...document.querySelectorAll('[data-modal]')].forEarch(el => {
     const modalId = el.getAttribute('data-modal')
 
     modalId && document.getElementById(modal).addEventListener('click', 
@@ -57,10 +57,39 @@ const bindModal = () => {
   })
 }
 
+/* bindEditionItem
+ * ------------------------------------------
+ * Permet 
+ *  
+ */
+const bindItemsEditTransition = () => {
+  document.querySelectorAll('.modal-dialog').forEach(modal => {
+    // pour chaque modal, ajouter un événnement pour chaque item
+    modal.querySelectorAll('.list-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault()
+        modal.classList.add('selected')
+      })
+    })
+
+    // ajoutes un évennement lorsque quelqu'un clique sur sur le bouton
+    // pour revenir à la liste
+    modal.querySelector('.gotoList').addEventListener('click', (e) => {
+      e.preventDefault()
+      modal.classList.remove('selected')
+    }) 
+  })
+
+}
+
+
 /*------------------------------ MAIN ----------------------------------*/
 
 // pour chaque liste de recherche, on greffe la logique permettant de faire un tri de liste à
 // l'aide d'une boîte de recherche
 searchList('.searchlist')
 
-bindModal()
+// bindModal()
+
+
+bindItemsEditTransition()

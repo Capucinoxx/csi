@@ -9,7 +9,7 @@
 ?>
 
 
-<div id="modal-labels" class="modal" style="display:none">
+<div id="modal-labels" class="modal">
   <div class="modal-dialog">
     <section class="list-modal">
       <div class="card-title">Liste des libellés</div>
@@ -23,6 +23,7 @@
             <? foreach($labels as $e): ?>
 
             <? endforeach; ?>
+            <li class="flex label list-item"><span>toto</span></li>
           </ul>
         </div>
       </div>
@@ -48,6 +49,10 @@
           <span aria-hidden="true">x</span>
         </button>
       </div>
+      <form action="" class="grid">
+        <?= $form->input('color', 'Couleur', '', 'color') ?>
+      </form>
+
     </section>
   </div>
 </div>

@@ -80,17 +80,3 @@
     </section>
   </div>
 </div>
-
-<script type="text/javascript">
-  const modal = document.querySelector('.modal-dialog')
-  document.querySelectorAll('.employee').forEach(
-    (employee) => employee.addEventListener('click', () => modal.classList.add('selected'))
-  )
-
-  document.querySelectorAll('.gotoList').forEach(
-    (btn) => btn.addEventListener('click', (e) => {
-      e.preventDefault()
-      modal.classList.remove('selected')
-    })
-  )
-</script>

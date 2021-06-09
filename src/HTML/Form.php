@@ -11,8 +11,7 @@ class Form {
       $this->errors = $errors;
   }
 
-  public function input (string $key, string $label, string $value = ""): string {
-    $type = $key === "password" ? "password" : "text";
+  public function input (string $key, string $label, string $value = "", string $type = "text"): string {
     return <<<HTML
       <div class="form-group">
         <label for="field{$key}">{$label}</label>
