@@ -15,6 +15,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -26,6 +30,7 @@ body {
   overflow: hidden;
   background: var(--white-bg);
   color: var(--background);
+  font-family: 'Poppins';
 }
 
 body:before {

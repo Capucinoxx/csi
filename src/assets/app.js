@@ -1,6 +1,6 @@
 const modalEmployees = document.getElementById('modal-employees')
 // modalEmployee.classList.add('display-none')
-modalEmployees.querySelectorAll('button[aria-label="close"]')
+modalEmployees && modalEmployees.querySelectorAll('button[aria-label="close"]')
   .forEach((element) => element.addEventListener('click', () => {
   modalEmployees.classList.add('display-none')
 }))
@@ -37,9 +37,30 @@ const searchList = (listContainer) => {
   })
 }
 
+/* bindModal
+ * ------------------------------------------
+ * Permet à l'utilisateur d'ouvrir les différentes
+ * fenêtres modales en cliquant sur l'élément associé.
+ * Cet élément doit avoit la propriété [data-modal] 
+ * comportant l'id de la fenêtre modal souhaitant être
+ * ouverte
+ */
+const bindModal = () => {
+  document.querySelectorAll('[data-modal]').forEarch(el => {
+    const modalId = el.getAttribute('data-modal')
+
+    modalId && document.getElementById(modal).addEventListener('click', 
+      (modal) => {
+        modal.classList.add('visible')
+      }
+    )
+  })
+}
 
 /*------------------------------ MAIN ----------------------------------*/
 
 // pour chaque liste de recherche, on greffe la logique permettant de faire un tri de liste à
 // l'aide d'une boîte de recherche
 searchList('.searchlist')
+
+bindModal()

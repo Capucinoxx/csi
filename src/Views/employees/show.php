@@ -9,7 +9,7 @@
   $form = new Form($employee, $errors);
 ?>
 
-<div id="modal-employees" class="modal">
+<div id="modal-employees" class="modal" style="display: none">
   <div class="modal-dialog">
     <section class="list-modal">
       <div class="card-title">Liste des employées</div>
