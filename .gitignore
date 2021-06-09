@@ -8,3 +8,5 @@
 vendor/
 
 .todo
+
+.vscode

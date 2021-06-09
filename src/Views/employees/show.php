@@ -17,7 +17,7 @@
         <span aria-hidden="true">x</span>
       </button>
       <div class="searchlist">
-        <input class="searchbox form-control" type="text" onkeyup="" />
+        <input class="searchbox form-control" type="text" />
         <div class="scroll">
           <ul class="list-container">
             <? foreach($employees as $e): ?>

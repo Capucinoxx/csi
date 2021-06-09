@@ -29,7 +29,10 @@
     //    echo "Connection failed: " . $e -> getMessage();
     // }
   ?>
-   <?php require_once('./Views/employees/show.php'); ?> 
+  <?php 
+    require_once('./Views/employees/show.php'); 
+    require_once('./Views/labels/show.php');
+  ?> 
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>
   <script src="./assets/app.js"></script>
