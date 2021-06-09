@@ -96,13 +96,14 @@ a {
 }
 
 .wrapper-title {
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   justify-content: center;
   position: absolute;
-  top: -70px;
-  left: 0;
-  right: 0;
+  top: -20px;
+  left: 20px;
+  font-size: 20px;
+  /* right: 0; */
 }
 
 
