@@ -636,3 +636,12 @@ a {
 .visible {
   display: flex !important;
 }
+
+.event-card {
+  width: 100%;
+}
+
+.event-list {
+  padding-left: 1px;
+  padding-right: 1px;
+}

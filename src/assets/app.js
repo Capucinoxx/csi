@@ -31,7 +31,7 @@ const searchList = (listContainer) => {
         let label = children.innerText.toLowerCase()
         
         // on met en display none si l'enfant n'est pas concerné par la recherche
-        children.style.display = label.indexOf(value) != -1 ? 'block' : 'none'
+        children.style.display = label.indexOf(value) !== -1 ? 'block' : 'none'
       })
     })
   })
@@ -46,10 +46,10 @@ const searchList = (listContainer) => {
  * ouverte
  */
 const bindOpenModal = () => {
-  [...document.querySelectorAll('[data-modal]')].forEarch(el => {
+  [...document.querySelectorAll('[data-modal]')].forEach(el => {
     const modalId = el.getAttribute('data-modal')
 
-    modalId && document.getElementById(modal).addEventListener('click', 
+    modalId && document.getElementById(modalId).addEventListener('click',
       (modal) => {
         modal.classList.add('visible')
       }

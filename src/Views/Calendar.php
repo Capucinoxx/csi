@@ -80,11 +80,42 @@
      return $hour.":".$minute;
    };
 
+  //  génère les information de la balise style de l'évennement ciblé
+  function generate_style_event(float $start_date, float $end_date, string $color = ""): string {
+    $style = "";
+    $style .= "box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px, inset 0 -3px " . rgba($color, .6) . ";";
+    $style .= "color: {$color}; background: white;";
+
+    // calcule la position de départ de l'évennement
+
+    // $top_position = floor($start_date) * 60 + ($start_date - floor($start_date) * 60);
+    // $event_height = 
+
+    // calcule la position de fin de l'évennement
+
+    return $style;
+  }
+
+  /* Gestion des évennements hebdomadaire
+   * -------------------------------------------------
+   * 
+   -----------------------------------------------------------*/
+  $projects_week = array(array(
+    (object) ['title' => 'test', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
+  ), array(), array(), array(), array(), array(), array());
+
+
+  //  prend une valeur hexa et retourne sous le forma rgba()
+  function rgba(string $hex, float $alpha): string {
+    list($r, $g, $b) = sscanf($hex, "#%02x%02x%02x");
+    return "rgba(" . $r . "," . $g . "," . $b . "," . $alpha . ")";
+  }
+
   /* Liste des évennements
    * -------------------------------------------------
    * 
    -----------------------------------------------------------*/
-  // prend les données des évenneemnts de la semaine représentée
+  // prend les données des évennements de la semaine représentée
   // $events = json_decode(
   //   Employee::getTimesheet(
   //      $_SESSION['id'], 
@@ -160,8 +191,16 @@
                   <?php echo $week_days[$i]." ".$d->format('d'); ?>
                 </div>
 
-                <ul class="h-100">
-
+                <ul class="h-100 event-list">
+                  <?php foreach($projects_week[$i] as $project): ?>
+                    <li 
+                      class="event-card"
+                      style="<?= generate_style_event($project->start, $project->end, $project->color) ?>"
+                    >
+                      <?= $project->title ?>
+                      <?= generate_style_event($project->start, $project->end, $project->color) ?>
+                    </li>
+                  <?php endforeach; ?>
 
                 </ul>
               </li>
