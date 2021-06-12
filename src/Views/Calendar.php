@@ -82,14 +82,18 @@
 
   //  génère les information de la balise style de l'évennement ciblé
   function generate_style_event(float $start_date, float $end_date, string $color = ""): string {
-    $style = "";
+    $style = "position: absolute;";
     $style .= "box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px, inset 0 -3px " . rgba($color, .6) . ";";
     $style .= "color: {$color}; background: white;";
 
     // calcule la position de départ de l'évennement
 
-    // $top_position = floor($start_date) * 60 + ($start_date - floor($start_date) * 60);
-    // $event_height = 
+    // ** le -8px provient de l'espace en haut 
+    $top_position = (string)(($start_date - 6.0) * 100.0 / (24.0 - 6.0));
+    $style .= "top: {$top_position}%;";
+
+    $event_height = ($end_date - $start_date) * 100.0 / (24.0 - 6.0);
+    $style .= "height: {$event_height}%;";
 
     // calcule la position de fin de l'évennement
 
@@ -100,9 +104,22 @@
    * -------------------------------------------------
    * 
    -----------------------------------------------------------*/
-  $projects_week = array(array(
+$projects_week = array(
+  array(
     (object) ['title' => 'test', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
-  ), array(), array(), array(), array(), array(), array());
+  ),
+  array(),
+  array(),
+  array(),
+  array(
+    (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
+    (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
+  ),
+  array(
+    (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
+  ),
+  array()
+);
 
 
   //  prend une valeur hexa et retourne sous le forma rgba()
@@ -187,7 +204,7 @@
           <ul class="ml-60 z-10" style="align-items: stretch;">
             <?php for($i = 0, $d = clone $sunday; $i < 7; $i++, $d->modify('+1 day')): ?>
               <li class="schedule__group">
-                <div class="flex-center">
+                <div class="flex-center" style="height: 54px">
                   <?php echo $week_days[$i]." ".$d->format('d'); ?>
                 </div>
 
@@ -198,7 +215,7 @@
                       style="<?= generate_style_event($project->start, $project->end, $project->color) ?>"
                     >
                       <?= $project->title ?>
-                      <?= generate_style_event($project->start, $project->end, $project->color) ?>
+                      
                     </li>
                   <?php endforeach; ?>
 

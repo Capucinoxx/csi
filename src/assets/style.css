@@ -638,10 +638,11 @@ a {
 }
 
 .event-card {
-  width: 100%;
+  width: calc(100% - 2px);
 }
 
 .event-list {
   padding-left: 1px;
   padding-right: 1px;
+  position: relative;
 }
