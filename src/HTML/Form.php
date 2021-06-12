@@ -12,10 +12,11 @@ class Form {
   }
 
   public function input (string $key, string $label, string $value = "", string $type = "text"): string {
+    $extra_class = $type == "color" ? "input-color " : "";
     return <<<HTML
       <div class="form-group">
         <label for="field{$key}">{$label}</label>
-        <input type="{$type}" id="field{$key}" class="{$this->getInputClass($key)}" name="{$key}" value="{$value}" required>
+        <input type="{$type}" id="field{$key}" class="{$extra_class}{$this->getInputClass($key)}" name="{$key}" value="{$value}" required>
         {$this->getErrorFeedback($key)}
       </div>
     HTML;

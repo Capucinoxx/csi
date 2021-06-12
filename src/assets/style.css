@@ -626,3 +626,7 @@ a {
 .arrow:hover i::before, arrow:hover i::after {
   background: #275EFE !important; 
 }
+
+.input-color {
+  padding: 1px !important;
+}
