@@ -37,7 +37,7 @@ const searchList = (listContainer) => {
   })
 }
 
-/* bindModal
+/* bindOpenModal
  * ------------------------------------------
  * Permet à l'utilisateur d'ouvrir les différentes
  * fenêtres modales en cliquant sur l'élément associé.
@@ -45,7 +45,7 @@ const searchList = (listContainer) => {
  * comportant l'id de la fenêtre modal souhaitant être
  * ouverte
  */
-const bindModal = () => {
+const bindOpenModal = () => {
   [...document.querySelectorAll('[data-modal]')].forEarch(el => {
     const modalId = el.getAttribute('data-modal')
 
@@ -57,29 +57,43 @@ const bindModal = () => {
   })
 }
 
-/* bindEditionItem
+/* bindModalActions
  * ------------------------------------------
- * Permet 
- *  
- */
-const bindItemsEditTransition = () => {
-  document.querySelectorAll('.modal-dialog').forEach(modal => {
-    // pour chaque modal, ajouter un événnement pour chaque item
+ *  Permet lorsque l'on clique sur les boutons
+ *  d'effectuer l'action voulue soit pour 
+ *  revenir à la liste, pour éditer un
+ *  élément ou pour fermer la fenêtre modale.
+*/
+const bindModalActions = () => {
+  document.querySelectorAll('.modal').forEach(modal => {
+    // element parent des deux section de la modale
+    const modalWrapper = modal.querySelector('.modal-dialog')
+
+    // pour chaque fenêtre modale, ajoutner un évennement pour chaque
+    // item envoyant à la liste d'édition
     modal.querySelectorAll('.list-item').forEach(item => {
       item.addEventListener('click', (e) => {
         e.preventDefault()
-        modal.classList.add('selected')
+        modalWrapper.classList.add('selected')
       })
     })
 
-    // ajoutes un évennement lorsque quelqu'un clique sur sur le bouton
+    // ajoutes un évennement lorsque quelqu'un clique sur le bouton
     // pour revenir à la liste
     modal.querySelector('.gotoList').addEventListener('click', (e) => {
       e.preventDefault()
-      modal.classList.remove('selected')
+      modalWrapper.classList.remove('selected')
     }) 
+  
+    // ajoutes un évennement lorsque quelqu'un clique sur le bouton
+    // pour quitter la fenêtre modale
+    modal.querySelectorAll('[aria-label="close"]').forEach(close => {
+      close.addEventListener('click', e => {
+        e.preventDefault()
+        modal.classList.remove('visible')
+      })
+    })
   })
-
 }
 
 
@@ -91,5 +105,4 @@ searchList('.searchlist')
 
 // bindModal()
 
-
-bindItemsEditTransition()
+bindModalActions()

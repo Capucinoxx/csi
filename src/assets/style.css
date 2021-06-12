@@ -369,6 +369,7 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
+  display: none;
 }
 
 .modal-dialog {
@@ -628,5 +629,10 @@ a {
 }
 
 .input-color {
-  padding: 1px !important;
+  height: 49px;
+  padding: 6px !important;
+}
+
+.visible {
+  display: flex !important;
 }

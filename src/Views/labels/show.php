@@ -9,7 +9,7 @@
 ?>
 
 
-<div id="modal-labels" class="modal">
+<div id="modal-labels" class="modal visible">
   <div class="modal-dialog">
     <section class="list-modal">
       <div class="card-title">Liste des libellés</div>
@@ -51,6 +51,16 @@
       </div>
       <form action="" class="grid">
         <?= $form->input('color', 'Couleur', '', 'color') ?>
+        <?= $form->input('title', 'Titre') ?>
+
+        <div
+          class="flex"
+          style="position: absolute; bottom: 0; right: 0;"
+        >
+          <button type="submit" class="fat-btn">
+            Édité
+          </button>
+        </div>
       </form>
 
     </section>
