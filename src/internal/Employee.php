@@ -86,13 +86,13 @@ class Employee extends Database {
       rate, rate_AMC, 
       rate_CSI, created_at, 
       deleted_at 
-    FROM employees";
+    FROM employees WHERE deleted_at IS NULL";
 
     if(!$isOne) {
       $query = $this->db_connection->prepare($sql);
       $query->execute();
     } else {
-      $sql .= " WHERE id = :id;";
+      $sql .= " AND id = :id;";
       $query = $this->db_connection->prepare($sql);
       $query->execute(['id' => $isOne]);
     }

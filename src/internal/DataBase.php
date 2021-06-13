@@ -37,15 +37,13 @@ class DataBase {
 
   protected function delete($id) {
     $sql = "
-    UPDATE employees 
+    UPDATE {$this->table_name} 
     SET deleted_at = :deleted_at
     WHERE id = :id";
-    // $sql = "UPDATE employees SET " . "deleted_at = '" . time()*1000 . "'  WHERE id=" . $id . ";";
     var_dump($sql);
     $query = $this->db_connection->prepare($sql);
     return $query->execute(
       [
-        'table_name' => $this->table_name,
         'id' => $id,
         'deleted_at' => (time()*1000)
       ]

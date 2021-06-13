@@ -27,6 +27,6 @@ var_dump($employee->createEmployee($employee_info));
 */
 
 ## Tests suppression de l'employé ##
-$employee->deleteEmployee(10);
-var_dump($employee->getByID(10));
+$employee->deleteEmployee(11);
+var_dump($employee->getByID(11));
 ?>
