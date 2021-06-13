@@ -1,12 +1,18 @@
 <?php
 namespace App\Internal;
 use App\Internal\Database;
+use App\Internal\Leave;
 use \PDO;
 
 
 class Employee extends Database {
 
-  public function getById($id) {
+  public function __construct() {
+    parent::__construct();
+    $this->table_name = 'employees';
+  }
+
+  public function getByID($id) {
     # Retourne le résultat en format dictionnaire
     return ($this->select($id))->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -15,7 +21,6 @@ class Employee extends Database {
     # Retourne le résultat en format dictionnaire
     return ($this->select(false))->fetchAll(PDO::FETCH_ASSOC);
   }
-
 
   private function getId($username) {
 
@@ -27,15 +32,29 @@ class Employee extends Database {
     return $row['id'];
   }
 
+  public function deleteEmployee($id) {
+    # Suppression de l'employé
+    $this->delete($id);
+
+    # Suppression des congés de l'employé
+    $leaves = new Leave();
+    $leaves->deleteByEmployeesID($id);
+  }
+
   public function createEmployee($params) {
 		# Vérifier si l'employé existe déjà
-		
+		if(!$this->exists($params['username'])) {
+      # Création de l'employé
+      $username = $this->insert($params);
+      
+      # Création des congés de l'employé
+      $this->insertLeaves($username);
 
-    # Création de l'employé
-		$username = $this->insert($params);
-		
-    # Création des congés de l'employé
-    $this->insertLeaves($username);
+      return true;
+    }
+
+    return (object) [
+      "error" => "Un employé existe déjà avec le nom d'utilisateur {$params['username']}."];
 	}
 
   public function getEmployee($id) {
@@ -45,6 +64,18 @@ class Employee extends Database {
   }
 
   ##  QUERIES ##
+
+  private function exists($username) {
+    # Vérifier si le username de l'employé existe déjà
+    $sql = "
+    SELECT id  
+    FROM employees
+    WHERE username = :username";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(['username' => $username]);
+
+    return ($query->rowCount() > 0);
+  }
 
   private function select($isOne) {
     $sql = "
@@ -90,23 +121,10 @@ class Employee extends Database {
   	# Id de l'employé créé
     $id = $this->getId($username);
 
-    # Date de création en unixtimestamp
-    $date = time()*1000;
-
-    # Insertion des congés
-    $sql = "
-      INSERT INTO Events(id_employee, id_label, id_leave, title, max_hours, created_at)
-      VALUES (:id, 1, 1, 'Congé mobile', 0, :date),
-            (:id, 1, 2, 'Heures maladie', 0, :date),
-            (:id, 1, 3, 'Congé parental', 0, :date),
-            (:id, 1, 4, 'Temps accumulé', 0, :date),
-            (:id, 1, 5, 'Vacances', 0, :date),
-            (:id, 1, 6, 'Congé férié', 0, :date);
-    ";
-
-    $query = $this->db_connection->prepare($sql);
-    $query->execute(['id' => $id, 'date' => $date]);
-  } 
+    # Insert leaves
+    $leaves = new Leave();
+    $leaves->insert($id);
+  }
 }
 
 ?>

@@ -4,12 +4,13 @@ use App\Internal\Employee;
 $employee = new Employee();
 
 ## Tests get employees (one and all) ##
-// var_dump($employee->getById(1));
+// var_dump($employee->getByID(10));
 // var_dump($employee->get());
 
 ## Tests employees creation ##
+/*
 $employee_info = [
-    'username' => 'test12345',
+    'username' => 'test1234567',
     'first_name' => 'Robert',
     'last_name' => 'Masson',
     'password' => '1234',
@@ -22,7 +23,10 @@ $employee_info = [
     'deleted_at' => null
 ];
 var_dump($employee_info);
+var_dump($employee->createEmployee($employee_info));
+*/
 
-$employee->createEmployee($employee_info);
-
+## Tests suppression de l'employé ##
+$employee->deleteEmployee(10);
+var_dump($employee->getByID(10));
 ?>
