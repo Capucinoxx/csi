@@ -31,8 +31,8 @@
     // }
   ?>
   <?php 
-    require_once('./Views/employees/show.php'); 
-    require_once('./Views/labels/show.php');
+    // require_once('./Views/employees/show.php'); 
+    // require_once('./Views/labels/show.php');
     require_once('./Views/actions/add.php');
   ?> 
 

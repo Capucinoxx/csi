@@ -12,7 +12,7 @@ class Form {
   }
 
 
-  public function formField(string $icon, string $label, string $key, bool $border = false): string {
+  public function formField(string $icon, string $label, string $key, string $type, bool $border = false): string {
     $class = $border ? ' border-bottom' : '';
     return <<<HTML
       <div class="flex-field{$class}">
@@ -20,7 +20,7 @@ class Form {
           <i class="{$icon}"></i>
         </div>
         <div class="form__div">
-          <input type="text" class="form__input" placeholder=" ">
+          <input type="{$type}" class="form__input" placeholder=" ">
           <label for="" name="{$key}" class="form__label">{$label}</label>
         </div>
       </div>
@@ -41,6 +41,8 @@ class Form {
       </div>
     HTML;
   }
+
+
 
   public function input (string $key, string $value = "", string $type = "text", string $placeholder = ""): string {
     $extra_class = $type == "color" ? "input-color " : "";

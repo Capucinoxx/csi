@@ -20,14 +20,14 @@
         </section>
         <section id="slide-2" class="carousel__element">
           <form action="">
-            <?= $form->formField('fas fa-user', 'Nom d\'utilisateur', 'username') ?>
-            <?= $form->formField('', 'Prénom', 'first_name') ?>
-            <?= $form->formField('', 'Nom de famille', 'last_name', true) ?>
-            <?= $form->formField('fas fa-user-tag', 'Rôle', 'role') ?>
-            <?= $form->formField('fas fa-calendar-check', 'Date d\'entrée en poste', 'created_at', true) ?>
-            <?= $form->formField('fas fa-hand-holding-usd', 'Taux horaire', 'rate')?>
-            <?= $form->formField('', 'Taux AMC', 'rate_AMC') ?>
-            <?= $form->formField('', 'Taux CSI', 'rate_CSI') ?>
+            <?= $form->formField('fas fa-user', 'Nom d\'utilisateur', 'username', 'text') ?>
+            <?= $form->formField('', 'Prénom', 'first_name', 'text') ?>
+            <?= $form->formField('', 'Nom de famille', 'last_name', 'text', true) ?>
+            <?= $form->formField('fas fa-user-tag', 'Rôle', 'role', 'text') ?>
+            <?= $form->formField('fas fa-calendar-check', 'Date d\'entrée en poste', 'created_at', 'date', true) ?>
+            <?= $form->formField('fas fa-hand-holding-usd', 'Taux horaire', 'rate', 'number')?>
+            <?= $form->formField('', 'Taux AMC', 'rate_AMC', 'number') ?>
+            <?= $form->formField('', 'Taux CSI', 'rate_CSI', 'number') ?>
             <div class="flex-end mt-2">
               <button class="save-button">Enregistrer</button>
             </div>
@@ -35,20 +35,24 @@
         </section>
         <section id="slide-3" class="carousel__element">
           <form action="">
-            <?= $form->formField('fas fa-stream', 'Référence', 'ref') ?>
-            <?= $form->formField('', 'Titre', 'title') ?>
-            <?= $form->formField('fas fa-tag', 'Libellé', 'id_label', true)?>
-            <?= $form->formField('fas fa-hourglass-half', 'Nombre limite d\'heures journalières', 'max_hours_per_day') ?>
-            <?= $form->formField('', 'Nombre limite d\'heures hebdomadaire', 'max_hours_per_week') ?>
+            <?= $form->formField('fas fa-stream', 'Référence', 'ref', 'text') ?>
+            <?= $form->formField('', 'Titre', 'title', 'text') ?>
+            <?= $form->formField('fas fa-tag', 'Libellé', 'id_label', 'text', true)?>
+            <?= $form->formField('fas fa-hourglass-half', 'Nombre limite d\'heures journalières', 'max_hours_per_day', 'number') ?>
+            <?= $form->formField('', 'Nombre limite d\'heures hebdomadaire', 'max_hours_per_week', 'number') ?>
             <div class="flex-end mt-2">
               <button class="save-button">Enregistrer</button>
             </div>
           </form>
         </section>
         <section id="slide-4" class="carousel__element">
-          formulaire ajout libellé
-          <?= $form->formField('', 'Ajouter un titre', 'title', true) ?>
-          <?= $form->formFieldColor('fas fa-palette', 'Couleur', 'color') ?>
+          <form action="">
+            <?= $form->formField('', 'Ajouter un titre', 'title', 'text', true) ?>
+            <?= $form->formFieldColor('fas fa-palette', 'Couleur', 'color') ?>
+            <div class="flex-end mt-2">
+              <button class="save-button">Enregistrer</button>
+            </div>
+          </form>
         </section>
       </div>
     </div>
