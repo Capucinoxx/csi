@@ -48,8 +48,7 @@ class ListFilter extends HTMLElement {
                 0 4px 8px rgba(0,0,0,0.07), 
                 0 8px 16px rgba(0,0,0,0.07),
                 0 16px 32px rgba(0,0,0,0.07), 
-                0 32px 64px rgba(0,0,0,0.07),
-                inset 0 -11px rgba(0,0,0,0.07);
+                0 32px 64px rgba(0,0,0,0.07);
         }
         
         .searchlist {

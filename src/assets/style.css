@@ -92,7 +92,7 @@ a {
   height: 95vh;
   width: 100%;
   border-radius: 20px;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 500;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -311,7 +311,7 @@ a {
   margin-left: auto;
   margin-right: auto;
   padding: 40px;
-  background-color: #FFF;
+  background-color: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
   z-index: 50;
 }
@@ -382,13 +382,13 @@ a {
 
 .visible {
   animation-name: openModal;
-  animation-duration: 1.3s;
+  animation-duration: .7s;
   transform: translateY(0);
 }
 
 .close-modal {
   animation-name: closeModal;
-  animation-duration: 1.3s;
+  animation-duration: .7s;
   transform: translateY(1200px);
 }
 
@@ -684,7 +684,7 @@ a {
 }
 
 .event-card {
-  width: calc(100% - 2px);
+  width: calc(100% - 10px);
 }
 
 .event-list {
@@ -970,6 +970,21 @@ resize: none;
 .btn-reverse {
   color: white;
   background: var(--b, var(--blue-bg));
+}
+
+.btn-reverse i {
+  color: white !important; 
+}
+
+.big-btn-reverse {
+  height: 46px !important;
+  width: 46px !important;
+  background: transparent;
+  font-size: 20px;
+}
+
+.big-btn-reverse::after {
+  opacity: 0 !important;
 }
 
 .btn-reverse::after {

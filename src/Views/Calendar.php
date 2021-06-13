@@ -83,8 +83,10 @@
   //  génère les information de la balise style de l'évennement ciblé
   function generate_style_event(float $start_date, float $end_date, string $color = ""): string {
     $style = "position: absolute;";
-    $style .= "box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px, inset 0 -3px " . rgba($color, .6) . ";";
-    $style .= "color: {$color}; background: white;";
+    $style .= "box-shadow: ". rgba($color, .02) ." 0px 1px 5px 0px, ". rgba($color, .15) ." 0px 0px 0px 2px, inset 0 -14px " . rgba($color, .6) . ";";
+    $style .= "color: var(--background); background: #e6e6e8; padding: 14px 12px 0 12px;";
+    // $style .= "color: var(--color); background: var(--background);";
+    $style .= "border-radius: 2px;border-bottom-left-radius: 7px; border-bottom-right-radius: 7px;";
 
     // calcule la position de départ de l'évennement
 
@@ -214,8 +216,8 @@
                       class="event-card"
                       style="<?= generate_style_event($project->start, $project->end, $project->color) ?>"
                     >
-                      <?= $project->title ?>
-                      
+                      <?= $project->title ?><br />
+                      <?= format_date($project->start)?> à <?= format_date($project->end) ?>
                     </li>
                   <?php endforeach; ?>
 
