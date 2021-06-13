@@ -25,7 +25,7 @@ class Employee extends Database {
   private function getId($username) {
     $sql = "SELECT id FROM employees WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
-    $query->execute(['username' => $username]);
+    $query->execute([':username' => $username]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
     return $row['id'];
@@ -57,12 +57,6 @@ class Employee extends Database {
     ];
 	}
 
-  public function getEmployee($id) {
-    $result = $this->selectOne($id);
-
-    return ($result ? $result : false);
-  }
-
   public function login($params) {
     # Valider que l'employé existe
     if(!$this->exists($params['username'])) {
@@ -88,7 +82,7 @@ class Employee extends Database {
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
-        'username' => $params['username']
+        ':username' => $params['username']
       ]
     );
     $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -108,7 +102,7 @@ class Employee extends Database {
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
-        'username' => $username
+        ':username' => $username
       ]
     );
 
@@ -138,7 +132,7 @@ class Employee extends Database {
     FROM employees
     WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
-    $query->execute(['username' => $username]);
+    $query->execute([':username' => $username]);
 
     return ($query->rowCount() > 0);
   }
@@ -160,7 +154,7 @@ class Employee extends Database {
     } else {
       $sql .= " AND id = :id;";
       $query = $this->db_connection->prepare($sql);
-      $query->execute(['id' => $isOne]);
+      $query->execute([':id' => $isOne]);
     }
 
     return (($query->errorCode() == "23000") ? false : $query);

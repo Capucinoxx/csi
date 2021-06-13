@@ -41,12 +41,12 @@ class DataBase {
     UPDATE {$this->table_name} 
     SET deleted_at = :deleted_at
     WHERE id = :id";
-    var_dump($sql);
+
     $query = $this->db_connection->prepare($sql);
     return $query->execute(
       [
-        'id' => $id,
-        'deleted_at' => (time()*1000)
+        ':id' => $id,
+        ':deleted_at' => (time()*1000)
       ]
     );
   }

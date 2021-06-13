@@ -28,7 +28,7 @@ class Leave extends Database {
     ";
 
     $query = $this->db_connection->prepare($sql);
-    $query->execute(['id' => $id, 'date' => $date]);
+    $query->execute([':id' => $id, ':date' => $date]);
   } 
 
   public function deleteByEmployeesID($id) {
@@ -37,12 +37,12 @@ class Leave extends Database {
     SET deleted_at = :deleted_at
     WHERE id_employee = :id_employee
     ";
-    var_dump($sql);
+
     $query = $this->db_connection->prepare($sql);
     return $query->execute(
       [
-        'deleted_at' => (time()*1000),
-        'id_employee' => $id
+        ':deleted_at' => (time()*1000),
+        ':id_employee' => $id
       ]
     );
   }
