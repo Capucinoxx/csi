@@ -50,8 +50,10 @@
         </button>
       </div>
       <form action="" class="grid">
-        <?= $form->input('color', 'Couleur', '', 'color') ?>
-        <?= $form->input('title', 'Titre') ?>
+        <?= $form->formField('', 'Ajouter un titre', 'title', true)?>
+        <?= $form->formField('fas fa-palette', 'Couleur', 'color') ?>
+
+
 
         <div
           class="flex"

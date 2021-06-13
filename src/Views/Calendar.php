@@ -104,22 +104,22 @@
    * -------------------------------------------------
    * 
    -----------------------------------------------------------*/
-$projects_week = array(
-  array(
-    (object) ['title' => 'test', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
-  ),
-  array(),
-  array(),
-  array(),
-  array(
-    (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
-    (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
-  ),
-  array(
-    (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
-  ),
-  array()
-);
+  $projects_week = array(
+    array(
+      (object) ['title' => 'test', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
+    ),
+    array(),
+    array(),
+    array(),
+    array(
+      (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
+      (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
+    ),
+    array(
+      (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
+    ),
+    array()
+  );
 
 
   //  prend une valeur hexa et retourne sous le forma rgba()
@@ -227,6 +227,10 @@ $projects_week = array(
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="btn absolute-bottom-right big-btn arrow">
+    +
   </div>
 </div>
 

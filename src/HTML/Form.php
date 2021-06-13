@@ -11,12 +11,37 @@ class Form {
       $this->errors = $errors;
   }
 
-  public function input (string $key, string $label, string $value = "", string $type = "text"): string {
+
+  public function formField(string $icon, string $label, string $key, bool $border = false): string {
+    $class = $border ? ' border-bottom' : '';
+    return <<<HTML
+      <div class="flex-field{$class}">
+        <div class="flex-center">
+          <i class="{$icon}"></i>
+        </div>
+        <div class="form__div">
+          <input type="text" class="form__input" placeholder=" ">
+          <label for="" name="{$key}" class="form__label">{$label}</label>
+        </div>
+      </div>
+    HTML;
+  }
+
+  public function input (string $key, string $value = "", string $type = "text", string $placeholder = ""): string {
     $extra_class = $type == "color" ? "input-color " : "";
     return <<<HTML
       <div class="form-group">
-        <label for="field{$key}">{$label}</label>
-        <input type="{$type}" id="field{$key}" class="{$extra_class}{$this->getInputClass($key)}" name="{$key}" value="{$value}" required>
+        <input 
+          type="{$type}" 
+          id="field{$key}" 
+          class="{$extra_class}{$this->getInputClass($key)}" 
+          name="{$key}" 
+          value="{$value}" 
+          autocomplete="off"
+          placeholder="{$placeholder}"
+          required
+
+        >
         {$this->getErrorFeedback($key)}
       </div>
     HTML;
