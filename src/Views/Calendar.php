@@ -195,7 +195,7 @@
           <ul class="py-30">
             <?php foreach (range(6, 23) as $value): ?>
               <li 
-                class="schedule__row <?php echo $value == 12 ? 'midi' : ''?>">
+                class="schedule__row <?= $value == 12 ? 'midi' : ''?>">
                 <span>
                   <?php echo format_date($value); ?>
                 </span>
