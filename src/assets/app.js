@@ -161,7 +161,7 @@ class ListFilter extends HTMLElement {
         <div class="form__div">
           <input type="text" class="form__input searchbox" placeholder=" ">
           <label for="" name="" class="form__label">
-            Recherche dans la listes des ${subject}
+            Recherche dans la liste des ${subject}
           </label>
         </div>
         <div class="scroll">
@@ -235,12 +235,12 @@ const bindActionModal = (modal, action) => {
       break;
     case 'Édition':
       // si l'on édite les sections, l'on doit pouvoir lister les éléments existant
-      ['#slide-2', '#slide-3', '#slide-4'].forEach(section => {
-        const el = modal.querySelector(`${section} form`)
+      [['#slide-2', 'employées'], ['#slide-3', 'projets'], ['#slide-4', 'libellées']].forEach(section => {
+        const el = modal.querySelector(`${section[0]} form`)
 
         const searchList = document.createElement('list-filter')
         searchList.setAttribute('items', JSON.stringify([{ id: 1, name: 'toto' }, { id: 2, name: 'tata' }, { id: 1, name: 'toto' }, { id: 2, name: 'tata' }, { id: 1, name: 'toto' }, { id: 2, name: 'tata' }]))
-        searchList.setAttribute('subject', 'Évennements')
+        searchList.setAttribute('subject', section[1])
 
         el.insertBefore(searchList, el.firstChild)
       })
