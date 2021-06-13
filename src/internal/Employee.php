@@ -1,14 +1,27 @@
 <?php
 namespace App\Internal;
 use App\Internal\Database;
+use \PDO;
+
 
 class Employee extends Database {
+
+  public function getById($id) {
+    # Retourne le résultat en format dictionnaire
+    return ($this->select($id))->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function get() {
+    # Retourne le résultat en format dictionnaire
+    return ($this->select(false))->fetchAll(PDO::FETCH_ASSOC);
+  }
+
 
   private function getId($username) {
 
     $sql = "SELECT id FROM employees WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
-    $query->execute($username);
+    $query->execute(['username' => $username]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
 
     return $row['id'];
@@ -19,7 +32,7 @@ class Employee extends Database {
 		
 
     # Création de l'employé
-		$username = $this->insert();
+		$username = $this->insert($params);
 		
     # Création des congés de l'employé
     $this->insertLeaves($username);
@@ -32,10 +45,34 @@ class Employee extends Database {
   }
 
   ##  QUERIES ##
+
+  private function select($isOne) {
+    $sql = "
+    SELECT 
+      id, username, 
+      first_name, last_name, 
+      role, regular, 
+      rate, rate_AMC, 
+      rate_CSI, created_at, 
+      deleted_at 
+    FROM employees";
+
+    if(!$isOne) {
+      $query = $this->db_connection->prepare($sql);
+      $query->execute();
+    } else {
+      $sql .= " WHERE id = :id;";
+      $query = $this->db_connection->prepare($sql);
+      $query->execute(['id' => $isOne]);
+    }
+
+    return (($query->errorCode() == "23000") ? false : $query);
+  }
+
   private function insert($params) {
-    # garder temp_passwod??
-    $hashed_password = password_hash($params['temp_password'], PASSWORD_DEFAULT);
-    $params['temp_password'] = $hashed_password;
+    # Hashage du mot de passe
+    $hashed_password = password_hash($params['password'], PASSWORD_DEFAULT);
+    $params['password'] = $hashed_password;
 
     # Insertion de l'employé
     $sql = sprintf(
@@ -49,54 +86,9 @@ class Employee extends Database {
 		return $params['username'];
   }
 
-  private function selectOne($id) {
-    $sql = "
-      SELECT 
-        id, username, 
-        first_name, last_name, 
-        role, regular, 
-        rate, rate_AMC, 
-        rate_CSI, created_at, 
-        deleted_at 
-      FROM employees 
-      WHERE id = {$id};";
-
-    $query = $this->db->prepare($sql);
-    $query->execute();
-
-    // if($query->errorCode() == "23000") {
-    //   return false;
-    // } else {
-    //   return $query;
-    // }
-    return (($query->errorCode() == "23000") ? false : $query);
-  }
-
-  private function select($isMany) {
-    $sql = "
-    SELECT 
-      id, username, 
-      first_name, last_name, 
-      role, regular, 
-      rate, rate_AMC, 
-      rate_CSI, created_at, 
-      deleted_at 
-    FROM employees;";
-
-    $query = $this->db->prepare($sql);
-    $query->execute();
-
-    // if($query->errorCode() == "23000") {
-    //   return "Cet employé n'existe pas.";
-    // } else {
-    //   return $query;
-    // }
-    return (($query->errorCode() == "23000") ? false : $query);
-  }
-
   private function insertLeaves($username) {
   	# Id de l'employé créé
-    $id = $this->getId($params['username']);
+    $id = $this->getId($username);
 
     # Date de création en unixtimestamp
     $date = time()*1000;
