@@ -95,6 +95,8 @@ const bindModalActions = () => {
 }
 
 
+
+
 /*------------------------------ MAIN ----------------------------------*/
 
 // pour chaque liste de recherche, on greffe la logique permettant de faire un tri de liste à
