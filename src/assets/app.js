@@ -1,108 +1,252 @@
-const modalEmployees = document.getElementById('modal-employees')
-// modalEmployee.classList.add('display-none')
-modalEmployees && modalEmployees.querySelectorAll('button[aria-label="close"]')
-  .forEach((element) => element.addEventListener('click', () => {
-  modalEmployees.classList.add('display-none')
-}))
+class ListFilter extends HTMLElement {
+  constructor () {
+    super()
+    this.root = this.attachShadow({ mode: 'open' })
+  }
 
-/* searchList
- * ------------------------------------------
- * Permet à l'utilisateur de faire une recherche
- * rapide en rentrant le nom de ce qu'il cherche
- * dans la liste ou une partie du nom / mot
- * 
- * la liste se filtre à chaque fois que l'utilisateur
- * actualise la valeur de la boîte de recherche
-*/
-const searchList = (listContainer) => {
-  const lists_container = document.querySelectorAll(listContainer)
-  lists_container.forEach(list_container => {
-    const search_bar = list_container.querySelector('.searchbox')
-    const childrens = Array.from(list_container.querySelector('.list-container').children)
-    
-    
-    // ajout de l'évennement lorsque l'utilisateur change la valeur dans la boîte
-    search_bar.addEventListener('keyup', (e) => {
-      const value = e.target.value.toLowerCase()
+  connectedCallback() {
+    const items = JSON.parse(this.getAttribute('items')) || []
+    const subject = this.getAttribute('subject') || ''
 
-      // pour chaque enfant de la liste, regarde si le contenu correspond à
-      // à la valeur de la barre de recherche
-      childrens.forEach(children => {
-        let label = children.innerText.toLowerCase()
-        
-        // on met en display none si l'enfant n'est pas concerné par la recherche
-        children.style.display = label.indexOf(value) !== -1 ? 'block' : 'none'
-      })
+    let childs = ''
+    items.forEach(item => {
+      childs += `
+        <li class="list-item" data-id="${item['id']}">
+          <span>${item['name']}</span>
+          <button>Éditer</button>
+        </li>
+      `
     })
-  })
+
+    this.root.innerHTML = `
+      <style>
+        :host {
+          display: block;
+        }
+        li:hover {
+          --edit-opacity: 1;
+        }
+        @media(hover:none) {
+          --edit-opacity: 1;
+        }
+
+        .searchlist {
+          width: 100%;
+        }
+
+        .scroll {
+          padding: 20px;
+          overflow-y: auto;
+          max-height: 100%;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          position: relative;
+          padding-bottom: 0;
+          padding-top: 0;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.07), 
+                0 2px 4px rgba(0,0,0,0.07), 
+                0 4px 8px rgba(0,0,0,0.07), 
+                0 8px 16px rgba(0,0,0,0.07),
+                0 16px 32px rgba(0,0,0,0.07), 
+                0 32px 64px rgba(0,0,0,0.07),
+                inset 0 -11px rgba(0,0,0,0.07);
+        }
+        
+        .searchlist {
+          margin-bottom: 44px;
+        }
+
+        .scroll::-webkit-scrollbar {
+          display: none;
+        }
+
+        .list-container {
+          list-style: none;
+          min-height: 200px;
+          max-height: 200px;
+          padding: 0 16px;
+          margin: 0;
+          font-size: 14px;
+        }
+
+        .form__div {
+          position: relative;
+          height: 48px;
+          flex: 1 1 auto;
+        }
+        
+        .form__input {
+          position: absolute;
+          top: 0;
+          top: 0;
+          left: 0;
+          width: calc(100% - 2rem);
+          border: 1px solid #DADCE0;
+          border-radius: .5rem;
+          outline: none;
+          padding: 1rem;
+          background: none;
+          z-index: 1;
+        }
+        
+        .form__label {
+          position: absolute;
+          left: 1rem;
+          top: 1rem;
+          padding: 0 .25rem;
+          background-color: #fff;
+          font-size: .85rem;
+          color: #80868B;
+          transition: .3s;
+        }
+        
+        .form__input:focus + .form__label{
+          top: -.5rem;
+          left: .8rem;
+          color: #275EFE;
+          font-size: .75rem;
+          font-weight: 500;
+          z-index: 10;
+        }
+        
+        .form__input:not(:placeholder-shown).form__input:not(:focus)+ .form__label{
+          top: -.5rem;
+          left: .8rem;
+          font-size: .75rem;
+          font-weight: 500;
+          z-index: 10;
+        }
+        
+        .form__input:focus{
+          border: 1.5px solid #275EFE;
+        }
+
+        .list-item {
+          padding: 12px 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .list-item:not(:last-child) {
+          border-bottom: 1px solid #D1D6EE;
+        }
+
+        span {
+          display: block;
+        }
+
+        button {
+          -webkit-appearance: none;
+          color: #646B8C;
+          border: none;
+          outline: none;
+          cursor: pointer;
+          border-radius: 8px;
+          padding: 4px 12px;
+          margin: 0;
+          line-height: 17px;
+          font-family: inherit;
+          font-size: 12px;
+          font-weight: 500;
+          background: var(--hover-bg, #ECEFFC);
+          opacity: var(--edit-opacity, 0);
+        }
+        button:hover {
+          --hover-bg: #E1E6F9;
+        }
+      </style>
+
+      <div class="searchlist">
+        <div class="form__div">
+          <input type="text" class="form__input searchbox" placeholder=" ">
+          <label for="" name="" class="form__label">
+            Recherche dans la listes des ${subject}
+          </label>
+        </div>
+        <div class="scroll">
+          <ul class="list-container">
+            ${childs}
+          </ul>
+        </div>
+      </div>
+    `
+
+    // attache la logique permettant à l'utilisateur de filtrer la liste
+    // à l'aide de la barre de recherche
+    const list_childrens = Array.from(this.root.querySelectorAll('.list-item'))
+    this.root.querySelector('.searchbox').addEventListener('keyup',
+      (e) => {
+        const value = e.target.value.toLowerCase()
+
+        // pour chaque enfant de la liste, on regarde si le contenu
+        // correspond à la valeur de la barre de recherche
+        list_childrens.forEach(children => {
+          let label = children.querySelector('span').innerText.toLowerCase()
+
+          // on met en display none si l'enfant n'est pas concerné par la recherche
+          children.style.display = label.indexOf(value) !== -1 ? 'flex' : 'none'
+        })
+      }
+    )
+  }
 }
 
-/* bindOpenModal
+customElements.define('list-filter', ListFilter)
+
+/* ======== FONCTIONS RELATIVES AUX FENÊTRES MODALES ======== */
+
+/* bindModal
  * ------------------------------------------
- * Permet à l'utilisateur d'ouvrir les différentes
- * fenêtres modales en cliquant sur l'élément associé.
- * Cet élément doit avoit la propriété [data-modal] 
- * comportant l'id de la fenêtre modal souhaitant être
- * ouverte
+ * Gestion des interractions avec les différentes
+ * fenêtres modales.
  */
-const bindOpenModal = () => {
+const bindModal = () => {
+  // pour chaque btn ouvrant une fenêtre modale
   [...document.querySelectorAll('[data-modal]')].forEach(el => {
+    // récupère l'id de la modale
     const modalId = el.getAttribute('data-modal')
 
+    // récupère l'action de la modale
+    const modalAction = el.getAttribute('data-action')
+
     modalId && el.addEventListener('click',
-      () => document.getElementById(modalId).classList.add('visible')
+      () => {
+        const modal = document.getElementById(modalId)
+
+        // si une action spécifique est enregistré, la disposé sinon effacé le titre existant
+        modalAction 
+          ? bindActionModal(modal, modalAction) 
+          : modal.querySelector('.modal-title').innerText = ''
+
+        // rend visible la fenêtre
+        modal.classList.add('visible')
+      }
     )
   })
 }
 
-/* bindModalActions
- * ------------------------------------------
- *  Permet lorsque l'on clique sur les boutons
- *  d'effectuer l'action voulue soit pour 
- *  revenir à la liste, pour éditer un
- *  élément ou pour fermer la fenêtre modale.
-*/
-const bindModalActions = () => {
-  document.querySelectorAll('.modal').forEach(modal => {
-    // element parent des deux section de la modale
-    const modalWrapper = modal.querySelector('.modal-dialog')
+const bindActionModal = (modal, action) => {
+  // changement du titre de la modale
+  modal.querySelector('.modal-title').innerText = action
 
-    // pour chaque fenêtre modale, ajoutner un évennement pour chaque
-    // item envoyant à la liste d'édition
-    modal.querySelectorAll('.list-item').forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault()
-        modalWrapper.classList.add('selected')
-      })
-    })
+  switch(action) {
+    case 'Ajout':
+      break;
+    case 'Édition':
+    // si l'on édite les sections, l'on doit pouvoir lister les éléments existant
+      ['#slide-1', '#slide-2', '#slide-3', '#slide-4'].forEach(section => {
+        const el = modal.querySelector(`${section} form`)
 
-    // ajoutes un évennement lorsque quelqu'un clique sur le bouton
-    // pour revenir à la liste
-    modal.querySelector('.gotoList').addEventListener('click', (e) => {
-      e.preventDefault()
-      modalWrapper.classList.remove('selected')
-    }) 
-  
-    // ajoutes un évennement lorsque quelqu'un clique sur le bouton
-    // pour quitter la fenêtre modale
-    modal.querySelectorAll('[aria-label="close"]').forEach(close => {
-      close.addEventListener('click', e => {
-        e.preventDefault()
-        modal.classList.remove('visible')
+        const searchList = document.createElement('list-filter')
+        searchList.setAttribute('items', JSON.stringify([{ id: 1, name: 'toto' }, { id: 2, name: 'tata' }, { id: 1, name: 'toto' }, { id: 2, name: 'tata' }, { id: 1, name: 'toto' }, { id: 2, name: 'tata' }]))
+        searchList.setAttribute('subject', 'Évennements')
+
+        el.insertBefore(searchList, el.firstChild)
       })
-    })
-  })
+      break;
+  }
+
 }
 
-
-
-
-/*------------------------------ MAIN ----------------------------------*/
-
-// pour chaque liste de recherche, on greffe la logique permettant de faire un tri de liste à
-// l'aide d'une boîte de recherche
-searchList('.searchlist')
-
-// bindModal()
-bindOpenModal()
-// bindModalActions()
+bindModal()

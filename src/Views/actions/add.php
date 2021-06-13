@@ -1,6 +1,8 @@
 <?php 
   use App\HTML\Form;
 
+
+
   $roles = [
     'user' => 'Utilisateur',
     'admin' => 'Administrateur'
@@ -13,12 +15,15 @@
   $form = new Form();
 ?>
 
-<div id="add-modal" class="modal visible">
+<div id="add-modal" class="modal">
   <div class="modal-dialog">
     <div class="carousel">
       <nav class="tabbar">
-        <div class="flex-end">
-          <button type="button" class="btn btn-reverse m-1 mb-0"><span>x</span></button>
+        <div class="flex-between">
+          <span class="modal-title"></span>
+          <button type="button" class="btn btn-reverse m-1 mb-0">
+            <span>x</span>
+          </button>
         </div>
         <div class="tabbar__wrapper">
           <input type="radio" name="tabbar" id="tabbar-slide-1" onClick="window.location.href='#slide-1'">
