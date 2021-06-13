@@ -10,11 +10,15 @@
 <body>
 
   <?php 
-    require_once(dirname(__DIR__).'/html/vendor/autoload.php');
+    require_once(dirname(__DIR__).'\src\vendor\autoload.php');
   
   ?>
-  <?php require_once('./Views/Calendar.php'); ?>
-  <?php require_once('./Views/employees/show.php'); ?>
+  <?php 
+    // require_once('./Views/Calendar.php'); 
+    // require_once('./Views/employees/show.php');
+    require_once('./Views/test.php'); 
+
+  ?>
 
   <script src="./assets/app.js"></script>
 </body>
