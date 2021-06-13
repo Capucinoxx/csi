@@ -13,9 +13,9 @@ class DataBase {
       (new DotEnv(__DIR__ . '/../.env'))->load();
       
       $this->db_connection = new PDO (
-            "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}",
-            $_ENV['DB_USERNAME'],
-            $_ENV['DB_PASSWORD']
+        "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}",
+          $_ENV['DB_USERNAME'],
+          $_ENV['DB_PASSWORD']
       );
       $this->db_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -36,7 +36,6 @@ class DataBase {
   ## QUERIES ##
 
   protected function delete($id) {
-
     $sql = "
     UPDATE {$this->table_name} 
     SET deleted_at = :deleted_at
@@ -51,5 +50,21 @@ class DataBase {
     );
   }
   
+  public function update($params) {
+    end($params);
+    $last_key = key($params);
+
+    $sql = "UPDATE {$this->table_name} SET ";
+    foreach ($params as $key => $value) {
+      $sql .= sprintf("%s = '%s'", $key,  $value);
+
+      if($last_key != $key) 
+        $sql .= ", ";
+    }
+    $sql .= " WHERE id = {$params['id']};"; 
+
+    $query = $this->db_connection->prepare($sql);
+    return $query->execute();
+  }
 }
 ?>
