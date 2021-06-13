@@ -49,10 +49,8 @@ const bindOpenModal = () => {
   [...document.querySelectorAll('[data-modal]')].forEach(el => {
     const modalId = el.getAttribute('data-modal')
 
-    modalId && document.getElementById(modalId).addEventListener('click',
-      (modal) => {
-        modal.classList.add('visible')
-      }
+    modalId && el.addEventListener('click',
+      () => document.getElementById(modalId).classList.add('visible')
     )
   })
 }
@@ -104,5 +102,5 @@ const bindModalActions = () => {
 searchList('.searchlist')
 
 // bindModal()
-
-bindModalActions()
+bindOpenModal()
+// bindModalActions()

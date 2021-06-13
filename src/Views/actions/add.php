@@ -13,21 +13,36 @@
   $form = new Form();
 ?>
 
-<div class="modal visible">
+<div id="add-modal" class="modal visible">
   <div class="modal-dialog">
     <div class="carousel">
-      <div class="flex-end px-18">
-        <button type="button" class="btn flex-center" aria-label="close">
-            <span aria-hidden="true">x</span>
-        </button>
-      </div>
-
-      <ul class="carousel__tags">
-        <li><a href="#slide-1">Évennement</a></li>
-        <li><a href="#slide-2">Employée</a></li>
-        <li><a href="#slide-3">Projet</a></li>
-        <li><a href="#slide-4">Libellé</a></li>
-      </ul>
+      <nav class="tabbar">
+        <div class="flex-end">
+          <button type="button" class="btn btn-reverse m-1 mb-0"><span>x</span></button>
+        </div>
+        <div class="tabbar__wrapper">
+          <input type="radio" name="tabbar" id="tabbar-slide-1" onClick="window.location.href='#slide-1'">
+          <label for="tabbar-slide-1">
+            <i class="fas fa-calendar-day"></i>
+            <span>Évennement</span>
+          </label>
+          <input type="radio" name="tabbar" id="tabbar-slide-2" onClick="window.location.href='#slide-2'">
+          <label for="tabbar-slide-2">
+            <i class="fas fa-user-plus"></i>
+            <span>Employée</span>
+          </label>
+          <input type="radio" name="tabbar" id="tabbar-slide-3" onClick="window.location.href='#slide-3'">
+          <label for="tabbar-slide-3">
+            <i class="fas fa-archive"></i>
+            <span>Projet</span>
+          </label>
+          <input type="radio" name="tabbar" id="tabbar-slide-4" onClick="window.location.href='#slide-4'">
+          <label for="tabbar-slide-4">
+            <i class="fas fa-tag"></i>
+            <span>Libellé</span>
+          </label>
+        </div>
+      </nav>
 
       <div class="carousel__elements">
         <section id="slide-1" class="carousel__element">

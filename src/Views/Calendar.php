@@ -229,7 +229,7 @@
     </div>
   </div>
 
-  <div class="btn absolute-bottom-right big-btn arrow">
+  <div class="btn absolute-bottom-right big-btn arrow" data-modal="add-modal">
     +
   </div>
 </div>
