@@ -27,6 +27,21 @@ class Form {
     HTML;
   }
 
+  public function formFieldColor(string $icon, string $label, string $key, bool $border = false): string { 
+    $class = $border ? ' border-bottom' : '';
+    return <<<HTML
+      <div class="flex-field{$class}">
+        <div class="flex-center">
+          <i class="{$icon}"></i>
+        </div>
+        <div class="form__div">
+          <input type="color" class="form__input input-color" placeholder=" ">
+          <label for="" name="{$key}" class="form__label">{$label}</label>
+        </div>
+      </div>
+    HTML;
+  }
+
   public function input (string $key, string $value = "", string $type = "text", string $placeholder = ""): string {
     $extra_class = $type == "color" ? "input-color " : "";
     return <<<HTML

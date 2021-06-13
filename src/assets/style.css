@@ -628,6 +628,21 @@ a {
   background: #275EFE !important; 
 }
 
+.input-color ~ .form__label {
+  background: transparent !important;
+}
+
+.input-color ~ .form__label::before {
+  content: '';
+  background: white;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 3px;
+  top: 0;
+  z-index: -1;
+}
+
 .input-color {
   height: 49px;
   padding: 6px !important;

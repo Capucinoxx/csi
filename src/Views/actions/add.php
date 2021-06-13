@@ -48,7 +48,7 @@
         <section id="slide-4" class="carousel__element">
           formulaire ajout libellé
           <?= $form->formField('', 'Ajouter un titre', 'title', true) ?>
-          <?= $form->formField('fas fa-palette', 'Couleur', 'color') ?>
+          <?= $form->formFieldColor('fas fa-palette', 'Couleur', 'color') ?>
         </section>
       </div>
     </div>
