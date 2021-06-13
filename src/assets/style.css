@@ -848,3 +848,29 @@ resize: none;
 .form__div--double-height {
   height: 96px;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex-x {
+  display: flex;
+  flex-direction: column;
+}
+
+.mt-1 {
+  margin-top: 7px !important;
+}
+
+.ml-2 {
+  margin-left: 14px !important;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.px-18 {
+  padding-left: 18px;
+  padding-right: 18px;
+}

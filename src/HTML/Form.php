@@ -63,6 +63,34 @@ class Form {
     HTML;
   }
 
+  public function formFieldFromTo(string $icon, array $label, array $key, bool $border = false): string {
+    $class = $border ? ' border-bottom' : '';
+
+    return <<<HTML
+      <div class="flex-field{$class}">
+        <div class="flex-center">
+          <i class="{$icon}"></i>
+        </div>
+        <div class="flex-x w-100">
+          <div class="flex-end">
+            Toute la journée
+            <input class="ml-2" type="checkbox" />
+          </div>
+          <div class="flex mt-1">
+            <div class="form__div">
+              <input type="time" class="form__input" name="{$key[0]}"/>
+              <label for="" name="{$key[0]}" class="form__label">{$label[0]}</label>
+            </div>
+            <div class="form__div">
+              <input type="time" class="form__input" name="{$key[1]}"/>
+              <label for="" name="{$key[1]}" class="form__label">{$label[1]}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    HTML;
+  }
+
 
   public function formFiedTextArea(string $icon, string $label, string $key, bool $border = false): string {
     $class = $border ? ' border-bottom' : '';

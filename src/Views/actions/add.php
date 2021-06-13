@@ -16,6 +16,12 @@
 <div class="modal visible">
   <div class="modal-dialog">
     <div class="carousel">
+      <div class="flex-end px-18">
+        <button type="button" class="btn flex-center" aria-label="close">
+            <span aria-hidden="true">x</span>
+        </button>
+      </div>
+
       <ul class="carousel__tags">
         <li><a href="#slide-1">Évennement</a></li>
         <li><a href="#slide-2">Employée</a></li>
@@ -25,8 +31,14 @@
 
       <div class="carousel__elements">
         <section id="slide-1" class="carousel__element">
-          <?= $form->formFieldOptions('fas fa-archive', 'Projet', 'id_event', $projects, true) ?>
-          <?= $form->formFiedTextArea('fas fa-comment-dots', 'Description', 'description') ?>
+          <form action="">
+            <?= $form->formFieldOptions('fas fa-archive', 'Projet', 'id_event', $projects, true) ?>
+            <?= $form->formFieldFromTo('fas fa-clock', ['De', 'A'], ['from', 'to'], true) ?>
+            <?= $form->formFiedTextArea('fas fa-comment-dots', 'Description', 'description') ?>
+            <div class="flex-end mt-2">
+              <button class="save-button">Enregistrer</button>
+            </div>
+          </form>
         </section>
         <section id="slide-2" class="carousel__element">
           <form action="">
