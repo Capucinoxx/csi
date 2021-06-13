@@ -27,6 +27,19 @@ var_dump($employee->createEmployee($employee_info));
 */
 
 ## Tests suppression de l'employé ##
+/*
 $employee->deleteEmployee(11);
 var_dump($employee->getByID(11));
+*/
+
+## Tests login ##
+/*
+var_dump($employee->getByID(9));
+$employee_login = [
+    'username' => 'test12345',
+    'password' => '1234'
+];
+var_dump($employee->login($employee_login));
+*/
+
 ?>

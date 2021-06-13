@@ -23,7 +23,6 @@ class Employee extends Database {
   }
 
   private function getId($username) {
-
     $sql = "SELECT id FROM employees WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
     $query->execute(['username' => $username]);
@@ -54,7 +53,8 @@ class Employee extends Database {
     }
 
     return (object) [
-      "error" => "Un employé existe déjà avec le nom d'utilisateur {$params['username']}."];
+      "error" => "Un employé existe déjà avec le nom d'utilisateur {$params['username']}."
+    ];
 	}
 
   public function getEmployee($id) {
@@ -63,7 +63,69 @@ class Employee extends Database {
     return ($result ? $result : false);
   }
 
+  public function login($params) {
+    # Valider que l'employé existe
+    if(!$this->exists($params['username'])) {
+      return (object) [
+        "error" => "Nom d'utilisateur incorrect."
+      ];
+    }
+      
+    # Valider que l'employé n'a pas été supprimé
+    $isDeleted = $this->deleted($params['username']);
+
+    if(!$isDeleted) {
+      # Validation du mot de passe
+      $sql = "SELECT password FROM employees WHERE username = :username;";
+      $query = $this->db_connection->prepare($sql);
+      $query->execute(
+        [
+          'username' => $params['username']
+        ]
+      );
+      $row = $query->fetch(PDO::FETCH_ASSOC);
+
+      if(!password_verify($params['password'], $row['password'])) {
+
+        return (object) [
+          "error" => "Mot de passe incorrect."
+        ];
+      }
+      return true;
+    }
+
+    return $isDeleted;
+  }
+
   ##  QUERIES ##
+
+  private function deleted($username) {
+    $sql = "SELECT deleted_at, id FROM employees WHERE username = :username;";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        'username' => $username
+      ]
+    );
+
+    if($query->rowCount() != 0) {
+      $row = $query->fetch(PDO::FETCH_ASSOC);
+
+      if($row['deleted_at'] && (time()*1000)> $row['deleted_at']) {
+        return (object) [ 
+          "error" => "Cet usager a été supprimé le " . date("Y-m-d", $row['deleted_at']/1000)
+        ];
+      }
+    } 
+
+    if($query->errorCode() == "23000") {
+      return (object) [ 
+        "error" => "Nom d'utilisateur incorrect."
+      ];
+    }
+
+    return false;
+  }
 
   private function exists($username) {
     # Vérifier si le username de l'employé existe déjà

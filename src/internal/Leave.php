@@ -35,7 +35,8 @@ class Leave extends Database {
     $sql = "
     UPDATE events 
     SET deleted_at = :deleted_at
-    WHERE id_employee = :id_employee";
+    WHERE id_employee = :id_employee
+    ";
     var_dump($sql);
     $query = $this->db_connection->prepare($sql);
     return $query->execute(

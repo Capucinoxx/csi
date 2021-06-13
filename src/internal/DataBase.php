@@ -36,6 +36,7 @@ class DataBase {
   ## QUERIES ##
 
   protected function delete($id) {
+
     $sql = "
     UPDATE {$this->table_name} 
     SET deleted_at = :deleted_at
