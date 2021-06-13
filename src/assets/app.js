@@ -234,8 +234,8 @@ const bindActionModal = (modal, action) => {
     case 'Ajout':
       break;
     case 'Édition':
-    // si l'on édite les sections, l'on doit pouvoir lister les éléments existant
-      ['#slide-1', '#slide-2', '#slide-3', '#slide-4'].forEach(section => {
+      // si l'on édite les sections, l'on doit pouvoir lister les éléments existant
+      ['#slide-2', '#slide-3', '#slide-4'].forEach(section => {
         const el = modal.querySelector(`${section} form`)
 
         const searchList = document.createElement('list-filter')
@@ -244,6 +244,12 @@ const bindActionModal = (modal, action) => {
 
         el.insertBefore(searchList, el.firstChild)
       })
+    
+      // retire la section évennement du formulaire
+      modal.querySelector('#slide-1').style.display = 'none'
+      modal.querySelector('#tabbar-slide-1').style.display = 'none'
+      modal.querySelector('label[for="tabbar-slide-1"]').style.display = 'none'
+
       break;
   }
 
