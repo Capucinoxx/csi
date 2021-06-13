@@ -9,7 +9,7 @@
 ?>
 
 
-<div id="modal-labels" class="modal visible">
+<div id="modal-labels" class="modal">
   <div class="modal-dialog">
     <section class="list-modal">
       <div class="card-title">Liste des libellés</div>

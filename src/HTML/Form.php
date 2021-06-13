@@ -6,7 +6,7 @@ class Form {
 
   private $errors;
 
-  public function __construct($data, array $errors) {
+  public function __construct($data = null, array $errors = []) {
       $this->data = $data;
       $this->errors = $errors;
   }

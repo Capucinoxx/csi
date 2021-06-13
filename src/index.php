@@ -33,6 +33,7 @@
   <?php 
     require_once('./Views/employees/show.php'); 
     require_once('./Views/labels/show.php');
+    require_once('./Views/actions/add.php');
   ?> 
 
       <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.3.4/gsap.min.js"></script>

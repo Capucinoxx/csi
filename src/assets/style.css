@@ -373,7 +373,7 @@ a {
 }
 
 .modal-dialog {
-  min-height: 800px;
+  /* min-height: 800px; */
   position: relative;
   width: 90%;
   max-width: 375px;
@@ -674,6 +674,10 @@ a {
   position: relative;
 }
 
+.border-bottom {
+  margin-bottom: 1rem;
+}
+
 .border-bottom::after {
   content: '';
   position: absolute;
@@ -681,7 +685,7 @@ a {
   left: 35px;
   right: 10px;
   height: 1px;
-  background: red;
+  background: var(--fill);
 }
 
 .flex-field .flex-center {
@@ -693,7 +697,7 @@ a {
 .form__div {
   position: relative;
   height: 48px;
-  margin-bottom: 1.5rem;
+  margin-bottom: .9rem;
   flex: 1 1 auto;
 }
 
@@ -718,6 +722,7 @@ a {
   top: 1rem;
   padding: 0 .25rem;
   background-color: #fff;
+  font-size: .85rem;
   color: #80868B;
   transition: .3s;
 }
@@ -741,4 +746,69 @@ a {
 
 .form__input:focus{
   border: 1.5px solid #275EFE;
+}
+
+.carousel {
+  overflow: hidden;
+  width: 375px;
+  height: 100%;
+  position: relative;
+}
+
+.carousel__elements {
+  display: flex;
+  
+  overflow-x: hidden;
+  scroll-snap-type: x mandatory;
+  
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.carousel__element {
+  scroll-snap-align: start;
+  flex-shrink: 0;
+  width: 375px;
+  height: 100%;
+  margin-right: 10px;
+  transform: scale(1);
+  transition: transform 0.5s;
+  position: relative;
+  padding: 12px 18px 0px 18px;
+}
+
+.carousel__tags {
+  display: flex;
+  width: 100%;
+  height: 1.5rem;
+  background: white;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  color: green;
+  list-style: none;
+  justify-content: space-around;
+}
+
+.fas {
+  color: var(--fill);
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-button {
+  padding: 8px 14px;
+  outline: none;
+  color: white;
+  background: #275EFE;
+  border: 1px solid var(--fill);
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.mt-2 {
+  margin-top: 14px !important;
 }
