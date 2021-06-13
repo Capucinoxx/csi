@@ -42,6 +42,26 @@ class Form {
     HTML;
   }
 
+  public function formFieldOptions(string $icon, string $label, string $key, array $options, bool $border = false): string {
+    $optionsHTML = [];
+    $optionsHTML[] = "<option value=\" \" selected disabled hidden></option>";
+    foreach($options as $k => $v) {
+      $optionsHTML[] = "<option value=\"$k\">$v</option>";
+    }
+    $optionsHTML = implode('', $optionsHTML);
+    return <<<HTML
+      <div class="flex-field{$class}">
+        <div class="flex-center">
+          <i class="{$icon}"></i>
+        </div>
+        <div class="form__div">
+          <select class="form__input" name="{$key}">{$optionsHTML}</select>
+          <label for="" name="{$key}" class="form__label">{$label}</label>
+        </div>
+      </div>
+    HTML;
+  }
+
 
 
   public function input (string $key, string $value = "", string $type = "text", string $placeholder = ""): string {

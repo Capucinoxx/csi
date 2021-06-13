@@ -1,6 +1,13 @@
 <?php 
   use App\HTML\Form;
 
+  $roles = [
+    'user' => 'Utilisateur',
+    'admin' => 'Administrateur'
+  ];
+
+  $labels = [];
+
   $form = new Form();
 ?>
 
@@ -23,7 +30,7 @@
             <?= $form->formField('fas fa-user', 'Nom d\'utilisateur', 'username', 'text') ?>
             <?= $form->formField('', 'Prénom', 'first_name', 'text') ?>
             <?= $form->formField('', 'Nom de famille', 'last_name', 'text', true) ?>
-            <?= $form->formField('fas fa-user-tag', 'Rôle', 'role', 'text') ?>
+            <?= $form->formFieldOptions('fas fa-user-tag', 'Rôle', 'role', $roles) ?>
             <?= $form->formField('fas fa-calendar-check', 'Date d\'entrée en poste', 'created_at', 'date', true) ?>
             <?= $form->formField('fas fa-hand-holding-usd', 'Taux horaire', 'rate', 'number')?>
             <?= $form->formField('', 'Taux AMC', 'rate_AMC', 'number') ?>
@@ -37,7 +44,7 @@
           <form action="">
             <?= $form->formField('fas fa-stream', 'Référence', 'ref', 'text') ?>
             <?= $form->formField('', 'Titre', 'title', 'text') ?>
-            <?= $form->formField('fas fa-tag', 'Libellé', 'id_label', 'text', true)?>
+            <?= $form->formFieldOptions('fas fa-tag', 'Libellé', 'id_label', $labels, true)?>
             <?= $form->formField('fas fa-hourglass-half', 'Nombre limite d\'heures journalières', 'max_hours_per_day', 'number') ?>
             <?= $form->formField('', 'Nombre limite d\'heures hebdomadaire', 'max_hours_per_week', 'number') ?>
             <div class="flex-end mt-2">
