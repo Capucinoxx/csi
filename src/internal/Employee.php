@@ -76,28 +76,32 @@ class Employee extends Database {
 
     if(!$isDeleted) {
       # Validation du mot de passe
-      $sql = "SELECT password FROM employees WHERE username = :username;";
-      $query = $this->db_connection->prepare($sql);
-      $query->execute(
-        [
-          'username' => $params['username']
-        ]
-      );
-      $row = $query->fetch(PDO::FETCH_ASSOC);
-
-      if(!password_verify($params['password'], $row['password'])) {
-
-        return (object) [
-          "error" => "Mot de passe incorrect."
-        ];
-      }
-      return true;
+      return $this->passwordValidation($params);
     }
 
     return $isDeleted;
   }
 
   ##  QUERIES ##
+  private function passwordValidation($params) {
+    $sql = "SELECT password FROM employees WHERE username = :username;";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        'username' => $params['username']
+      ]
+    );
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+
+    if(!password_verify($params['password'], $row['password'])) {
+
+      return (object) [
+        "error" => "Mot de passe incorrect."
+      ];
+    }
+
+    return true;
+  }
 
   private function deleted($username) {
     $sql = "SELECT deleted_at, id FROM employees WHERE username = :username;";
