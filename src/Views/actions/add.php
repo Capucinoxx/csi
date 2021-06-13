@@ -8,6 +8,8 @@
 
   $labels = [];
 
+  $projects = [];
+
   $form = new Form();
 ?>
 
@@ -23,7 +25,8 @@
 
       <div class="carousel__elements">
         <section id="slide-1" class="carousel__element">
-          formulaire ajout heures
+          <?= $form->formFieldOptions('fas fa-archive', 'Projet', 'id_event', $projects, true) ?>
+          <?= $form->formFiedTextArea('fas fa-comment-dots', 'Description', 'description') ?>
         </section>
         <section id="slide-2" class="carousel__element">
           <form action="">

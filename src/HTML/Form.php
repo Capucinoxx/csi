@@ -43,6 +43,7 @@ class Form {
   }
 
   public function formFieldOptions(string $icon, string $label, string $key, array $options, bool $border = false): string {
+    $class = $border ? ' border-bottom' : '';
     $optionsHTML = [];
     $optionsHTML[] = "<option value=\" \" selected disabled hidden></option>";
     foreach($options as $k => $v) {
@@ -63,6 +64,20 @@ class Form {
   }
 
 
+  public function formFiedTextArea(string $icon, string $label, string $key, bool $border = false): string {
+    $class = $border ? ' border-bottom' : '';
+    return <<<HTML
+      <div class="flex-field{$class}">
+        <div class="flex-center">
+          <i class="{$icon}"></i>
+        </div>
+        <div class="form__div form__div--double-height">
+          <textarea class="form__input" cols="30" rows="10" spellcheck="false"></textarea>
+          <label for="" name="{$key}" class="form__label">{$label}</label>
+        </div>
+      </div>
+    HTML;
+  }
 
   public function input (string $key, string $value = "", string $type = "text", string $placeholder = ""): string {
     $extra_class = $type == "color" ? "input-color " : "";

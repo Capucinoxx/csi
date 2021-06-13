@@ -840,3 +840,11 @@ a {
 .mt-2 {
   margin-top: 14px !important;
 }
+
+textarea {
+resize: none;
+}
+
+.form__div--double-height {
+  height: 96px;
+}
