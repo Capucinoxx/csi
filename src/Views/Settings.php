@@ -25,8 +25,11 @@
     <li class="btn big-btn-reverse" data-modal="add-modal" data-action="Édition" style="margin-right: 14px;">
       <i class="fas fa-edit"></i>
     </li>
-    <li class="btn big-btn-reverse">
+    <li class="btn big-btn-reverse" style="margin-right: 14px;">
       <i class="fas fa-print"></i>
+    </li>
+    <li class="btn big-btn-reverse">
+      <i class="fas fa-exchange-alt"></i>
     </li>
   </ul>
 </nav>
