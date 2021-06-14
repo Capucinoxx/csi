@@ -1,5 +1,6 @@
 <?php
 use App\Internal\Employee;
+use App\Internal\Label;
 
 $employee = new Employee();
 
@@ -43,6 +44,7 @@ var_dump($employee->login($employee_login));
 */
 
 ## Tests update employee ##
+/*
 $employee_update= [
     'id' => '9',
     'first_name' => 'Robert',
@@ -50,5 +52,33 @@ $employee_update= [
 ];
 $employee->update($employee_update);
 var_dump($employee->getByID(9));
+
+*/
+
+$label = new Label();
+
+## Tests get labels ##
+// var_dump($label->get());
+
+## Test labels crearion ##
+/*
+$label_info = [
+    "title" => "Test",
+    "color" => "#FFFFF",
+    "amc" => 1
+];
+
+var_dump($label->createLabel($label_info));
+*/
+
+## Test update labels ##
+/*
+$label_update = [
+    "id" => 12,
+    "title" => "Test",
+    "color" => "#00000"
+];
+$label->update($label_update);
+*/
 
 ?>
