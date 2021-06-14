@@ -282,6 +282,12 @@ a {
   height: 100%;
 }
 
+.daily-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 1.1;
+}
+
 
 .py-30 {
   padding-top: 30px;

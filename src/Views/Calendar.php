@@ -177,7 +177,7 @@
         </a>
       </div>
 
-      <div class="banner__inf">
+      <div class="banner__inf daily-title">
         <?php 
           $start_month = $sunday->format('n');
           $end_month = $saturday->format('n');
@@ -206,7 +206,7 @@
           <ul class="ml-60 z-10" style="align-items: stretch;">
             <?php for($i = 0, $d = clone $sunday; $i < 7; $i++, $d->modify('+1 day')): ?>
               <li class="schedule__group">
-                <div class="flex-center" style="height: 54px">
+                <div class="flex-center daily-title" style="height: 54px">
                   <?php echo $week_days[$i]." ".$d->format('d'); ?>
                 </div>
 
