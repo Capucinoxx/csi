@@ -255,3 +255,32 @@ const bindActionModal = (modal, action) => {
 }
 
 bindModal()
+
+const bindEditEvents = () => {
+  const { top: top_wrapper, bottom: bottom_wrapper } = document.getElementById('cw').getBoundingClientRect()
+
+  const form = document.getElementById('edit-modal')
+  const { width: width_form } = form.getBoundingClientRect()
+
+  document.querySelectorAll('.event-card').forEach(
+    (card) => {
+      console.log(card)
+      card.addEventListener('click', () => {
+        
+        const { bottom, top, right, left, width } = card.getBoundingClientRect()
+
+        // gestion de la position sur l'axe des x
+        right > window.innerWidth / 2
+          ? form.style.right = `${window.innerWidth - left}px`
+          : form.style.right = `${window.innerWidth - right - width_form}px`
+
+        // gestion sur l'axe des y
+        let y_axis = ((top - top_wrapper) + (bottom_wrapper - bottom))
+        y_axis < window.innerHeight * .3 && (y_axis = window.innerHeight * .3)
+        form.style.top = `${y_axis}px`
+      })
+    }
+  )
+}
+
+bindEditEvents()

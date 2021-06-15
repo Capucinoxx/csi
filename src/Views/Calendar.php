@@ -190,7 +190,7 @@
     </div>
 
     <div class="schedule__events">
-      <div class="scroll">
+      <div id="cw" class="scroll">
         <div style="position: relative">
           <ul class="py-30">
             <?php foreach (range(6, 23) as $value): ?>
