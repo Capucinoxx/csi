@@ -12,6 +12,16 @@ class Form {
   }
 
 
+  public function field(string $label, string $key, string $type): string {
+    return <<<HTML
+      <div class="form__div">
+        <input type="{$type}" class="form__input" placeholder=" ">
+        <label for="" name="{$key}" class="form__label">{$label}</label>
+      </div>
+    HTML;
+  }
+
+
   public function formField(string $icon, string $label, string $key, string $type, bool $border = false): string {
     $class = $border ? ' border-bottom' : '';
     return <<<HTML
@@ -19,10 +29,7 @@ class Form {
         <div class="flex-center">
           <i class="{$icon}"></i>
         </div>
-        <div class="form__div">
-          <input type="{$type}" class="form__input" placeholder=" ">
-          <label for="" name="{$key}" class="form__label">{$label}</label>
-        </div>
+        { $this->field($label, $key, $type); }
       </div>
     HTML;
   }

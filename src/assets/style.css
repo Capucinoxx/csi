@@ -60,6 +60,7 @@ body:before {
     rgba(31, 29, 43, 0.3113620448179272) 64%
   );
   opacity: .4;
+  z-index: -1;
 }
 
 
@@ -1008,4 +1009,19 @@ resize: none;
 
 #edit-modal {
   height: 500px;
+}
+
+.login-wrapper {
+  background: #F6F8FF;
+  width: 500px;
+  padding: 4rem;
+  border-radius: 8px;
+  position: relative;
+}
+
+.title-login-page {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 70px;
+  font-size: 1.4rem;
 }
