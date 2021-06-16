@@ -1,6 +1,7 @@
 <?php
 use App\Internal\Employee;
 use App\Internal\Label;
+use App\Internal\Event;
 
 $employee = new Employee();
 
@@ -81,4 +82,23 @@ $label_update = [
 $label->update($label_update);
 */
 
+$event =  new Event();
+
+## Tests select events ##
+// var_dump($event->get(1));
+// var_dump($event->getByID(49));
+
+
 ?>
+
+<section class="test-data-dump">
+  <pre><?php print_r($event->getByID(49)); ?></pre>
+</section>
+
+<style>
+  .test-data-dump {
+    height: 90vh;
+    overflow-y: scroll;
+    z-index: 100;
+  }
+</style>

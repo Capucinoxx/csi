@@ -149,9 +149,11 @@ class Employee extends Database {
     FROM employees WHERE deleted_at IS NULL";
 
     if(!$isOne) {
+      # Select all employees
       $query = $this->db_connection->prepare($sql);
       $query->execute();
     } else {
+      # Select one employee
       $sql .= " AND id = :id;";
       $query = $this->db_connection->prepare($sql);
       $query->execute([':id' => $isOne]);
