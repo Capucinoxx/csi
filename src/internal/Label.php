@@ -53,16 +53,6 @@ class Label extends Database {
     return ($query->rowCount() > 0);
   }
 
-  private function insert($params) {
-    $sql = sprintf(
-      "INSERT INTO labels (%s) VALUES (%s)" , 
-      implode(', ', array_keys($params)),
-      ':' . implode(', :', array_keys($params))
-    );
-    $query = $this->db_connection->prepare($sql);
-    $query->execute($params);
-  }
-
 }
 
 ?>

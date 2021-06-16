@@ -44,10 +44,14 @@ class Employee extends Database {
 		# Vérifier si l'employé existe déjà
 		if(!$this->exists($params['username'])) {
       # Création de l'employé
-      $username = $this->insert($params);
-      
+      if(!$this->insert($params)) {
+        return (object) [
+          "error" => "Erreur lors de la création de l'employé."
+        ];
+      }
+     
       # Création des congés de l'employé
-      $this->insertLeaves($username);
+      $this->insertLeaves($params['username']);
 
       return true;
     }
@@ -162,22 +166,22 @@ class Employee extends Database {
     return (($query->errorCode() == "23000") ? false : $query);
   }
 
-  private function insert($params) {
-    # Hashage du mot de passe
-    $hashed_password = password_hash($params['password'], PASSWORD_DEFAULT);
-    $params['password'] = $hashed_password;
+  // private function insert($params) {
+  //   # Hashage du mot de passe
+  //   $hashed_password = password_hash($params['password'], PASSWORD_DEFAULT);
+  //   $params['password'] = $hashed_password;
 
-    # Insertion de l'employé
-    $sql = sprintf(
-    "INSERT INTO employees (%s) VALUES (%s)", 
-    implode(', ', array_keys($params)),
-    ':' . implode(', :', array_keys($params))
-    );
-    $query = $this->db_connection->prepare($sql);
-    $query->execute($params);
+  //   # Insertion de l'employé
+  //   $sql = sprintf(
+  //   "INSERT INTO employees (%s) VALUES (%s)", 
+  //   implode(', ', array_keys($params)),
+  //   ':' . implode(', :', array_keys($params))
+  //   );
+  //   $query = $this->db_connection->prepare($sql);
+  //   $query->execute($params);
 
-		return $params['username'];
-  }
+	// 	return $params['username'];
+  // }
 
   private function insertLeaves($username) {
   	# Id de l'employé créé
@@ -185,7 +189,7 @@ class Employee extends Database {
 
     # Insert leaves
     $leaves = new Leave();
-    $leaves->insert($id);
+    $leaves->createLeaves($id);
   }
 }
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Internal;
 use App\Internal\Database;
+use App\Internal\Employee;
 use \PDO;
 
 
@@ -21,6 +22,21 @@ class Event extends Database {
     return ($this->select($id, true))->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function createEvent($params) {
+    $result = $this->insert($params);
+
+    if(($query->errorCode() == "23000")) {
+    # Retourner une erreur si le libellé n'existe pas
+
+      return (object) [
+        "error" => "Ce libellé n'a pas été créé."
+      ];
+    }
+
+    return true;
+  }
+
+  ## QUERIES ##
   private function select($id, $isOne) {
     $sql = "
     SELECT 
@@ -62,37 +78,6 @@ class Event extends Database {
     );
     
     return $query;
-  }
-
-  public function selectProject() {
-    $query = $this->db->prepare(
-      "SELECT events.id as id_event, id_label, id_employee, ref, events.title as title_event, events.created_at,
-       events.deleted_at, max_hours_per_day, max_hours_per_week, max_hours, labels.title as title_label, color
-         FROM events JOIN labels ON events.id_label = labels.id
-           WHERE events.deleted_at IS NULL AND id_employee IS NULL
-             ORDER BY labels.id ASC;"
-    );
-    $query->execute();
-
-    return $query;
-  }
-
-
-  public function selectLeave($id_employee) {
-    $query = $this->db->prepare(
-      "SELECT events.id as id_event, id_label, id_employee, ref, events.title as title_event, events.created_at,
-       events.deleted_at, max_hours_per_day, max_hours_per_week, max_hours, labels.title as title_label, color
-        FROM events JOIN labels ON events.id_label = labels.id
-          WHERE events.deleted_at IS null AND id_employee = {$id_employee}
-            ORDER BY labels.id ASC;"
-    );
-    $query->execute();
-
-    if($query->errorCode() == "23000") {
-      return "Cet employé n'existe pas.";
-    } else {
-      return $query;
-    }
   }
 
 }

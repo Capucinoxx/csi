@@ -10,9 +10,9 @@ $employee = new Employee();
 // var_dump($employee->get());
 
 ## Tests employees creation ##
-/*
+
 $employee_info = [
-    'username' => 'test1234567',
+    'username' => 'test123456101',
     'first_name' => 'Robert',
     'last_name' => 'Masson',
     'password' => '1234',
@@ -24,9 +24,10 @@ $employee_info = [
     'created_at' => 1474848000000,
     'deleted_at' => null
 ];
-var_dump($employee_info);
-var_dump($employee->createEmployee($employee_info));
-*/
+// var_dump($employee_info);
+// var_dump($employee->createEmployee($employee_info));
+
+
 
 ## Tests suppression de l'employé ##
 
@@ -92,7 +93,7 @@ $event =  new Event();
 ?>
 
 <section class="test-data-dump">
-  <pre><?php print_r($event->getByID(49)); ?></pre>
+  <pre><?php print_r($event->get(13)); ?></pre>
 </section>
 
 <style>
