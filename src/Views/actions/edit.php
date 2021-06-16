@@ -7,7 +7,7 @@
   <div class="modal-dialog">
     <nav class="tabbar">
       <span class="modal-title"></span>
-      <button type="button" class="btn btn-reverse m-1 mb-0">
+      <button type="button" class="btn btn-reverse m-1 mb-0 cmb">
         <span>x</span>
       </button>
     </nav>

@@ -385,6 +385,7 @@ a {
   bottom: 40px;
   /* transition: transform 2s ease 0s; */
   right: 15px;
+  animation: all .3s ease;
 }
 
 .visible {
@@ -396,17 +397,17 @@ a {
 .close-modal {
   animation-name: closeModal;
   animation-duration: .7s;
-  transform: translateY(1200px);
+  transform: translateY(90vh);
 }
 
 @keyframes openModal {
-  from {   transform: translateY(1200px); }
+  from {   transform: translateY(90vh); }
   to {   transform: translateY(0); }
 }
 
 @keyframes closeModal {
   from {   transform: translateY(0); }
-  to {   transform: translateY(1200px); }
+  to {   transform: translateY(90vh); }
 }
 
 .modal-dialog {

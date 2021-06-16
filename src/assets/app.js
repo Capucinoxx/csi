@@ -209,9 +209,15 @@ const bindModal = () => {
     // récupère l'action de la modale
     const modalAction = el.getAttribute('data-action')
 
-    modalId && el.addEventListener('click',
+    if (modalId === undefined || modalId === '') {
+      return
+    }
+
+    const modal = document.getElementById(modalId)
+
+    el.addEventListener('click',
       () => {
-        const modal = document.getElementById(modalId)
+        modal.classList.remove('close-modal')
 
         // si une action spécifique est enregistré, la disposé sinon effacé le titre existant
         modalAction 
@@ -220,6 +226,14 @@ const bindModal = () => {
 
         // rend visible la fenêtre
         modal.classList.add('visible')
+      }
+    )
+
+    modal.querySelector('.cmb').addEventListener('click', 
+      () => {
+        modal.classList.add('close-modal')
+        modal.classList.remove('visible')
+        
       }
     )
   })
@@ -262,12 +276,24 @@ const bindEditEvents = () => {
   const form = document.getElementById('edit-modal')
   const { width: width_form } = form.getBoundingClientRect()
 
+  // gestion evennement lorsque l'on clique sur bouton fermeture de la modale
+  form.querySelector('.cmb').addEventListener('click', 
+    () => {
+      form.classList.add('close-modal')
+      form.classList.remove('visible')
+      
+    }
+  )
+
   document.querySelectorAll('.event-card').forEach(
     (card) => {
       console.log(card)
       card.addEventListener('click', () => {
         
         const { bottom, top, right, left, width } = card.getBoundingClientRect()
+
+        form.classList.remove('close-modal')
+        form.classList.add('visible')
 
         // gestion de la position sur l'axe des x
         right > window.innerWidth / 2

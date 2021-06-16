@@ -21,7 +21,7 @@
       <nav class="tabbar">
         <div class="flex-between">
           <span class="modal-title"></span>
-          <button type="button" class="btn btn-reverse m-1 mb-0">
+          <button type="button" class="btn btn-reverse m-1 mb-0 cmb">
             <span>x</span>
           </button>
         </div>

@@ -29,7 +29,10 @@ class Form {
         <div class="flex-center">
           <i class="{$icon}"></i>
         </div>
-        { $this->field($label, $key, $type); }
+        <div class="form__div">
+          <input type="{$type}" class="form__input" placeholder=" ">
+          <label for="" name="{$key}" class="form__label">{$label}</label>
+      </div>
       </div>
     HTML;
   }
