@@ -1,6 +1,8 @@
 <?php
 use App\Internal\Employee;
 use App\Internal\Label;
+use App\Internal\Event;
+use App\Internal\Timesheet;
 
 $employee = new Employee();
 
@@ -9,9 +11,9 @@ $employee = new Employee();
 // var_dump($employee->get());
 
 ## Tests employees creation ##
-/*
+
 $employee_info = [
-    'username' => 'test1234567',
+    'username' => 'test123456101',
     'first_name' => 'Robert',
     'last_name' => 'Masson',
     'password' => '1234',
@@ -23,9 +25,10 @@ $employee_info = [
     'created_at' => 1474848000000,
     'deleted_at' => null
 ];
-var_dump($employee_info);
-var_dump($employee->createEmployee($employee_info));
-*/
+// var_dump($employee_info);
+// var_dump($employee->createEmployee($employee_info));
+
+
 
 ## Tests suppression de l'employé ##
 
@@ -81,4 +84,57 @@ $label_update = [
 $label->update($label_update);
 */
 
+## Test suppression des labels ##
+// $label->deleteLabel(1);
+
+$event =  new Event();
+
+## Tests select events ##
+// var_dump($event->get(1));
+// var_dump($event->getByID(49));
+
+## Tests events creation ##
+/*
+$project_info = [
+    "ref" => "LE208804",
+    "id_label" => "50",
+    "title" => "Titre test",
+    "max_hours_per_day" => "9",
+    "max_hours_per_week" => "45"
+];
+var_dump($event->createEvent($project_info));
+*/
+
+## Tests delete event ##
+// $event->deleteEvent(103);
+
+## Tests update event ##
+/*
+$event_info = [
+    "id" => 105,
+    "id_label" => "2"
+];
+$event->update($event_info);
+*/
+
+$timesheet = new Timesheet();
+
+
+## Tests get timesheet ##
+# Get By id_employee, from, to
+$timesheet->get(1, 1581120000000, 1596099200000);
+
+
 ?>
+
+<section class="test-data-dump">
+  <pre><?php print_r($timesheet->getByID(1)); ?></pre>
+</section>
+
+<style>
+  .test-data-dump {
+    height: 90vh;
+    overflow-y: scroll;
+    z-index: 100;
+  }
+</style>

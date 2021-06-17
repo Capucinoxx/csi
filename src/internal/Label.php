@@ -1,6 +1,7 @@
 <?php
 namespace App\Internal;
 use App\Internal\Database;
+use App\Internal\Event;
 use \PDO;
 
 
@@ -30,8 +31,24 @@ class Label extends Database {
     ];
   }
 
-  ## QUERIES ##
+  public function deleteLabel($id) {
+    if($id != 1) {
+      # Suppression du labels
+      $this->delete($id);
+      
+      # Suppression des events associés au label
+      $event = new Event();
+      $event->eraseEventsLabel($id);
 
+      return true;
+    }
+
+    return (object) [
+      "error" => "Ce libellé ne peut pas être supprimé."
+    ];
+  }
+
+  ## QUERIES ##
   private function select() {
     $sql = "SELECT * FROM labels;";
 
@@ -51,16 +68,6 @@ class Label extends Database {
     $query->execute([':title' => $title]);
 
     return ($query->rowCount() > 0);
-  }
-
-  private function insert($params) {
-    $sql = sprintf(
-      "INSERT INTO labels (%s) VALUES (%s)" , 
-      implode(', ', array_keys($params)),
-      ':' . implode(', :', array_keys($params))
-    );
-    $query = $this->db_connection->prepare($sql);
-    $query->execute($params);
   }
 
 }

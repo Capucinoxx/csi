@@ -11,7 +11,11 @@ class Leave extends Database {
     $this->table_name ="events";
   }
 
-  public function insert($id) {
+  public function createLeaves($id) {
+    $this->insert($id);
+  }
+
+  protected function insert($id) {
       
     # Date de création en unixtimestamp
     $date = time()*1000;

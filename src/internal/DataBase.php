@@ -61,10 +61,29 @@ class DataBase {
       if($last_key != $key) 
         $sql .= ", ";
     }
-    $sql .= " WHERE id = {$params['id']};"; 
+    $sql .= " WHERE id = :id;"; 
 
     $query = $this->db_connection->prepare($sql);
-    return $query->execute();
+    return $query->execute(
+      [
+        ":id" => $params['id']
+      ]
+    );
+  }
+
+  protected function insert($params) {
+    $params['created_at'] = time()*1000;
+
+    $sql = sprintf(
+      "INSERT INTO {$this->table_name} (%s) VALUES (%s)", 
+      implode(', ', array_keys($params)),
+      ':' . implode(', :', array_keys($params))
+    );
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute($params);
+
+    return $query;
   }
 }
 ?>

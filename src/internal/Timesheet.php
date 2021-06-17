@@ -1,15 +1,29 @@
 <?php
 namespace App\Internal;
 use App\Internal\Database;
+use \PDO;
 
 class Timesheet extends Database {
-  public function __construct() {}
-
-  public function get(int $id, int $from, int $to) {
-    $this->queryTimesheet($id, $from, $to);
+  public function __construct() {
+    parent::__construct();
+    $this->table_name = 'timesheets';
   }
 
-  private function queryTimesheet(int $id, int $from, int $to) {
+  public function get(int $id, int $from, int $to) {
+    $result = $this->select($id, $from, $to);
+
+    if(!$result && isset($result['error']))
+      return $result;
+    
+      return $result->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  public function getByID($id) {
+    return ($this->selectByID($id))->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  ## QUERIES ##
+  private function select(int $id_employee, int $from, int $to) {
     $sql = "
       SELECT 
         timesheets.id AS id, 
@@ -46,10 +60,30 @@ class Timesheet extends Database {
         ORDER BY id_employee ASC;
     ";
 
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute([':id' => $id, ':from' => $from, ':to' => $to]);
-    return $stmt;
+    $query = $this->db_connection->prepare($sql);
+    $query->execute([':id' => $id_employee, ':from' => $from, ':to' => $to]);
+    
+    if($query->rowCount() != 0) {
+      return $query;
+    } 
+    return (object) [
+      "error" => "Erreur lors de la création de la carte."
+    ];
   }
+
+  private function selectByID($id) {
+    $sql = "SELECT * FROM timesheets WHERE id = :id;";
+    
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ":id" => $id
+      ]
+    );
+
+    return (($query->errorCode() == "23000") ? false : $query);
+ }
+
 }
 
 ?>
