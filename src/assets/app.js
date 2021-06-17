@@ -91,10 +91,10 @@ class ListFilter extends HTMLElement {
         .form__label {
           position: absolute;
           left: 1rem;
-          top: 1rem;
+          top: 1.4rem;
           padding: 0 .25rem;
           background-color: #fff;
-          font-size: .85rem;
+          font-size: 1.4rem;
           color: #80868B;
           transition: .3s;
         }
@@ -103,7 +103,7 @@ class ListFilter extends HTMLElement {
           top: -.5rem;
           left: .8rem;
           color: #275EFE;
-          font-size: .75rem;
+          font-size: 1rem;
           font-weight: 500;
           z-index: 10;
         }
@@ -111,7 +111,7 @@ class ListFilter extends HTMLElement {
         .form__input:not(:placeholder-shown).form__input:not(:focus)+ .form__label{
           top: -.5rem;
           left: .8rem;
-          font-size: .75rem;
+          font-size: 1.4rem;
           font-weight: 500;
           z-index: 10;
         }

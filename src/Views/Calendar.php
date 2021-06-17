@@ -231,8 +231,10 @@
     </div>
   </div>
 
-  <div class="btn absolute-bottom-right big-btn arrow" data-modal="add-modal" data-action="Ajout">
+  <div class="btn arrow absolute-bottom-right big-btn" data-modal="add-modal" data-action="Ajout">
     +
   </div>
 </div>
 
+<? require_once(dirname(__FILE__) . '/actions/add.php'); ?>
+<? require_once(dirname(__FILE__) . '/actions/edit.php'); ?>

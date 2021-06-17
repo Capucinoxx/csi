@@ -13,16 +13,13 @@
   <?php 
     require_once(dirname(__DIR__).'/html/vendor/autoload.php');
 
+    // set logged_in tkn
+    $_SESSION['loggedin'] = true;
+
     isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true
       ? require_once('./Views/Calendar.php')
       : require_once('./Views/Login.php');
   ?>
-  <?php 
-    // require_once('./Views/employees/show.php'); 
-    // require_once('./Views/labels/show.php');
-    // require_once('./Views/actions/add.php');
-    // require_once('./Views/actions/edit.php');
-  ?> 
 
   <script src="./assets/app.js"></script>
 </body>

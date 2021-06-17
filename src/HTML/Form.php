@@ -73,30 +73,6 @@ class Form {
     HTML;
   }
 
-  public function formDropdown(string $icon, string $label, string $key, array $options, bool $border = false): string {
-
-    return <<<HTML
-      <div class="dropdown-container">
-        <button class="dropdown-button main-button">
-          <span class="dropdown-title-icon"></span>
-          <span class="dropdown-title text-truncate"></span>
-          <span class="dropdown-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
-              <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
-            </svg>
-          </span>
-        </button>
-        <div class="dropdown-list-container">
-          <div class="dropdown-list-wrapper">
-            <ul class="dropdown-list"></ul>
-            <div class="floating-icon" aria-hidden="true"></div>
-          </div>
-        </div>
-
-      </div>
-    HTML;
-  }
-
   public function formFieldFromTo(string $icon, array $label, array $key, bool $border = false): string {
     $class = $border ? ' border-bottom' : '';
 
