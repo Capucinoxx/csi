@@ -50,7 +50,7 @@ class DataBase {
     );
   }
   
-  protected function update($params) {
+  public function update($params) {
     end($params);
     $last_key = key($params);
 
@@ -61,10 +61,14 @@ class DataBase {
       if($last_key != $key) 
         $sql .= ", ";
     }
-    $sql .= " WHERE id = {$params['id']};"; 
+    $sql .= " WHERE id = :id;"; 
 
     $query = $this->db_connection->prepare($sql);
-    return $query->execute();
+    return $query->execute(
+      [
+        ":id" => $params['id']
+      ]
+    );
   }
 
   protected function insert($params) {
@@ -78,14 +82,6 @@ class DataBase {
 
     $query = $this->db_connection->prepare($sql);
     $query->execute($params);
-
-    // if($query->errorCode() == "23000") {
-    //   return "Ce libellé n'existe pas.";
-    // } 
-    // else {
-    //   $this->returnFormat($params);
-    // }
-    // return (($query->errorCode() == "23000") ? false : $query);
 
     return $query;
   }

@@ -83,6 +83,9 @@ $label_update = [
 $label->update($label_update);
 */
 
+## Test suppression des labels ##
+// $label->deleteLabel(1);
+
 $event =  new Event();
 
 ## Tests select events ##
@@ -101,10 +104,24 @@ $project_info = [
 var_dump($event->createEvent($project_info));
 */
 
+## Tests delete event ##
+// $event->deleteEvent(103);
+
+## Tests update event ##
+/*
+$event_info = [
+    "id" => 105,
+    "id_label" => "2"
+];
+$event->update($event_info);
+*/
+
+
+
 ?>
 
 <section class="test-data-dump">
-  <pre><?php print_r($event->get(1)); ?></pre>
+  <pre><?php print_r($event->getByID(105)); ?></pre>
 </section>
 
 <style>

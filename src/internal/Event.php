@@ -36,6 +36,10 @@ class Event extends Database {
     return true;
   }
 
+  public function deleteEvent($id) {
+    $this->delete($id);
+  }
+
   ## QUERIES ##
   private function select($id, $isOne) {
     $sql = "
@@ -78,6 +82,23 @@ class Event extends Database {
     );
     
     return $query;
+  }
+
+  public function eraseEventsLabel($id_label) {
+    if($id_label != 1) {
+      $sql = "
+      UPDATE events 
+      SET id_label = null
+      WHERE id_label = :id_label";
+    }
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ":id_label" => $id_label
+      ]
+    );
+    
   }
 
 }
