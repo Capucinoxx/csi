@@ -10,3 +10,7 @@ vendor/
 .todo
 
 .vscode
+
+# css généré à partir du scss
+*.css
+*.css.map

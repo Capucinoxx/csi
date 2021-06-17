@@ -3,7 +3,7 @@
   $form = new Form();
 ?>
 
-<div id="edit-modal" class="modal visible">
+<div id="edit-modal" class="modal">
   <div class="modal-dialog">
     <nav class="tabbar">
       <span class="modal-title"></span>
