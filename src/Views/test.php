@@ -122,13 +122,13 @@ $timesheet = new Timesheet();
 
 ## Tests get timesheet ##
 # Get By id_employee, from, to
-$timesheet->get(1, 1581120000000, 1596099200000);
+var_dump($timesheet->get(100, 1, 2));
 
 
 ?>
 
-<section class="test-data-dump">
-  <pre><?php print_r($timesheet->getByID(1)); ?></pre>
+<!-- <section class="test-data-dump">
+  <pre><?php //print_r($timesheet->getByID(1)); ?></pre>
 </section>
 
 <style>
@@ -137,4 +137,4 @@ $timesheet->get(1, 1581120000000, 1596099200000);
     overflow-y: scroll;
     z-index: 100;
   }
-</style>
+</style> -->

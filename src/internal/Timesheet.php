@@ -11,11 +11,8 @@ class Timesheet extends Database {
 
   public function get(int $id, int $from, int $to) {
     $result = $this->select($id, $from, $to);
-
-    if(!$result && isset($result['error']))
-      return $result;
     
-      return $result->fetchAll(PDO::FETCH_ASSOC);
+    return $result->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function getByID($id) {
@@ -23,7 +20,7 @@ class Timesheet extends Database {
   }
 
   ## QUERIES ##
-  private function select(int $id_employee, int $from, int $to) {
+  private function select($id_employee, $from, $to) {
     $sql = "
       SELECT 
         timesheets.id AS id, 
@@ -63,12 +60,7 @@ class Timesheet extends Database {
     $query = $this->db_connection->prepare($sql);
     $query->execute([':id' => $id_employee, ':from' => $from, ':to' => $to]);
     
-    if($query->rowCount() != 0) {
-      return $query;
-    } 
-    return (object) [
-      "error" => "Erreur lors de la création de la carte."
-    ];
+    return $query;
   }
 
   private function selectByID($id) {
