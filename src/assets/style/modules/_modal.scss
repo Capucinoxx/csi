@@ -8,12 +8,16 @@
 
   &-title {
     color: white;
+    font-size: 2.1rem;
+    display: flex;
+    align-items: center;
+    padding-left: 1.85rem;
   }
 
   &-dialog {
     position: relative;
-    width: 375px;
-    max-width: 375px;
+    width: 400px;
+    max-width: 400px;
     max-height: calc(90vh - 40px);
     border-radius: 7px;
     background: #fff;
@@ -92,7 +96,7 @@
 
     i {
       --s: .84;
-      font-size: 14px;
+      font-size: 1.4rem;
       margin-bottom: 8px;
       color: #6C7486;
       transform-origin: 50% 50%;
@@ -100,7 +104,7 @@
 
     span {
       --s: .92;
-      font-size: 10px;
+      font-size: 1.2rem;
       font-weight: 500;
       color: #99A3BA;
     }
@@ -128,4 +132,8 @@
       }
     }
   }
+}
+
+.title-mid-text {
+  font-size: 1.4rem;
 }

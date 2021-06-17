@@ -83,6 +83,7 @@
   //  génère les information de la balise style de l'évennement ciblé
   function generate_style_event(float $start_date, float $end_date, string $color = ""): string {
     $style = "position: absolute;";
+    
     $style .= "box-shadow: ". rgba($color, .02) ." 0px 1px 5px 0px, ". rgba($color, .15) ." 0px 0px 0px 2px, inset 0 -14px " . rgba($color, .6) . ";";
     $style .= "color: var(--background); background: #e6e6e8; padding: 14px 12px 0 12px;";
     // $style .= "color: var(--color); background: var(--background);";
@@ -108,7 +109,7 @@
    -----------------------------------------------------------*/
   $projects_week = array(
     array(
-      (object) ['title' => 'test', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
+      (object) ['title' => 'Journée québécoise', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
     ),
     array(),
     array(),
@@ -231,8 +232,8 @@
     </div>
   </div>
 
-  <div class="btn arrow absolute-bottom-right big-btn" data-modal="add-modal" data-action="Ajout">
-    +
+  <div class="btn absolute-bottom-right plus-btn" data-modal="add-modal" data-action="Ajout">
+    <i class="fas fa-plus"></i>
   </div>
 </div>
 

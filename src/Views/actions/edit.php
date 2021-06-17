@@ -6,10 +6,12 @@
 <div id="edit-modal" class="modal">
   <div class="modal-dialog">
     <nav class="tabbar">
-      <span class="modal-title"></span>
-      <button type="button" class="btn btn-reverse m-1 mb-0 cmb">
-        <span>x</span>
-      </button>
+      <div class="flex-between">
+        <span class="modal-title title-mid-text"></span>
+        <button type="button" class="btn btn-reverse m-1 mb-0 cmb">
+          <span>x</span>
+        </button>
+      </div>
     </nav>
 
     <div class="carousel__elements">

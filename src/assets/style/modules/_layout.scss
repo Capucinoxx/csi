@@ -25,7 +25,27 @@
   position: relative;
   background-color: var(--white-bg);
   padding: 34px;
-  z-index: 1;
+  z-index: 5;
+
+  // box-shadow: 0px 0px 40px -9px #485fed;
+
+  &::before {
+    content: "";
+      background: linear-gradient(to bottom, rgba(0,0,0,.65), rgba(0, 0, 0, 0.3), var(--blue-active));
+      opacity: 0.1;
+      z-index: -1; // CHILD /*negative*/ /* relative with .mobile-wrapper it's his parent background*/
+      display: block;
+      width: calc(100% - 20px);
+      height: 40px;
+      margin: auto;
+      position: absolute;
+      bottom: -13px;
+      left: 50%;
+      transform: translatex(-50%);
+      border-radius: 50%;
+      box-shadow: 0px 0px 40px 0 #485fed; 
+  }
+
 
   &-hidden {
     width: 100%;
@@ -173,14 +193,14 @@
 // carousel display
 .carousel {
   overflow: hidden;
-  width: 375px;
+  width: 400px;
   height: 100%;
   position: relative;
 
   &__elements {
     display: flex;
   
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     scroll-snap-type: x mandatory;
     

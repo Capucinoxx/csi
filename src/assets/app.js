@@ -287,11 +287,11 @@ const bindEditEvents = () => {
 
   document.querySelectorAll('.event-card').forEach(
     (card) => {
-      console.log(card)
+      console.log(card.innerText)
       card.addEventListener('click', () => {
-        
         const { bottom, top, right, left, width } = card.getBoundingClientRect()
 
+        form.querySelector('.modal-title').innerText = card.innerText
         form.classList.remove('close-modal')
         form.classList.add('visible')
 
