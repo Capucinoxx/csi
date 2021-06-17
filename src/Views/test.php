@@ -2,6 +2,7 @@
 use App\Internal\Employee;
 use App\Internal\Label;
 use App\Internal\Event;
+use App\Internal\Timesheet;
 
 $employee = new Employee();
 
@@ -116,12 +117,18 @@ $event_info = [
 $event->update($event_info);
 */
 
+$timesheet = new Timesheet();
+
+
+## Tests get timesheet ##
+# Get By id_employee, from, to
+$timesheet->get(1, 1581120000000, 1596099200000);
 
 
 ?>
 
 <section class="test-data-dump">
-  <pre><?php print_r($event->getByID(105)); ?></pre>
+  <pre><?php print_r($timesheet->getByID(1)); ?></pre>
 </section>
 
 <style>
