@@ -25,7 +25,7 @@ class Event extends Database {
   public function createEvent($params) {
     $result = $this->insert($params);
 
-    if(($query->errorCode() == "23000")) {
+    if(($result->errorCode() == "23000")) {
     # Retourner une erreur si le libellé n'existe pas
 
       return (object) [
@@ -53,7 +53,7 @@ class Event extends Database {
       labels.title as title_label, 
       color
     FROM events 
-    JOIN labels 
+    LEFT JOIN labels 
       ON events.id_label = labels.id
     WHERE 
       events.deleted_at IS NULL 

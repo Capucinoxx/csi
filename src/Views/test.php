@@ -89,11 +89,22 @@ $event =  new Event();
 // var_dump($event->get(1));
 // var_dump($event->getByID(49));
 
+## Tests events creation ##
+/*
+$project_info = [
+    "ref" => "LE208804",
+    "id_label" => "50",
+    "title" => "Titre test",
+    "max_hours_per_day" => "9",
+    "max_hours_per_week" => "45"
+];
+var_dump($event->createEvent($project_info));
+*/
 
 ?>
 
 <section class="test-data-dump">
-  <pre><?php print_r($event->get(13)); ?></pre>
+  <pre><?php print_r($event->get(1)); ?></pre>
 </section>
 
 <style>
