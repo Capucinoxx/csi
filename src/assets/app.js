@@ -281,7 +281,6 @@ const bindEditEvents = () => {
     () => {
       form.classList.add('close-modal')
       form.classList.remove('visible')
-      
     }
   )
 
@@ -304,9 +303,17 @@ const bindEditEvents = () => {
         let y_axis = ((top - top_wrapper) + (bottom_wrapper - bottom))
         y_axis < window.innerHeight * .3 && (y_axis = window.innerHeight * .3)
         form.style.top = `${y_axis}px`
+
+        // ajout des informations dans le formulaire
+        form.querySelector('[name="id_event"]').childNodes.forEach(e => e.selected = e.value === card.getAttribute('id_event'))
+        form.querySelector('[name="from"]').value = card.getAttribute('data-start')
+        form.querySelector('[name="to"]').value = card.getAttribute('data-end')
+        form.querySelector('[name="description"]').value = card.getAttribute('data-content')
+
       })
     }
   )
 }
+
 
 bindEditEvents()

@@ -178,7 +178,7 @@
         </a>
       </div>
 
-      <div class="banner__inf daily-title">
+      <div class="banner__inf" style="font-size: 1.1em;">
         <?php 
           $start_month = $sunday->format('n');
           $end_month = $saturday->format('n');
@@ -216,6 +216,10 @@
                     <li 
                       class="event-card"
                       style="<?= generate_style_event($project->start, $project->end, $project->color) ?>"
+                      data-start="<?= format_date($project->start) ?>"
+                      data-end="<?= format_date($project->end) ?>"
+                      data-title="<?= $project->title ?>"
+                      data-content="<?= $project->description ?>"
                     >
                       <?= $project->title ?><br />
                       <?= format_date($project->start)?> à <?= format_date($project->end) ?>
