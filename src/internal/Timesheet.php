@@ -19,6 +19,10 @@ class Timesheet extends Database {
     return ($this->selectByID($id))->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function createTimesheet($params) {
+
+  }
+
   ## QUERIES ##
   private function select($id_employee, $from, $to) {
     $sql = "
@@ -75,6 +79,35 @@ class Timesheet extends Database {
 
     return (($query->errorCode() == "23000") ? false : $query);
  }
+
+ public function validateInsertion($data) {
+  # Validation de l'évènement
+  $event = new Event();
+
+  if(!$event->isValid($data['id_event'], $data['at'])) {
+    
+    return (object) [
+      "error" => "Évènement invalide"
+    ];
+  }
+
+  # Validation de l'employé
+  $employee = new Employee();
+
+  if(!$employee->isValid($data['id_employee'], $data['at'])) {
+    
+    return (object) [
+        "error" => "Employé invalide"
+    ];
+  }
+
+  $response = $event->validateHours($data);
+  if($response == true) {
+    return $response;
+  }
+
+  return false;
+}
 
 }
 

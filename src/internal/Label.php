@@ -17,6 +17,18 @@ class Label extends Database {
     return ($this->select())->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function getIDByEvent($id_event) {
+    $sql = "SELECT id_label FROM events WHERE id_= :id";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ":id" => $id_event
+      ]
+    );
+
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function createLabel($params) {
     # Vérifier si le label existe déjà
     if(!$this->exists($params['title'])) {
