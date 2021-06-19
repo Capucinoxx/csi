@@ -18,17 +18,23 @@ tbody td {
 .current-week {
   position: relative;
 
-  &::after {
-    content: '';
-    position: absolute;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 50%;
-    background: var(--blue-active);
-    top: 50%;
-    left: -.75rem;
-    transform: translateY(-50%);
-  }
+  // box-shadow: 
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px 0px, rgba(#275EFE, 0.95) 0px 0px 0px 1px;
+  border-radius: 1em;
+  // border: 1px solid var(--blue-active);
+
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   width: 1rem;
+  //   height: 1rem;
+  //   border-radius: 50%;
+  //   background: var(--blue-active);
+  //   top: 50%;
+  //   left: -.75rem;
+  //   transform: translateY(-50%);
+  //   float: right;
+  // }
 }
 
 .calendar__weekday {
@@ -38,11 +44,15 @@ tbody td {
 .calendar__day {
   text-align: center;
   cursor: pointer;
-}
-
-.is-today .calendar__day {
-  color: var(--color);
   position: relative;
+
+  &:hover:not(:has(.is-today)) {
+    color: var(--blue-bg) !important;
+  }
+
+  &:hover::before {
+    background: var(--outer-border);
+  }
 
   &::before {
     content: '';
@@ -52,10 +62,19 @@ tbody td {
     height: 0%;
     width: 80%;
     padding-bottom: 80%;
-    background: var(--blue-active);
+    
     z-index: -1;
     opacity: .95;
     border-radius: 50%;
+  }
+}
+
+.is-today.calendar__day {
+  color: var(--color);
+  
+
+  &::before {
+    background: var(--blue-active);
   }
 }
 

@@ -101,6 +101,12 @@
     display: flex;
     flex-direction: row;
 
+    &-end {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
     & > *:nth-child(2n) {
       margin-left: 10px;
     }

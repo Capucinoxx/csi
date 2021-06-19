@@ -77,14 +77,8 @@ const handleMonthlyEvents = () => {
   document.querySelectorAll('.calendar__day').forEach(
     (day) => {
       day.addEventListener('click', () => {
-        const d = new Date(day.getAttribute('data-date'))
 
-        const firstJ = new Date(d.getFullYear(),0, 1)
-
-        const days = Math.floor((d - firstJ) / (24 * 60 * 60 * 1000))
-
-        console.log('toto')
-        window.location.replace(`/index.php?week=${Math.ceil((d.getDay() + 1 + days) / 7)}&year=${d.getFullYear()}`)
+        window.location.replace(`/index.php?week=${day.getAttribute('data-week')}&year=${day.getAttribute('data-year')}`)
       })
     }
   )

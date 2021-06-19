@@ -49,7 +49,7 @@
   ?>
 
   <div class="flex wrapper">
-    <div class="flex-yp-2">
+    <div class="flex-x p-2">
       <section class="controls-panel">
         <div class="panel-option">
           <button>
@@ -65,6 +65,15 @@
         </div>
       </section>
       <?= $calendar->draw_monthly_calendar() ?>
+        <span class="employee-name">Jacty Milena</span>
+      <div class="flex-y-end" style="flex: 1 1 auto">
+        <div class="panel-option">
+          <button>
+            <i class="fas fa-sign-out-alt"></i>
+            Déconnexion
+          </button>
+        </div>
+      </div>
     </div>
     <div class="flex-grow-2 ml-3">
       <?= $calendar->draw_weekly_calendar() ?>

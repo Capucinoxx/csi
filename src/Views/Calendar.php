@@ -196,7 +196,7 @@ class Calendar {
         $html .= "<td>";
         $html .= $i === 0 
           ? "<div class='calendar__weekday'>{$day}</div>" 
-          : "<div data-date='{$date->format('Y-m-d')}' class='calendar__day {$class}'>{$date->format('d')}</div>";
+          : "<div data-week='{$date->format('W')}' data-year='{$date->format('o')}' class='calendar__day {$class}'>{$date->format('d')}</div>";
         $html .= "</td>";
       }
       $html .= "</tr>";
