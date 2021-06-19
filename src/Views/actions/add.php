@@ -15,7 +15,7 @@
   $form = new Form();
 ?>
 
-<div id="add-modal" class="modal">
+<div id="edit-event" class="modal">
   <div class="modal-dialog">
     <div class="carousel">
       <nav class="tabbar">

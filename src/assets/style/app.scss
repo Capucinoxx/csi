@@ -100,3 +100,20 @@ textarea {
 // ==========--------------------==========
 @import 'pages/calendar';
 @import 'pages/login';
+
+
+.event-list {
+  z-index: 0;
+}
+
+// temp
+.event-card {
+  z-index: 3;
+  position: absolute;
+  color: var(--background);
+  background: #e6e6e8;
+  padding: 14px 12px 0 12px;
+  border-radius: 2px;
+  border-bottom-left-radius: 7px; 
+  border-bottom-right-radius: 7px;
+}

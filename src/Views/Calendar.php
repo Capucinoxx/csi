@@ -1,19 +1,21 @@
 <?php 
-  /*  CONSTANTES
-   * -------------------------------------------------
-   * création des tableaux de références des jours de la semaine
-   * et des mois de l'année
-   -----------------------------------------------------------*/
-  $week_days = array(
-    'dim', 
-    'lun', 
-    'mar', 
-    'mer', 
-    'jeu', 
-    'ven', 
-    'sam'
-  );
-  $months = array(
+
+namespace App\Views;
+
+class Calendar {
+  
+
+  private $days = [
+    'Dim', 
+    'Lun', 
+    'Mar', 
+    'Mer', 
+    'Jeu', 
+    'Ven', 
+    'Sam'
+  ];
+
+  private $months = [
     'Janvier',
     'Février',
     'Mars',
@@ -26,220 +28,337 @@
     'Octobre',
     'Novembre',
     'Décembre'
-  );
+  ];
 
-  /* Gestion date
-   * -------------------------------------------------
-   * gestion des dates de la semaine courrante. Cela peut être
-   * soit la semaine en cours ou celle définie dans les paramêtres
-   * de l'URI
-   -----------------------------------------------------------*/
-  $dt = new DateTime; // référentiel de date
+  public $projects;
+  public $week;
+  public $year;
 
-  // si date est spécifié dans les params, changer le référentiel
-  isset($_GET['year']) && isset($_GET['week'])
-    ? $dt->setISODate($_GET['year'], $_GET['week'] )
-    : $dt->setISODate($dt->format('o'), $dt->format('W'));
 
-  $year = $dt->format('o');
-  $week = $dt->format('W');
+  /**
+   * Calendar contructor
+   * @param int $week Le numéro de la semaine
+   * @param int $year L'année
+   * @param array $proejcts Liste des projets de la semaine en cours
+   */
+  public function __construct(?int $week = null, ?int $year = null, ?array $projects = null) {
+    $this->projects = $projects === null ? [[],[],[],[],[],[],[]] : $projects;
 
-  $dt_clone = clone $dt;
-  // définition du dimanche commençant la semaine et du samedi finissant la semaine
-  $sunday = clone $dt_clone->modify(
-    ('Saturday' == $dt_clone->format('l')) ? 'Sunday this week' : 'Sunday last week'
-  );
-  $saturday = clone $dt_clone->modify('Saturday next week');
 
-  // diminue d'une semaine de celle affichée
-  // retourne les arguments pour l'URI sour forme week={}&year={}
-  function decreaseHandler($date) {
-    $last_week = (clone $date)->modify('last week');
+    $this->week = $week === null ? intval(date('W')) : $week;
+    $this->year = $year === null ? intval(date('o')) : $year; 
+  }
 
-    return "week=".($last_week->format('W'))."&year=".($last_week->format('o'));
-  };
+  /**
+   * Renvoie le nombre de semaine dans le mois
+   * @return int
+   */
+  public function getWeeks(): int {
+    $start = $this->getStartingMonthlyDay();
+    $end = (clone $start)->modify('+1 month -1 day');
+    $startWeek = intval($start->format('W'));
+    $endWeek = intval($end->format('W'));
+    if ($endWeek === 1) {
+        $endWeek = intval($end->modify('- 7 days')->format('W')) + 1;
+    }
+    $weeks = $endWeek - $startWeek + 1;
+    if ($weeks < 0) {
+        $weeks = intval($end->format('W'));
+    }
 
-  // augmente d'une semaine de celle affichée
-  // retourne les arguments pour l'URI sour forme week={}&year={}
-  function increaseHandler($date) {
-    $next_week = (clone $date)->modify('next week');
+    return $weeks;
+  }
 
-    return "week=".($next_week->format('W'))."&year=".($next_week->format('o'));
-  };
+  /**
+   * Renvoie le premier jour de la semaine
+   * @return \DateTime
+   */
+  public function getStartingWeeklyDay(): \DateTime {
+    $date = (new \DateTime())->setISODate($this->year, $this->week);
+    return (clone $date)->modify(
+      ('Saturday' == $date->format('l')) ? 'Sunday this week' : 'Sunday last week'
+    );
+  }
 
-  /* Gestion des heures
-   * -------------------------------------------------
-   * formattage des heures pour le visuel utilisateur
-   -----------------------------------------------------------*/
+  /**
+   * Renvoie le premier jour du mois
+   * @return \DateTime
+   */
+  public function getStartingMonthlyDay(): \DateTime {
+    $month = (new \DateTime())->setISODate($this->year, $this->week)->format('m');
+    return new \DateTime("{$this->year}-{$month}-01");
+  }
 
-   // formatte l'heure pour retourner sour format hh:mm
-   function format_date($date) {
-     $hour = floor($date) < 10 ? '0'.floor($date) : floor($date);
-     $minute = ($date - $hour) * 60 < 10 ? '0'.round(($date - $hour) * 60) : round(($date - $hour) * 60);
+  /**
+   * Retourne l'intervalle couverte par la semaine courante
+   * @return string 
+   */
+  public function getWeeklyDate(): string {
+    $start = $this->getStartingWeeklyDay();
+    $end = (clone $start)->modify('+6 day');
 
-     return $hour.":".$minute;
-   };
+    return "du " . ($start->format('n') === $end->format('n')
+      ? "{$start->format('d')} au {$end->format('d')} {$this->months[$start->format('n') - 1]}, "
+      : "{$start->format('d')} {$this->months[$start->format('n') - 1]} au 
+         {$end->format('d')} {$this->months[$end->format('n') - 1]}, "
+    ) . "{$end->format('Y')}";
+  }
 
-  //  génère les information de la balise style de l'évennement ciblé
-  function generate_style_event(float $start_date, float $end_date, string $color = ""): string {
-    $style = "position: absolute;";
+  public function getMonthlyDate(): string {
+    return $this->months[$this->getStartingWeeklyDay()->format('n') - 1] . " " . $this->year;
+  }
+
+  /**
+   * Renvoie si le jour est dans le mois courrant
+   * @param \DateTime $date
+   * @return bool
+   */
+  public function withinMonth(\DateTime $date): bool {
+    return $this->getStartingMonthlyDay()->format('Y-m') === $date->format('Y-m');
+  }
+
+  /**
+   * Renvoie le nombre de semaine qu'il y a dans l'année
+   * @param int $year Année que l'on cherche le nombre de semaine
+   * @return int
+   */
+  public function getISOWeeksInYear(int $year): int {
+    $date = new \DateTime;
+    $date->setISODate($year, 53);
+    return ($date->format("W") === "53" ? 53 : 52);
+  }
+
+  /**
+   * Renvoie soit le mois ou la semaine précédente
+   * @param bool $isMonth si on retourne 1 mois ou 1 semaine en arrière
+   * @return Calendar
+   */
+  public function next(bool $isMonth): Calendar {
+    $date = $this->getStartingWeeklyDay();
+    $isMonth ? $date->modify('next month') : $date->modify('+8 days');
+
+    return new Calendar($date->format('W'), $date->format('o'));
+  }
+
+  /**
+   * Renvoie soit le mois ou la semaine suivant
+   * @param bool $isMonth si on avance de 1 mois ou 1 semaine
+   * @return Calendar
+   */
+  public function prev(bool $isMonth): Calendar {
+    $date = $this->getStartingWeeklyDay();
+    $isMonth ? $date->modify('last month') : $date;
+
+    return new Calendar($date->format('W'), $date->format('o'));
+  }
+
+
+
+
+
+  public function draw_monthly_calendar(): string {
+    $prev_href = "/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
+    $next_href = "/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
+
+    return "
+      <div class='flex-between'>
+        <h2 class='m-0'>{$this->getMonthlyDate()}</h2>
+        <div class='flex'>
+          <a href='{$prev_href}' class='arrow left'><i></i></a>
+          <a href='{$next_href}' class='arrow'><i></i></a>
+        </div>
+      </div>
+      <table>
+        {$this->draw_monthly_days()}
+      </table>
+    ";
+  }
+
+  public function draw_monthly_days(): string {
+    $html = "";
+
+    $start =  clone $this->getStartingMonthlyDay();
+    $start = $start->format('N') === '7' 
+      ? $start 
+      : (clone $this->getStartingMonthlyDay())->modify('saturday last week + 1 day');
+
+    for($i = 0; $i <= $this->getWeeks(); $i++) {
+      $current_week = (clone $start)->modify("+{$i} weeks")->format('W');
+
+      $class = intval($current_week) === $this->week ? "current-week" : "";
+      $html .= "<tr class='{$class}'>";
+      foreach($this->days as $k => $day) {
+        $date = (clone $start)->modify("+" . ($k + ($i - 1) * 7) . " days");
+        $isToday = date('Y-m-d') === $date->format('Y-m-d');
+
+        $class = $this->withinMonth($date) ? "" : "calendar__othermonth";
+        $class .= $isToday ? " is-today" : "";
+        $html .= "<td>";
+        $html .= $i === 0 
+          ? "<div class='calendar__weekday'>{$day}</div>" 
+          : "<div data-date='{$date->format('Y-m-d')}' class='calendar__day {$class}'>{$date->format('d')}</div>";
+        $html .= "</td>";
+      }
+      $html .= "</tr>";
+    }
+
+    return $html;
+  }
+
+
+  public function draw_weekly_calendar(): string {
+    $prev_href = "/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
+    $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
+
+
+    return "
+      <div class='wrapper-hidden'>
+        <div class='flex-align-center'>
+          <h2>{$this->getWeeklyDate()}</h2>
+          <div class='flex ml-2'>
+            <a href='{$prev_href}' class='arrow left'><i></i></a>
+            <a href='{$next_href}' class='arrow'><i></i></a>
+          </div>
+        </div>
+
+        {$this->draw_weekly_days()}
+      </div>
+    ";
+  }
+
+  public function draw_weekly_days(): string {
+    $html_hours = "";
+    foreach (range(6, 23) as $hour) {
+      $html_hours .= <<<HTML
+        <li class='schedule__row'>
+          <span>{$this->format_date($hour)}</span>
+        </li>
+      HTML;
+    }
+
+    $html_days = "";
+    $start = $this->getStartingWeeklyDay();
+    foreach (range(0, 6) as $day) {
+      $html_daily_events = "";
+      foreach($this->projects[$day] as $project) {
+        $html_daily_events .= "
+          <li
+            class='event-card'
+            style='{$this->generate_style_event($project->start, $project->end, $project->color)}'
+          
+          >
+            {$project->title}<br/>
+            {$this->format_date($project->start)}
+            {$this->format_date($project->end)}
+          </li>
+        ";
+      }
+
+      $html_days.= <<<HTML
+        <li class="schedule__group">
+          <div class="flex-center daily-title" style="height: 54px">
+            <span>{$this->days[$day]} {$start->format('d')}</span>
+          </div>
+          <ul class="h-100 event-list">
+            {$html_daily_events}
+          </ul>
+        </li>
+      HTML;
+
+      $start->modify('+1 day');
+    }
+
+    ob_start();
+    require_once(dirname(__FILE__) . '/actions/edit.php');
+
+    $form = ob_get_contents(); 
+
+    return <<<HTML
+      <div class='schedule__events'>
+        <div class='scroll'>
+          <div style='position: relative'>
+            <ul class='py-30'>
+              {$html_hours}
+            </ul>
+            <ul class='ml-60 z-10' style='align-items: stretch'>
+              {$html_days}
+              {$form}
+            </ul>
+          </div>
+        </div>
+      </div>
+    HTML;
+  }
+
+
+  // ===========================================================
+  // ========================== UTILS ==========================
+  // ===========================================================
+
+  /**
+   * generate_style_event
+   * -----------------------------------
+   * génère les informations de la balise style 
+   * de l'évennement ciblé
+   */
+  function generate_style_event(float $start_time, float $end_time, string $color = ""): string {
+    $top_position = (string)(($start_time - 6.0) * 100.0 / (24.0 - 6.0));
+    $height = (string)(($end_time - $start_time) * 100.0 / (24.0 - 6.0));
+
+    $style = "
+      box-shadow: 
+        {$this->rgba($color, .62)} 0px 1px 5px 0px,
+        {$this->rgba($color, .15)} 0px 0px 0px 2px,
+        inset 0 -14px {$this->rgba($color, 6)};
+      top: {$top_position}%;
+      height: {$height}%;
+    ";
     
-    $style .= "box-shadow: ". rgba($color, .02) ." 0px 1px 5px 0px, ". rgba($color, .15) ." 0px 0px 0px 2px, inset 0 -14px " . rgba($color, .6) . ";";
-    $style .= "color: var(--background); background: #e6e6e8; padding: 14px 12px 0 12px;";
-    // $style .= "color: var(--color); background: var(--background);";
-    $style .= "border-radius: 2px;border-bottom-left-radius: 7px; border-bottom-right-radius: 7px;";
-
-    // calcule la position de départ de l'évennement
-
-    // ** le -8px provient de l'espace en haut 
-    $top_position = (string)(($start_date - 6.0) * 100.0 / (24.0 - 6.0));
-    $style .= "top: {$top_position}%;";
-
-    $event_height = ($end_date - $start_date) * 100.0 / (24.0 - 6.0);
-    $style .= "height: {$event_height}%;";
-
-    // calcule la position de fin de l'évennement
-
     return $style;
   }
 
-  /* Gestion des évennements hebdomadaire
-   * -------------------------------------------------
-   * 
-   -----------------------------------------------------------*/
-  $projects_week = array(
-    array(
-      (object) ['title' => 'Journée québécoise', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
-    ),
-    array(),
-    array(),
-    array(),
-    array(
-      (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
-      (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
-    ),
-    array(
-      (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
-    ),
-    array()
-  );
-
-
-  //  prend une valeur hexa et retourne sous le forma rgba()
-  function rgba(string $hex, float $alpha): string {
+  //  
+  /**
+   * prend une valeur hexa et retourne sous le forma rgba()
+   * @param string $hex Couleur en hexa
+   * @param float $alpha 
+   * @return string
+   */
+  private function rgba(string $hex, float $alpha): string {
     list($r, $g, $b) = sscanf($hex, "#%02x%02x%02x");
     return "rgba(" . $r . "," . $g . "," . $b . "," . $alpha . ")";
   }
 
-  /* Liste des évennements
-   * -------------------------------------------------
-   * 
-   -----------------------------------------------------------*/
-  // prend les données des évennements de la semaine représentée
-  // $events = json_decode(
-  //   Employee::getTimesheet(
-  //      $_SESSION['id'], 
-  //      $sunday->getTimestamp() * 1000,
-  //      $saturday->getTimestamp() * 1000
-  //   ), true
-  // );
+  // formatte l'heure pour retourner sour format hh:mm
+  function format_date($date) {
+    $hour = floor($date) < 10 ? '0'.floor($date) : floor($date);
+    $minute = ($date - $hour) * 60 < 10 ? '0'.round(($date - $hour) * 60) : round(($date - $hour) * 60);
+
+    return $hour.":".$minute;
+  }
+}
+
+
+
+// $projects_week = array(
+//   array(
+//     (object) ['title' => 'Journée québécoise', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
+//   ),
+//   array(),
+//   array(),
+//   array(),
+//   array(
+//     (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
+//     (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
+//   ),
+//   array(
+//     (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
+//   ),
+//   array()
+// );
+
+
+// $dt = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, $projects_week);
+
 
 ?>
-
-<div class="wrapper">
-  <? require_once(dirname(__FILE__) . '/Settings.php'); ?>
-  <div class="wrapper-title">
-    <h2>Gestionnaire d'horaire</h2>
-  </div>
-  <div class="wrapper-hidden">
-    <div class="banner">
-      <div class="banner__actions">
-        <a 
-          href="<?php echo $_SERVER['PHP_SELF'].'?'.decreaseHandler($dt); ?>" 
-          class="arrow left"
-        >
-          <i></i>
-          <svg><use xlink:href="#circle"></svg>
-        </a>
-
-        <a 
-          href="<?php echo $_SERVER['SCRIPT_NAME']; ?>"
-          class="fat-btn"
-        >
-        Semaine courante
-        </a>
-
-        <a 
-          href="<?php echo $_SERVER['PHP_SELF'].'?'.increaseHandler($dt); ?>" 
-          class="arrow"
-        >
-          <i></i>
-          <svg><use xlink:href="#circle"></svg>
-        </a>
-      </div>
-
-      <div class="banner__inf" style="font-size: 1.1em;">
-        <?php 
-          $start_month = $sunday->format('n');
-          $end_month = $saturday->format('n');
-
-          echo "du ".($start_month == $end_month
-            ? $sunday->format('d')." au ".$saturday->format('d')." ".$months[$start_month - 1].", ".$sunday->format('Y')
-            : $sunday->format('d')." ".$months[$start_month - 1]." au ".$saturday->format('d')." ".$months[$end_month - 1].", ".$sunday->format('Y'));
-        ?>
-      </div>
-    </div>
-
-    <div class="schedule__events">
-      <div id="cw" class="scroll">
-        <div style="position: relative">
-          <ul class="py-30">
-            <?php foreach (range(6, 23) as $value): ?>
-              <li 
-                class="schedule__row <?= $value == 12 ? 'midi' : ''?>">
-                <span>
-                  <?php echo format_date($value); ?>
-                </span>
-              </li>
-            <?php endforeach; ?>
-          </ul>
-
-          <ul class="ml-60 z-10" style="align-items: stretch;">
-            <?php for($i = 0, $d = clone $sunday; $i < 7; $i++, $d->modify('+1 day')): ?>
-              <li class="schedule__group">
-                <div class="flex-center daily-title" style="height: 54px">
-                  <?php echo $week_days[$i]." ".$d->format('d'); ?>
-                </div>
-
-                <ul class="h-100 event-list">
-                  <?php foreach($projects_week[$i] as $project): ?>
-                    <li 
-                      class="event-card"
-                      style="<?= generate_style_event($project->start, $project->end, $project->color) ?>"
-                      data-start="<?= format_date($project->start) ?>"
-                      data-end="<?= format_date($project->end) ?>"
-                      data-title="<?= $project->title ?>"
-                      data-content="<?= $project->description ?>"
-                    >
-                      <?= $project->title ?><br />
-                      <?= format_date($project->start)?> à <?= format_date($project->end) ?>
-                    </li>
-                  <?php endforeach; ?>
-
-                </ul>
-              </li>
-            <?php endfor; ?>
-          </ul>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="btn absolute-bottom-right plus-btn" data-modal="add-modal" data-action="Ajout">
-    <i class="fas fa-plus"></i>
-  </div>
-</div>
-
-<? require_once(dirname(__FILE__) . '/actions/add.php'); ?>
-<? require_once(dirname(__FILE__) . '/actions/edit.php'); ?>

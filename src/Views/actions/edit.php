@@ -1,9 +1,12 @@
 <?php 
-  use App\HTML\Form;
-  $form = new Form();
+    use App\HTML\Form;
+
+    $formGenerator = new Form();
+
+    $projects = [];
 ?>
 
-<div id="edit-modal" class="modal">
+<div id="edit-event" class="modal">
   <div class="modal-dialog">
     <nav class="tabbar">
       <div class="flex-between">
@@ -17,9 +20,9 @@
     <div class="carousel__elements">
       <section class="carousel__element">
         <form action="">
-          <?= $form->formFieldOptions('fas fa-archive', 'Projet', 'id_event', $projects, true) ?>
-          <?= $form->formFieldFromTo('fas fa-clock', ['De', 'A'], ['from', 'to'], true) ?>
-          <?= $form->formFiedTextArea('fas fa-comment-dots', 'Description', 'description') ?>
+          <?= $formGenerator->formFieldOptions('fas fa-archive', 'Projet', 'id_event', $projects, true) ?>
+          <?= $formGenerator->formFieldFromTo('fas fa-clock', ['De', 'A'], ['from', 'to'], true) ?>
+          <?= $formGenerator->formFiedTextArea('fas fa-comment-dots', 'Description', 'description') ?>
           <div class="flex-end mt-2">
             <button class="save-button">Enregistrer</button>
           </div>

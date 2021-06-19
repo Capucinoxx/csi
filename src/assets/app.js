@@ -287,7 +287,8 @@ const bindEditEvents = () => {
   document.querySelectorAll('.event-card').forEach(
     (card) => {
       console.log(card.innerText)
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation()
         const { bottom, top, right, left, width } = card.getBoundingClientRect()
 
         form.querySelector('.modal-title').innerText = card.innerText
@@ -317,3 +318,18 @@ const bindEditEvents = () => {
 
 
 bindEditEvents()
+
+
+const bincOnClickAddEvent = () => {
+  document.querySelectorAll('.event-list').forEach(
+    (list) => addEventListener('click', (e) => {
+      let rect = e.target.getBoundingClientRect()
+      
+      let x = e.clientX - rect.left
+      let y = e.clientY - rect.top
+
+      console.log(Math.round(y / rect.height * 36) / 2 / 18 * 100)
+    })
+  )
+}
+bincOnClickAddEvent()

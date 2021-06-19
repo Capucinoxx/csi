@@ -14,8 +14,10 @@
 }
 
 .wrapper {
-  max-width: 1560px;
+  max-width: 1860px;
   max-height: 1000px;
+  width: 90vw;
+  min-width: 1200px;
   height: 95vh;
   width: 100%;
   border-radius: 20px;
@@ -70,6 +72,15 @@
 .flex {
   display: flex;
 
+  &-grow {
+    &-1 {
+      flex-grow: 1;
+    }
+    &-2 {
+      flex-grow: 2;
+    }
+  } 
+
   &-field {
     display: flex;
     position: relative;
@@ -98,6 +109,12 @@
   &-between {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
+
+  &-align-center {
+    display: flex;
+    align-items: center;
   }
 
   &-end {
@@ -317,6 +334,10 @@
 
   .mr-#{$i} {
     margin-right: $i * 7px !important;
+  }
+
+  .p-#{$i} {
+    padding: $i * 7px !important;
   }
 }
 

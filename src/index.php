@@ -12,15 +12,67 @@
 <body>
   <?php 
     require_once(dirname(__DIR__).'/html/vendor/autoload.php');
+    
+    use \App\Views\Calendar;
+    use App\HTML\Form;
+
+    
+
+    $projects_week = array(
+      array(
+        (object) ['title' => 'Journée québécoise', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
+      ),
+      array(),
+      array(),
+      array(),
+      array(
+        (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
+        (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
+      ),
+      array(
+        (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
+      ),
+      array()
+    );
+
+    $formGenerator = new Form();
+    $calendar = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, $projects_week);
+
+    $projects = [];
 
     // set logged_in tkn
-    $_SESSION['loggedin'] = true;
+    // $_SESSION['loggedin'] = true;
 
-    isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true
-      ? require_once('./Views/Calendar.php')
-      : require_once('./Views/Login.php');
+    // isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true
+    //   ? require_once('./Views/Calendar.php')
+    //   : require_once('./Views/Login.php');
   ?>
 
-  <script src="./assets/app.js"></script>
+  <div class="flex wrapper">
+    <div class="flex-yp-2">
+      <section class="controls-panel">
+        <div class="panel-option">
+          <button>
+            <i class="fas fa-plus"></i>
+            Ajout
+          </button>
+        </div>
+        <div class="panel-option">
+          <button>
+            <i class="fas fa-cog"></i>
+            Édition
+          </button>
+        </div>
+      </section>
+      <?= $calendar->draw_monthly_calendar() ?>
+    </div>
+    <div class="flex-grow-2 ml-3">
+      <?= $calendar->draw_weekly_calendar() ?>
+    </div>
+  </div>
+
+
+
+  <script src="./assets/add.js"></script>
 </body>
 </html>
