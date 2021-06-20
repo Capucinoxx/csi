@@ -3,7 +3,7 @@
   --white-bg: #eaedfabb;
   --background: #1e2235;
   --shadow: #00093d20;
-  --progress: #2ba972;
+  --progress: #49de84;
   --outer-border: #aeb7e7;
   --fill: #2b3044;
   --alert: #EF8D9C;
@@ -11,6 +11,8 @@
   --alert-bg: #ffd3e288;
   --blue-bg: #171C28;
   --blue-active: #275EFE;
+  --gray: #d6d6d7;
+  --gray-dark: #9498a0;
 }
 
 // Générique
@@ -122,4 +124,21 @@ textarea {
   font-size: 1.05em;
   font-weight: 600;
   color: var(--blue-bg);
+}
+
+.cursor {
+  width: calc(100% / 7);
+  height: 2px;
+  background: red;
+  position: absolute;
+}
+
+.invisible {
+  display: none;
+}
+
+.round {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
 }

@@ -326,3 +326,45 @@
 .fz-h2 {
   font-size: 2rem;
 }
+
+.edit-btn, .add-btn {
+  border-radius: 1rem;
+  font-size: 1.4em;
+  padding: .7em;
+  background: var(--gray-dark);
+  color: var(--color) !important;
+}
+
+.manage__container {
+  width: 600px;
+  border-top-left-radius: 2em;
+  border-top-right-radius: 2em;
+  position: absolute;
+  z-index: 10000;
+  background: white;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+}
+
+.manage__title {
+  text-transform: uppercase;
+  color: var(--dark-gray);
+  padding: 3em 0;
+  font-weight: 700;
+  letter-spacing: 1.1;
+  background: var(--gray);
+
+  i {
+    margin-right: .5em;
+  }
+
+  &.is-active {
+    background: white;
+
+    color: var(--blue-bg);
+
+    .edit-btn {
+      background: var(--progress);
+    }
+  }
+}

@@ -281,6 +281,7 @@ class Calendar {
               {$html_hours}
             </ul>
             <ul class='ml-60 z-10' style='align-items: stretch'>
+            <div class='cursor'></div>
               {$html_days}
               {$form}
             </ul>

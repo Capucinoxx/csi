@@ -19,30 +19,14 @@
     // $db = (new DataBase());
     // die();
     use \App\Views\Calendar;
+    use \App\Views\Forms;
     use App\HTML\Form;
-    // use App\Internal\Employee;
-
-    
-
-    $projects_week = array(
-      array(
-        (object) ['title' => 'Journée québécoise', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
-      ),
-      array(),
-      array(),
-      array(),
-      array(
-        (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
-        (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
-      ),
-      array(
-        (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
-      ),
-      array()
-    );
+    use App\Internal\Label;
 
     $formGenerator = new Form();
     $calendar = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, $projects_week);
+    $forms = new Forms();
+    $label = new Label();
 
 
     // set logged_in tkn
@@ -85,7 +69,7 @@
     </div>
   </div>
 
-
+  <?= $forms->draw($label->get(), "libellé") ?>
 
   <script src="./assets/add.js"></script>
 </body>

@@ -1,11 +1,11 @@
 <?php
 namespace App\Internal;
-use App\Internal\Database;
+use App\Internal\DataBase;
 use App\Internal\Event;
 use \PDO;
 
 
-class Label extends Database {
+class Label extends DataBase {
 
   public function __construct() {
     parent::__construct();
@@ -50,7 +50,7 @@ class Label extends Database {
 
   ## QUERIES ##
   private function select() {
-    $sql = "SELECT * FROM labels;";
+    $sql = "SELECT * FROM Labels;";
 
     $query = $this->db_connection->prepare($sql);
     $query->execute();

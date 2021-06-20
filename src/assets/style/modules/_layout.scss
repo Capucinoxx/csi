@@ -107,6 +107,10 @@
       justify-content: center;
     }
 
+    &-center {
+      display: flex;
+      align-items: center;
+    }
     & > *:nth-child(2n) {
       margin-left: 10px;
     }
@@ -441,4 +445,10 @@
 
 .z-10 {
   z-index: 10;
+}
+
+.notice {
+  max-width: 400px;
+  color: #80868B;
+  font-size: .95em;
 }

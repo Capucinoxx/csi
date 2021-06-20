@@ -84,6 +84,51 @@ const handleMonthlyEvents = () => {
   )
 }
 
+/**
+ * gestion du curseur montrant on se trouve à qu'elle heure actuellement
+ */
+const drawTimeCursor = () => {
+  
+  const cursor = document.querySelector('.cursor')
+  const { height } = cursor.parentElement.getBoundingClientRect()
+
+
+  let interval = 0
+
+  let compute = () => {
+    let time = new Date();
+    let { hours, minutes, day, seconds } = {
+      hours: time.getHours(),
+      minutes: time.getMinutes(),
+      day: time.getDay(),
+      seconds: time.getSeconds()
+    }
+
+    if (hours >= 6) {
+      cursor.classList.remove('invisible')
+
+      console.log((hours - 6 + minutes / 60) / 18)
+      let top = ((hours - 6 + minutes / 60) / 18)
+
+      cursor.style.top = `${(height * top) + 54 - 7}px`
+      cursor.style.left = `${(day % 7)/7 * 100}%`
+      
+      interval = 5 * 1000
+      setTimeout(compute, interval)
+    } else {
+      cursor.classList.add('invisible')
+    }
+  }
+
+  setTimeout(compute, interval)
+
+
+  
+
+
+}
+
 // ===== MAIN =====
 handleMonthlyEvents()
 handleWeeklyEvents()
+drawTimeCursor()
