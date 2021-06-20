@@ -11,9 +11,9 @@ class DataBase {
 
     try {
       (new DotEnv(__DIR__ . '/../.env'))->load();
-      
+
       $this->db_connection = new PDO (
-        "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']}",
+        "{$_ENV['DB_DRIVER']}:host={$_ENV['DB_HOST']};port=3306;dbname={$_ENV['DB_NAME']}",
           $_ENV['DB_USERNAME'],
           $_ENV['DB_PASSWORD']
       );

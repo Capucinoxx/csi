@@ -1,9 +1,14 @@
 <?php 
     use App\HTML\Form;
+    use App\Internal\Event;
 
     $formGenerator = new Form();
 
     $projects = [];
+
+    $p = (new Event())->get(1);
+    var_dump($p);
+    die();
 ?>
 
 <div id="edit-event" class="modal">

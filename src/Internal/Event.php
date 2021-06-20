@@ -1,15 +1,15 @@
 <?php
 namespace App\Internal;
-use App\Internal\Database;
+use App\Internal\DataBase;
 use App\Internal\Employee;
 use \PDO;
 
 
-class Event extends Database {
+class Event extends DataBase {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = 'events';
+    $this->table_name = 'Events';
   }
 
   public function get($id_employee) {
@@ -56,8 +56,8 @@ class Event extends Database {
       max_hours, 
       labels.title as title_label, 
       color
-    FROM events 
-    LEFT JOIN labels 
+    FROM Events events
+    LEFT JOIN Labels labels
       ON events.id_label = labels.id
     WHERE 
       events.deleted_at IS NULL 
@@ -87,7 +87,7 @@ class Event extends Database {
   public function eraseEventsLabel($id_label) {
     if($id_label != 1) {
       $sql = "
-      UPDATE events 
+      UPDATE Events 
       SET id_label = null
       WHERE id_label = :id_label";
     }

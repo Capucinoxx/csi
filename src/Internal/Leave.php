@@ -8,7 +8,7 @@ class Leave extends Database {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name ="events";
+    $this->table_name ="Events";
   }
 
   public function createLeaves($id) {
@@ -37,7 +37,7 @@ class Leave extends Database {
 
   public function deleteByEmployeesID($id) {
     $sql = "
-    UPDATE events 
+    UPDATE Events 
     SET deleted_at = :deleted_at
     WHERE id_employee = :id_employee
     ";

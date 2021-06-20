@@ -13,8 +13,14 @@
   <?php 
     require_once(dirname(__DIR__).'/html/vendor/autoload.php');
     
+
+    // use App\Internal\DataBase;
+
+    // $db = (new DataBase());
+    // die();
     use \App\Views\Calendar;
     use App\HTML\Form;
+    // use App\Internal\Employee;
 
     
 
@@ -38,7 +44,6 @@
     $formGenerator = new Form();
     $calendar = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, $projects_week);
 
-    $projects = [];
 
     // set logged_in tkn
     // $_SESSION['loggedin'] = true;

@@ -9,7 +9,7 @@ class Label extends Database {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = 'labels';
+    $this->table_name = 'Labels';
   }
 
   public function get() {
@@ -62,7 +62,7 @@ class Label extends Database {
     # Vérifier si le titre du label existe déjà
     $sql = "
     SELECT id  
-    FROM labels
+    FROM Labels
     WHERE title = :title";
     $query = $this->db_connection->prepare($sql);
     $query->execute([':title' => $title]);
