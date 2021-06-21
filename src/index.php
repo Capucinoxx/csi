@@ -13,21 +13,21 @@
   <?php 
     require_once(dirname(__DIR__).'/html/vendor/autoload.php');
     
-
-    // use App\Internal\DataBase;
-
-    // $db = (new DataBase());
-    // die();
     use \App\Views\Calendar;
     use \App\Views\Forms;
     use App\HTML\Form;
     use App\Internal\Label;
+    use App\Internal\Employee;
+    use App\Internal\Event;
 
     $formGenerator = new Form();
     $calendar = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, $projects_week);
-    $forms = new Forms();
-    $label = new Label();
-
+    
+    $forms = new Forms(
+      (new Label())->get(),
+      (new Event())->get(1),
+      (new Employee())->get()
+    );
 
     // set logged_in tkn
     // $_SESSION['loggedin'] = true;
@@ -47,10 +47,21 @@
           </button>
         </div>
         <div class="panel-option">
-          <button>
+          <button id="btn-trigger-gestion">
             <i class="fas fa-cog"></i>
-            Édition
+            Gestion
           </button>
+          <ul class="gestion-options">
+            <li>
+              <i data-modal="gestion-labels" class="gestion-option fas fa-tag"></i>
+            </li>
+            <li>
+              <i data-modal="gestion-users" class="gestion-option fas fa-users"></i>
+            </li>
+            <li>
+              <i data-modal="gestion-projects" class="gestion-option fas fa-archive"></i>
+            </li>
+          </ul>
         </div>
       </section>
       <?= $calendar->draw_monthly_calendar() ?>
@@ -69,7 +80,8 @@
     </div>
   </div>
 
-  <?= $forms->draw($label->get(), "libellé") ?>
+  <?= $forms->draw("libellé", "gestion-labels") ?>
+  <?= $forms->draw("employé", "gestion-users") ?>
 
   <script src="./assets/add.js"></script>
 </body>

@@ -183,7 +183,8 @@ class Calendar {
       : (clone $this->getStartingMonthlyDay())->modify('saturday last week + 1 day');
 
     for($i = 0; $i <= $this->getWeeks(); $i++) {
-      $current_week = (clone $start)->modify("+{$i} weeks")->format('W');
+      $current_week = (clone $start)->modify("+" . ($i * 7) . " days")->format('W');
+      
 
       $class = intval($current_week) === $this->week ? "current-week" : "";
       $html .= "<tr class='{$class}'>";
@@ -338,28 +339,4 @@ class Calendar {
     return $hour.":".$minute;
   }
 }
-
-
-
-// $projects_week = array(
-//   array(
-//     (object) ['title' => 'Journée québécoise', 'start' => 12.5, 'end' => 15.5, 'color' => '#32a88d']
-//   ),
-//   array(),
-//   array(),
-//   array(),
-//   array(
-//     (object) ['title' => 'test', 'start' => 6.5, 'end' => 12.0, 'color' => '#eb4034'],
-//     (object) ['title' => 'test', 'start' => 13, 'end' => 18, 'color' => '#eb4034']
-//   ),
-//   array(
-//     (object) ['title' => 'test', 'start' => 6.5, 'end' => 18.5, 'color' => '#eb4034']
-//   ),
-//   array()
-// );
-
-
-// $dt = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, $projects_week);
-
-
 ?>

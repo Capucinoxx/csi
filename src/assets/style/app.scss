@@ -3,7 +3,7 @@
   --white-bg: #eaedfabb;
   --background: #1e2235;
   --shadow: #00093d20;
-  --progress: #49de84;
+  --progress: #28c767;
   --outer-border: #aeb7e7;
   --fill: #2b3044;
   --alert: #EF8D9C;
@@ -75,6 +75,7 @@ body:before {
 ul {
   padding: 0;
   list-style: none;
+  margin: 0;
 }
 
 a {
@@ -92,6 +93,7 @@ textarea {
 @import 'modules/layout';
 @import 'modules/modal';
 @import 'modules/schedule';
+@import 'modules/form';
 
 // gestion font awesome
 .fas {
@@ -134,11 +136,15 @@ textarea {
 }
 
 .invisible {
-  display: none;
+  visibility: hidden;
 }
 
 .round {
   width: 1.5rem;
   height: 1.5rem;
   border-radius: 50%;
+}
+
+.fz-14 {
+  font-size: 1.4rem;
 }

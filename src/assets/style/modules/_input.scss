@@ -245,3 +245,25 @@
     }
   }
 }
+
+.h-45 {
+  height: 45px !important;
+}
+
+.input-color-container {
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  overflow: hidden;
+  border:none;
+
+  input[type="color"] {
+    border: 0;
+    padding: 0;
+    width: 200%;
+    height: 200%;
+    cursor: pointer;
+    transform: translate(-25%, -25%);
+    opacity: .75;
+  }
+}

@@ -72,6 +72,15 @@
 .flex {
   display: flex;
 
+  &-wrapper {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
   &-grow {
     &-1 {
       flex-grow: 1;
@@ -144,21 +153,17 @@
 //  grid display
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(297px, 1fr));
+  grid-template-columns: repeat(auto-fill, 245px);
   grid-gap: 24px;
   align-items: stretch;
 
-  &-full {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(152px, 1fr));
-    grid-gap: 24px;
-    align-items: stretch;
+  .full {
     grid-column: 1 / -1;
-
-    input {
-      width: calc(100% - 5px);
-    }
   }
+}
+
+.block {
+  display: block;
 }
 
 @media only screen and (max-width: 600px) {
@@ -349,10 +354,16 @@
   .p-#{$i} {
     padding: $i * 7px !important;
   }
+
+  .px-#{$i} {
+    padding-left: $i * 7px !important;
+    padding-right: $i * 7px !important;
+  }
 }
 
 // other
 .visible {
+  visibility: visible;
   display: flex !important;
 }
 

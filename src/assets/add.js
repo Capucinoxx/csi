@@ -128,7 +128,51 @@ const drawTimeCursor = () => {
 
 }
 
+/**
+ * gestion des évennements relatifs 
+ */
+const handleEventEditingModal = () => {
+  const btn = document.getElementById('btn-trigger-gestion')
+
+  if (btn) {
+    btn.addEventListener('click', () => {
+      document.querySelector('.gestion-options').classList.toggle('visible')
+    })
+  }
+
+  document.querySelectorAll('i[data-modal]').forEach(
+    (open) => {
+      open.addEventListener('click', () => {
+        document.getElementById(open.getAttribute('data-modal')).classList.add('visible-modal')
+      })
+    }
+  )
+
+  document.querySelectorAll('.manage__container').forEach(
+    (container) => {
+      const edit_form = container.querySelector('.edit-form')
+
+      container.querySelectorAll('.choice').forEach(
+        (choice) => choice.addEventListener('click', () => {
+          container.querySelector('.choices').classList.add('editing-mode')
+
+          
+          edit_form.querySelector('.name').innerText = choice.querySelector('span').innerText
+          edit_form.classList.add('editing-mode')
+        })
+      )
+
+      container.querySelector('.close-btn').addEventListener('click', () => {
+        console.log('click ')
+        container.classList.remove('visible-modal')
+        edit_form.querySelector('.name').innerText = ""
+        edit_form.classList.remove('editing-mode')
+      })
+    }
+  )
+}
 // ===== MAIN =====
 handleMonthlyEvents()
 handleWeeklyEvents()
 drawTimeCursor()
+handleEventEditingModal()
