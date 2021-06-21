@@ -71,7 +71,6 @@ class DataBase {
   }
 
   protected function insert($params) {
-    $params['created_at'] = time()*1000;
 
     $sql = sprintf(
       "INSERT INTO {$this->table_name} (%s) VALUES (%s)", 
@@ -87,7 +86,7 @@ class DataBase {
 
   protected function isValid($id, $at) {
     $sql = "SELECT deleted_at FROM {$this->table_name} WHERE id = :id";
-    $query = $this->db->prepare($sql);
+    $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
         ':id' => $id

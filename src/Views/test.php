@@ -122,13 +122,44 @@ $timesheet = new Timesheet();
 
 ## Tests get timesheet ##
 # Get By id_employee, from, to
-var_dump($timesheet->get(100, 1, 2));
+// var_dump($timesheet->get(100, 1, 2));
+# Get employee by id
+// var_dump($timesheet->getByID(1));
 
+## Tests timesheet creation ##
+# Project
+/*
+$timsheet_info = [
+    'id_event' => 1,
+    'id_employee' => 2,
+    'start' => 8,
+    'end' => 10,
+    'at' => 1623697500,
+    'hours_invested' => 2,
+    'description' => 'allo'
+];
+
+var_dump($timesheet->createTimesheet($timsheet_info));
+*/
+/*
+# Leave
+$timsheet_info = [
+    'id_event' => 1,
+    'id_employee' => 2,
+    'start' => 8,
+    'end' => 10,
+    'at' => 1623697500,
+    'hours_invested' => 2,
+    'description' => 'allo'
+];
+
+var_dump($timesheet->createTimesheet($timsheet_info));
+*/
 
 ?>
 
-<!-- <section class="test-data-dump">
-  <pre><?php //print_r($timesheet->getByID(1)); ?></pre>
+ <section class="test-data-dump">
+  <pre><?php print_r($timesheet->get(1, 152394900, 1623949600)); ?></pre>
 </section>
 
 <style>
@@ -137,4 +168,4 @@ var_dump($timesheet->get(100, 1, 2));
     overflow-y: scroll;
     z-index: 100;
   }
-</style> -->
+</style> 

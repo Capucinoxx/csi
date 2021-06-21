@@ -1,12 +1,12 @@
 <?php
 namespace App\Internal;
-use App\Internal\Database;
+use App\Internal\DataBase;
 use \PDO;
 
-class Timesheet extends Database {
+class Timesheet extends DataBase {
   public function __construct() {
     parent::__construct();
-    $this->table_name = 'timesheets';
+    $this->table_name = "Timesheets";
   }
 
   public function get(int $id, int $from, int $to) {
@@ -20,7 +20,125 @@ class Timesheet extends Database {
   }
 
   public function createTimesheet($params) {
+    $response = $this->validateInsertion($params);
 
+    if(isset($response['error'])) {
+      return $response;
+    }
+
+    $this->insert($params);
+    return true;
+  }
+
+  
+
+  public function getHtmlHeader($data) {
+    $sql = "
+    SELECT 
+      id_event, 
+      COALESCE(ref, '0') AS ref, 
+      events.title, 
+      amc, 
+      id_label, 
+      labels.title as title_label
+    FROM timesheets 
+    JOIN events ON id_event = events.id 
+    JOIN labels ON id_label = labels.id
+    WHERE timesheets.id_employee =  :id_employee AND
+          at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
+          UNIX_TIMESTAMP(:to)*1000
+    GROUP BY id_event
+    ORDER BY id_event ASC;";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(
+      [
+        ':id_employee' => $data['id_employee'],
+        ':from' => $data['from'],
+        ':to' => $data['to']
+      ]
+    );
+
+    return $query;
+  }
+
+
+  public function getHtmlBody($data, $id_event) {
+    $sql = "
+    SELECT 
+      DAY(FROM_UNIXTIME(at/1000, '%Y-%m-%d')) as day, 
+      SUM(hours_invested) as hours, 
+      description 
+    FROM timesheets
+    WHERE id_employee = :id_employee AND 
+          at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
+          UNIX_TIMESTAMP(:to)*1000 AND 
+          id_event = :id_event
+    GROUP BY FROM_UNIXTIME(at/1000, '%Y-%m-%d')
+    ORDER BY at ASC;";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(
+      [
+        ':id_employee' => $data['id_employee'],
+        ':id_event' => $id_event,
+        ':from' => $data['from'],
+        ':to' => $data['to']
+      ]
+    );
+
+    return $query;
+  }
+
+  
+  public function getTotalHours($at, $id_employee) {
+    $sql = "
+    SELECT SUM(hours_invested) as total_hours 
+    FROM timesheets
+    WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = :at AND 
+          id_employee = :id_employee;";
+
+    $query = $this->db->prepare($sql);
+    $query->execute(
+      [
+        ':id_employee' => $id_employee,
+        ':at' => $at,
+      ]
+    );
+
+    return $query;
+  }
+
+  public function getEmployeeInfo($id_employee) {
+    $sql = "SELECT first_name, last_name FROM employees
+    WHERE id = {$id_employee};";
+
+    $query = $this->db->prepare($sql);
+    $query->execute();
+
+    return $query;
+  }
+
+  public function getAMCHours($at, $id_employee, $id_label) {
+    $sql = "SELECT SUM(hours_invested) as hours FROM timesheets
+              JOIN events ON events.id = id_event
+              JOIN labels ON labels.id = id_label
+                WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = '{$at}' AND timesheets.id_employee = {$id_employee} AND id_label = {$id_label};";
+    $query = $this->db->prepare($sql);
+    $query->execute();
+
+    return $query;
+  }
+
+  public function print($data) {
+    $fh = fopen($_SERVER['DOCUMENT_ROOT'].'/pdfContent/timesheet.html', 'w'); 
+    ob_start();
+    include dirname(__FILE__).'/../pdfContent/timesheetHtmlStr.php';
+    $content = ob_get_clean();
+    fwrite($fh, $content);
+    fclose($fh);
+    
+    return $content;
   }
 
   ## QUERIES ##
@@ -53,10 +171,10 @@ class Timesheet extends Database {
         labels.title AS labels_title,
         color,
         events.created_at AS event_created_at
-      FROM timesheets
-        JOIN events ON (timesheets.id_event = events.id)
-        JOIN employees ON (timesheets.id_employee = employees.id)
-        JOIN labels ON (events.id_label = labels.id)
+      FROM Timesheets timesheets
+        JOIN Events events ON (timesheets.id_event = events.id)
+        JOIN Employees employees ON (timesheets.id_employee = employees.id)
+        JOIN Labels labels ON (events.id_label = labels.id)
       WHERE timesheets.id_employee = :id AND at BETWEEN :from AND :to
         ORDER BY id_employee ASC;
     ";
@@ -68,7 +186,7 @@ class Timesheet extends Database {
   }
 
   private function selectByID($id) {
-    $sql = "SELECT * FROM timesheets WHERE id = :id;";
+    $sql = "SELECT * FROM Timesheets WHERE id = :id;";
     
     $query = $this->db_connection->prepare($sql);
     $query->execute(
@@ -80,34 +198,34 @@ class Timesheet extends Database {
     return (($query->errorCode() == "23000") ? false : $query);
  }
 
- public function validateInsertion($data) {
-  # Validation de l'évènement
-  $event = new Event();
+  public function validateInsertion($data) {
+    # Validation de l'évènement
+    $event = new Event();
 
-  if(!$event->isValid($data['id_event'], $data['at'])) {
-    
-    return (object) [
-      "error" => "Évènement invalide"
-    ];
+    if(!$event->isValid($data['id_event'], $data['at'])) {
+      
+      return [
+        "error" => "Évènement invalide"
+      ];
+    }
+
+    # Validation de l'employé
+    $employee = new Employee();
+
+    if(!$employee->isValid($data['id_employee'], $data['at'])) {
+      
+      return [
+          "error" => "Employé invalide"
+      ];
+    }
+
+    $response = $event->validateHours($data);
+    if(isset($response['error'])) {
+      return $response;
+    }
+
+    return true;
   }
-
-  # Validation de l'employé
-  $employee = new Employee();
-
-  if(!$employee->isValid($data['id_employee'], $data['at'])) {
-    
-    return (object) [
-        "error" => "Employé invalide"
-    ];
-  }
-
-  $response = $event->validateHours($data);
-  if($response == true) {
-    return $response;
-  }
-
-  return false;
-}
 
 }
 

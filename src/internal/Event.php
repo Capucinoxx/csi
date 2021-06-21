@@ -1,15 +1,15 @@
 <?php
 namespace App\Internal;
-use App\Internal\Database;
+use App\Internal\DataBase;
 use App\Internal\Employee;
 use \PDO;
 
 
-class Event extends Database {
+class Event extends DataBase {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = 'events';
+    $this->table_name = 'Events';
   }
 
   public function get($id_employee) {
@@ -23,12 +23,13 @@ class Event extends Database {
   }
 
   public function createEvent($params) {
+    $params['created_at'] = time()*1000;
     $result = $this->insert($params);
 
     if(($result->errorCode() == "23000")) {
     # Retourner une erreur si le libellé n'existe pas
 
-      return (object) [
+      return [
         "error" => "Ce libellé n'a pas été créé."
       ];
     }
@@ -56,8 +57,8 @@ class Event extends Database {
       max_hours, 
       labels.title as title_label, 
       color
-    FROM events 
-    LEFT JOIN labels 
+    FROM Events events 
+    LEFT JOIN Labels labels 
       ON events.id_label = labels.id
     WHERE 
       events.deleted_at IS NULL 
@@ -87,7 +88,7 @@ class Event extends Database {
   public function eraseEventsLabel($id_label) {
     if($id_label != 1) {
       $sql = "
-      UPDATE events 
+      UPDATE Events 
       SET id_label = null
       WHERE id_label = :id_label";
 
@@ -105,7 +106,7 @@ class Event extends Database {
     $sql = "
     SELECT 
       SUM(hours_invested) as hours_per_day
-    FROM timesheets
+    FROM Timesheets
     WHERE 
       from_unixtime(at/1000, '%Y, %D, %M') = from_unixtime({$at}/1000, '%Y, %D, %M') 
       AND id_employee = :id_employee
@@ -133,7 +134,7 @@ class Event extends Database {
     $sql = "
     SELECT 
       SUM(hours_invested) AS hours_per_week 
-    FROM timesheets
+    FROM Timesheets
     WHERE 
       id_event = :id_project 
       AND id_employee = :id_employee
@@ -159,10 +160,10 @@ class Event extends Database {
   public function getLimitHours($id) {
     $sql = "
     SELECT max_hours_per_day, max_hours_per_week 
-    FROM events
+    FROM Events
     WHERE id = :id;";
 
-    $query = $this->db->prepare($sql);
+    $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
         ':id' => $id
@@ -183,16 +184,16 @@ class Event extends Database {
     $hours_per_week = $this->getCurrentHoursPerWeek($id_event, $id_employee, $at);
 
     # Vérifier si le total des heures rentrées dépassent la limite d'heures par jour
-    if(($hours_invested + $hours_per_day) > $this->limit_hours['max_hours_per_day']) {
+    if(($hours_invested + $hours_per_day) > $limit_hours['max_hours_per_day']) {
       
-      return (object) [
+      return [
         "error" => "Impossible de rentrer les heures : la limite d'heures par jour a été dépassée."
       ];
     }
     # Vérifier si le total des heures rentrées dépassent la limite d'heures par semaine
-    if(($hours_invested + $hours_per_week) > $this->limit_hours['max_hours_per_week']) {
+    if(($hours_invested + $hours_per_week) > $limit_hours['max_hours_per_week']) {
 
-      return (object) [
+      return [
         "error" => "Impossible de rentrer les heures : la limite d'heures par semaine a été dépassée."
       ];
     }
@@ -204,7 +205,7 @@ class Event extends Database {
     extract($data);
 
     $label = new Label();
-    $id_label = $label->getByIDByEvent($id_event);
+    $id_label = $label->getIDByEvent($id_event);
 
     if($id_label != 1) {
       // c'est un projet
@@ -215,48 +216,22 @@ class Event extends Database {
       }
     } else {
       // c'est un leave
-      $id_leave = $this->getIdLeave($id_event);
-      $employee_status = $this->getEmployeeStatus($id_employee);
-      $current_hours = $this->getCurrentHours($id_event, $id_employee, $id_leave);
-      $total_hours = $hours_invested + $current_hours; // heures totales si on rentre les nouvelles heures
+      $leave = new Leave();
+      $response = $leave->validateLeave($data);
 
+      if(isset($response['error'])) {
 
-      if($id_leave == 6) {
-        return false;
+        return $response;
       }
-
-      if ($id_leave == 4) { // temps accumulé
-        // vérifier que le temps accumulé ne soit pas plus petit que -14 si on lui aditionne le nouveau temps
-        $total_hours = $current_hours + $hours_invested;
-        if($total_hours < -14){
-          return "Impossible de rentrer les heures : le temps accumulé total ne peut pas dépasser -14 heures.";
-        }
-      } else if($employee_status == 1) {
-        // regular employee
-        // vérifier que ca dépasse pas le nombre d'heures dispo.
-        $max_hours = $this->getLeaveMaxHours($id_employee, $id_event);
-        if($total_hours > $max_hours) {
-          return "Impossible de rentrer les heures.";
-        }
-      } else {
-        // au prorata employee
-        // calculer le nombre d'heures dispo et vérifier si la somme des heures courantes et les heures rentrées les dépassent 
-        $max_hours = $this->getRegularLeaveMaxHours($id_leave);
-        $weeks_worked = $this->getWeeksWorked($id_employee);
-        $hours_permitted = ($max_hours/52) * $weeks_worked;
-        
-        if($total_hours > $hours_permitted) {
-          return "Impossible de rentrer les heures. Les heures permises sont : " . $hours_permitted . ".\n";
-        }
-      }
-
     }
     
     if($start > $end) {
-      return "Impossible de rentrer les heures : l'heure du début de l'activité est plus grande que l'heure de fin.";
+      return [
+        "error" => "Impossible de rentrer les heures : l'heure du début de l'activité est plus grande que l'heure de fin."
+      ];  
     }
     
-    return false;
+    return true;
   }  
 
 }

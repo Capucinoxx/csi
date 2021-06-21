@@ -1,15 +1,15 @@
 <?php
 namespace App\Internal;
-use App\Internal\Database;
+use App\Internal\DataBase;
 use App\Internal\Event;
 use \PDO;
 
 
-class Label extends Database {
+class Label extends DataBase {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = 'labels';
+    $this->table_name = "Labels";
   }
 
   public function get() {
@@ -18,7 +18,7 @@ class Label extends Database {
   }
 
   public function getIDByEvent($id_event) {
-    $sql = "SELECT id_label FROM events WHERE id_= :id";
+    $sql = "SELECT id_label FROM Events WHERE id = :id";
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
@@ -33,12 +33,13 @@ class Label extends Database {
     # Vérifier si le label existe déjà
     if(!$this->exists($params['title'])) {
       # Création du label
+      $params['created_at'] = time()*1000;
       $this->insert($params);
 
       return true;
     }
 
-    return (object) [
+    return [
       "error" => "Un libellé existe déjà avec le titre {$params['title']}."
     ];
   }
@@ -55,7 +56,7 @@ class Label extends Database {
       return true;
     }
 
-    return (object) [
+    return [
       "error" => "Ce libellé ne peut pas être supprimé."
     ];
   }
@@ -74,7 +75,7 @@ class Label extends Database {
     # Vérifier si le titre du label existe déjà
     $sql = "
     SELECT id  
-    FROM labels
+    FROM Labels
     WHERE title = :title";
     $query = $this->db_connection->prepare($sql);
     $query->execute([':title' => $title]);
