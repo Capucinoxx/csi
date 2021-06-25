@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+    <style>
+    td {
+      text-align: center;
+    }
+
+    .flex {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .bg-grey-weekend {
+      background: #B3B3B3;
+    }
+
+    .bg-grey-week {
+      background: #D9D9D9; 
+    }
+  
+    .color-grey-700 {
+      color: #363636;
+    }
+
+    .fw-300 { 
+      font-weight: 300;
+    }
+
+    .d-inline {
+      display: inline-block;
+    }
+
+    .rotate {
+      transform: rotate(90deg);
+    }
+
+    .bottom {
+      vertical-align: bottom;
+    }
+
+    .border-top { 
+      border-top: 1px solid #737373;
+    }
+
+    .border-left {
+      border-left: 1px solid #737373;
+    }
+
+
+    tr:nth-child(3) > td {
+      border-top: 1px solid #737373;
+    }
+
+    .total > * {
+      border-top: 1px solid black;
+    }
+
+    .fw-normal {
+      font-weight: normal;
+    }
+
+    .mw-300 {
+      min-width: 260px;
+    }
+
+    .mw-400 {
+      min-width: 300px;
+    }
+
+    .mw-120 {
+      min-width: 70px;
+    }
+
+    .mw-35 {
+      min-width: 35px;
+    }
+
+    .max-w-300{
+      max-width: 260;
+    }
+
+    .max-w-400{
+      max-width: 300px;
+    }
+
+    .line {
+      width: 50%;
+      border-bottom: 1px solid black;
+      align-content: right;
+    }
+
+    .text-left {
+      text-align: left;
+    }
+
+    .fs-small {
+      font-size: small;
+    }
+
+    .fs-smaller {
+      font-size: smaller;
+    }
+
+    table:first-child{
+      margin-bottom: 70px; 
+    }
+  </style>
+</head>
+
+
+<body>
+  <table style="border-spacing: 0px;">
+    <col>
+    <colgroup span="8"></colgroup>
+    <tr>
+      <td rowspan="2">
+        <img src="https://www.csisher.com/wp-content/themes/csi_2016/img/logo.jpg" alt="" srcset="" width="300px">
+      </td>
+      <th colspan="8" scope="colgroup">
+        <pre class='xdebug-var-dump' dir='ltr'>
+<small>C:\wamp64\www\csi\src\internal\Timesheet.php:126:</small><small>int</small> <font color='#4e9a06'>1</font>
+</pre>        <div>
+          <h2 class="fs-small" style="text-align: center; padding-bottom: 0px; margin-bottom: 0px;">
+          Daniel Vanoverschelde          </h2>
+          <span class="fs-smaller fw-normal" style="display: flex; justify-content: center;">
+          Du: 2021-06-13          </span>
+          <span class="fs-smaller fw-normal" style="display: flex; justify-content: center;">
+          Au: 2021-06-19        </span>
+        </div>
+      </th>
+    </tr>
+    <tr class="fs-small">
+
+          <th scope="col">
+        <p class="rotate">Dim</p>
+        <strong>13</strong>
+      </th>
+          <th scope="col">
+        <p class="rotate">Lun</p>
+        <strong>14</strong>
+      </th>
+          <th scope="col">
+        <p class="rotate">Mar</p>
+        <strong>15</strong>
+      </th>
+          <th scope="col">
+        <p class="rotate">Mer</p>
+        <strong>16</strong>
+      </th>
+          <th scope="col">
+        <p class="rotate">Jeu</p>
+        <strong>17</strong>
+      </th>
+          <th scope="col">
+        <p class="rotate">Ven</p>
+        <strong>18</strong>
+      </th>
+          <th scope="col">
+        <p class="rotate">Sam</p>
+        <strong>19</strong>
+      </th>
+     
+      <th scope="col" class="rotate">Total</th>
+      <th scope="col" class="bottom text-left">Description</th>
+    </tr>
+
+        <tr>
+      <th class="fw-300 color-grey-700 d-inline mw-120 fs-small" scope="row" style="text-align: left;">
+        AD208800      </th>
+        
+      <th class="d-inline border-top fw-normal mw-300 max-w-300 fs-small" scope="row" style="text-align: left;">
+        Direction générale      </th>
+            <td class="border-left mw-35 border-top fs-smaller"> </td>
+            <td class="border-left mw-35 border-top fs-smaller">4.00</td>
+            <td class="border-left mw-35 border-top fs-smaller">4.00</td>
+            <td class="border-left mw-35 border-top fs-smaller">9.00</td>
+            <td class="border-left mw-35 border-top fs-smaller">8.00</td>
+            <td class="border-left mw-35 border-top fs-smaller"> </td>
+            <td class="border-left mw-35 border-top fs-smaller"> </td>
+      
+      <td class="border-left mw-35 border-top fs-smaller"><strong>25.00</strong></td>
+      <td class="border-left text-left max-w-400 mw-400 border-top">test. <br/>test. <br/>test. <br/>test. <br/></td>
+    </tr>
+        <tr class="total" style="font-weight: bold;">
+     <th scope="row" style="text-align: right;" class="fs-small">TOTAUX</th>
+            <td class="border-top fs-smaller">0.00</td>
+            <td class="border-top fs-smaller">4.00</td>
+            <td class="border-top fs-smaller">4.00</td>
+            <td class="border-top fs-smaller">9.00</td>
+            <td class="border-top fs-smaller">8.00</td>
+            <td class="border-top fs-smaller">0.00</td>
+            <td class="border-top fs-smaller">0.00</td>
+            <td class="border-top fs-smaller">25.00</td>
+      <td></td>
+    </tr>
+          
+    <tr>
+      <th class="fs-small" scope="row" colspan="8" style="text-align: right; font-weight: normal;">Heures payées</th>
+      <td class="fs-smaller"><strong>25.00</strong></td>
+    </tr>
+    </col>
+  </table>
+
+  <table>
+    <tr>
+      <td style="min-width: 400px;">
+          <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature vérification</span>
+      </td>
+
+      <td style="min-width: 400px;">
+        <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature employé.e</span>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

@@ -125,41 +125,58 @@ $timesheet = new Timesheet();
 // var_dump($timesheet->get(100, 1, 2));
 # Get employee by id
 // var_dump($timesheet->getByID(1));
+//var_dump($timesheet->get(1, 152394900, 1623949600));
 
 ## Tests timesheet creation ##
 # Project
 /*
 $timsheet_info = [
     'id_event' => 1,
-    'id_employee' => 2,
+    'id_employee' => 1,
     'start' => 8,
     'end' => 10,
     'at' => 1623697500,
     'hours_invested' => 2,
-    'description' => 'allo'
+    'description' => 'test'
 ];
 
 var_dump($timesheet->createTimesheet($timsheet_info));
-*/
-/*
-# Leave
+
 $timsheet_info = [
     'id_event' => 1,
-    'id_employee' => 2,
-    'start' => 8,
-    'end' => 10,
+    'id_employee' => 1,
+    'start' => 12,
+    'end' => 15,
     'at' => 1623697500,
     'hours_invested' => 2,
-    'description' => 'allo'
+    'description' => 'test'
 ];
 
 var_dump($timesheet->createTimesheet($timsheet_info));
 */
+$timsheet_info = [
+    'id_event' => 1,
+    'id_employee' => 1,
+    'start' => 8,
+    'end' => 15,
+    'at' => 1623816401,
+    'hours_invested' => 7,
+    'description' => 'test'
+];
+
+var_dump($timesheet->createTimesheet($timsheet_info));
+
+$data_print = [
+    'id_employee' => 1,
+    'from' => '2021-06-13',
+    'to' => '2021-06-19'
+]; 
+$timesheet->print($data_print);
 
 ?>
 
  <section class="test-data-dump">
-  <pre><?php print_r($timesheet->get(1, 152394900, 1623949600)); ?></pre>
+  <pre><?php print_r($timesheet->get(1, 1623557201, 1623949600)); ?></pre>
 </section>
 
 <style>

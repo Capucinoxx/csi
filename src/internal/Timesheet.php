@@ -20,19 +20,35 @@ class Timesheet extends DataBase {
   }
 
   public function createTimesheet($params) {
+    $params['at'] *= 1000;
     $response = $this->validateInsertion($params);
 
     if(isset($response['error'])) {
       return $response;
     }
-
+    
+    // var_dump($params);
+    
     $this->insert($params);
     return true;
   }
 
-  
+  public function print($data) {
+    $fh = fopen(dirname(__FILE__).'/pdfContent/timesheet.html', 'w'); 
+    ob_start();
+    include dirname(__FILE__).'/pdfContent/timesheetHtmlStr.php';
+    $content = ob_get_clean();
+    fwrite($fh, $content);
+    fclose($fh);
+    
+    return $content;
+    // $content = $this->getEventsInfo($data);
+    // var_dump($content->fetch(PDO::FETCH_ASSOC));
+  }
 
-  public function getHtmlHeader($data) {
+  ## QUERIES ##
+
+  public function getEventsInfo($data) {
     $sql = "
     SELECT 
       id_event, 
@@ -49,8 +65,7 @@ class Timesheet extends DataBase {
           UNIX_TIMESTAMP(:to)*1000
     GROUP BY id_event
     ORDER BY id_event ASC;";
-
-    $query = $this->db->prepare($sql);
+    $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
         ':id_employee' => $data['id_employee'],
@@ -62,8 +77,7 @@ class Timesheet extends DataBase {
     return $query;
   }
 
-
-  public function getHtmlBody($data, $id_event) {
+  public function getHoursData($data, $id_event) {
     $sql = "
     SELECT 
       DAY(FROM_UNIXTIME(at/1000, '%Y-%m-%d')) as day, 
@@ -77,7 +91,7 @@ class Timesheet extends DataBase {
     GROUP BY FROM_UNIXTIME(at/1000, '%Y-%m-%d')
     ORDER BY at ASC;";
 
-    $query = $this->db->prepare($sql);
+    $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
         ':id_employee' => $data['id_employee'],
@@ -90,7 +104,6 @@ class Timesheet extends DataBase {
     return $query;
   }
 
-  
   public function getTotalHours($at, $id_employee) {
     $sql = "
     SELECT SUM(hours_invested) as total_hours 
@@ -98,7 +111,7 @@ class Timesheet extends DataBase {
     WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = :at AND 
           id_employee = :id_employee;";
 
-    $query = $this->db->prepare($sql);
+    $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
         ':id_employee' => $id_employee,
@@ -110,10 +123,11 @@ class Timesheet extends DataBase {
   }
 
   public function getEmployeeInfo($id_employee) {
-    $sql = "SELECT first_name, last_name FROM employees
+    $sql = "
+    SELECT first_name, last_name FROM employees
     WHERE id = {$id_employee};";
 
-    $query = $this->db->prepare($sql);
+    $query = $this->db_connection->prepare($sql);
     $query->execute();
 
     return $query;
@@ -124,24 +138,12 @@ class Timesheet extends DataBase {
               JOIN events ON events.id = id_event
               JOIN labels ON labels.id = id_label
                 WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = '{$at}' AND timesheets.id_employee = {$id_employee} AND id_label = {$id_label};";
-    $query = $this->db->prepare($sql);
+    $query = $this->db_connection->prepare($sql);
     $query->execute();
 
     return $query;
   }
 
-  public function print($data) {
-    $fh = fopen($_SERVER['DOCUMENT_ROOT'].'/pdfContent/timesheet.html', 'w'); 
-    ob_start();
-    include dirname(__FILE__).'/../pdfContent/timesheetHtmlStr.php';
-    $content = ob_get_clean();
-    fwrite($fh, $content);
-    fclose($fh);
-    
-    return $content;
-  }
-
-  ## QUERIES ##
   private function select($id_employee, $from, $to) {
     $sql = "
       SELECT 
@@ -175,7 +177,7 @@ class Timesheet extends DataBase {
         JOIN Events events ON (timesheets.id_event = events.id)
         JOIN Employees employees ON (timesheets.id_employee = employees.id)
         JOIN Labels labels ON (events.id_label = labels.id)
-      WHERE timesheets.id_employee = :id AND at BETWEEN :from AND :to
+      WHERE timesheets.id_employee = :id AND at BETWEEN (:from)*1000 AND (:to)*1000
         ORDER BY id_employee ASC;
     ";
 
