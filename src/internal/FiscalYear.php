@@ -17,6 +17,25 @@ class Leave extends DataBase {
     return ($this->select())->fetch(PDO::FETCH_ASSOC);
   }
 
+  public function restartYear($params) {
+    $this->newFiscalYear($params);
+
+    $event = new Event();
+    return $event->updateRef();
+  }
+
+  public function newFiscalYear($params) {
+    if($params['end'] < $params['start']) {
+      return [
+        "error" => "La date de fin d'année fiscale est plus grande que la date de début d'année fiscale."
+      ];
+    } 
+    $params['created_at'] = time()*1000;
+    $this->insert($params);
+
+    return true;
+  }
+
   ## QUERIES ## 
 
   private function select() {

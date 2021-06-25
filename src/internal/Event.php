@@ -234,6 +234,33 @@ class Event extends DataBase {
     return true;
   }  
 
+  public function updateRef() {
+    # Aller chercher toute es références à modifier
+    $sql = "SELECT id, ref FROM events WHERE id_label != 1;";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute();
+    $data = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach($data as $row) {
+      $array = str_split($row['ref']);
+      $newYear = ($array[2] . $array[3]) + 1;
+      $newRef = $array[0] . $array[1] . $newYear;
+
+      for($i = 4; $i < count($array); $i++) {
+        $newRef = $newRef . $array[$i]; 
+      }
+      
+      $sql = "UPDATE events SET ref = :newRef WHERE id = :id;";
+      $query = $this->db_connection->prepare($sql);
+      $query->execute(
+        [
+          ':newRef' => $newRef,
+          ':id' => $row['id']
+        ]
+      );
+    }
+  }
+
 }
 
 ?>
