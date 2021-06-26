@@ -263,6 +263,7 @@ const ajoutTimesheet = () => {
   timesheet.querySelector('.save-btn').addEventListener('click',
     () => {
       const formData = new FormData();
+      formData.append('context', 'add-timesheet-event')
 
       timesheet.querySelectorAll('input, textarea').forEach(
         (input) => {
