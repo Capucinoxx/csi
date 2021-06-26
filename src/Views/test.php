@@ -13,7 +13,7 @@ $employee = new Employee();
 ## Tests employees creation ##
 
 $employee_info = [
-    'username' => 'test123456101',
+    'username' => 'test1234561012',
     'first_name' => 'Robert',
     'last_name' => 'Masson',
     'password' => '1234',
@@ -26,7 +26,7 @@ $employee_info = [
     'deleted_at' => null
 ];
 // var_dump($employee_info);
-// var_dump($employee->createEmployee($employee_info));
+var_dump($employee->createEmployee($employee_info));
 
 
 

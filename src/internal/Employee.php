@@ -44,6 +44,7 @@ class Employee extends DataBase {
 		# Vérifier si l'employé existe déjà
 		if(!$this->exists($params['username'])) {
       # Création de l'employé
+      $params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);
       $params['created_at'] = time()*1000;
       if(!$this->insert($params)) {
         return [
