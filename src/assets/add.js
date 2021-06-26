@@ -270,10 +270,11 @@ const ajoutTimesheet = () => {
         }
       )
 
-      // Display the key/value pairs
-for (var pair of formData.entries()) {
-  console.log(pair[0]+ ', ' + pair[1]); 
-}
+      fetch(
+        window.location, 
+        { method: 'POST', body: formData },
+        true
+      ).then(() => document.location.reload())
     }
   )
 }
