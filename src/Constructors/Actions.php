@@ -57,6 +57,7 @@ class Actions {
     ]);
 
     var_dump($rep);
+    die();
 
     // on store les informations dans les variables de sessions
   }
@@ -67,6 +68,8 @@ class Actions {
   private function disconnect() {
     // // unset all of the session variables
     $_SESSION = array();
+
+    session_destroy();
   }
 
   /**
