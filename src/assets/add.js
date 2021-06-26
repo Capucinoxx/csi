@@ -257,6 +257,26 @@ const dropdown = () => {
     }
   )
 }
+
+const ajoutTimesheet = () => {
+  const timesheet = document.getElementById('ajout-timesheet')
+  timesheet.querySelector('.save-btn').addEventListener('click',
+    () => {
+      const formData = new FormData();
+
+      timesheet.querySelectorAll('input, textarea').forEach(
+        (input) => {
+          formData.append(input.getAttribute('name'), input.value)
+        }
+      )
+
+      // Display the key/value pairs
+for (var pair of formData.entries()) {
+  console.log(pair[0]+ ', ' + pair[1]); 
+}
+    }
+  )
+}
  
 const getTime = (d) => {
   const t = d.getHours() + Math.round(d.getMinutes()/60 * 2) / 2
@@ -284,3 +304,4 @@ handleWeeklyEvents()
 drawTimeCursor()
 handleEventEditingModal()
 dropdown()
+ajoutTimesheet()

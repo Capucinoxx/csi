@@ -154,7 +154,7 @@ class Forms extends Input {
           <div class="full flex-end mt-2 panel-option">
             <button class="save-btn mr-2">
               <i class="fas fa-check-circle"></i>
-              Sauvegarder
+              Ajouter
             </button>
             <button class="close-btn">
               <i class="fas fa-times-circle"></i>
