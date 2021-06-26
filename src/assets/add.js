@@ -193,6 +193,18 @@ const handleEventEditingModal = () => {
         })
       )
 
+      container.querySelectorAll('.manage__title').forEach(
+        (title) => {
+          title.addEventListener('click', () => {
+            container.querySelectorAll('.manage__title').forEach(e => e.classList.toggle('is-active'))
+
+            
+          })
+        
+        
+        }
+      )
+
       container.querySelector('.close-btn').addEventListener('click', () => {
         console.log('click ')
         container.classList.remove('visible-modal')

@@ -1,7 +1,7 @@
 <?php
 require_once(dirname(__DIR__).'/html/vendor/autoload.php');
 
-// session_start();
+session_start();
 
 use \App\Constructors\Calendar;
 use \App\Constructors\Forms;
@@ -9,16 +9,18 @@ use App\Internal\Label;
 use App\Internal\Employee;
 use App\Internal\Event;
 use App\Constructors\Actions;
+use App\Internal\Timesheet;
 
 $IEvent = new Event();
 $ILabel = new Label();
 $IEmployee = new Employee();
-
-$_SESSION['loggedin'] = true;
+$ITimesheet = new Timesheet();
 
 if ($_SERVER["REQUEST_METHOD"] != "GET") {
-  (new Actions())->execute();
+  (new Actions($IEvent, $IEmployee, $ITimesheet))->execute();
 }
+
+$_SESSION['loggedin'] = true;
 
 $calendar = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, $projects_week);
 

@@ -3,7 +3,14 @@
 namespace App\Constructors;
 
 class Actions {
-  public function __construct() {}
+  private $IEvent;
+  private $Iemployee;
+
+  public function __construct($IEvent, $IEmployee, $ITimesheet) {
+    $this->IEvent = $IEvent;
+    $this->IEmployee = $IEmployee;
+    $this->ITimesheet = $ITimesheet;
+  }
 
   public function execute() {
     switch($_SERVER["REQUEST_METHOD"]) {
@@ -44,10 +51,12 @@ class Actions {
    */
   private function connect() {
     // on se connecte
-    $rep = $Ievent->login([
+    $rep = ($this->IEmployee)->login([
       'username' => $_POST['username'],
       'password' => $_POST['password']
     ]);
+
+    var_dump($rep);
 
     // on store les informations dans les variables de sessions
   }
@@ -58,6 +67,13 @@ class Actions {
   private function disconnect() {
     // // unset all of the session variables
     $_SESSION = array();
+  }
+
+  /**
+   * ajoute un évennement pour l'utilisateur courant
+   */
+  private function addTimesheet() {
+
   }
 }
 
