@@ -75,7 +75,11 @@ class Employee extends DataBase {
 
     if(!$isDeleted) {
       # Validation du mot de passe
-      return $this->passwordValidation($params);
+      if($this->passwordValidation($params)) {
+        return $this->userLogged($params['username']);
+      }
+      
+      return false;
     }
 
     return $isDeleted;
@@ -100,6 +104,26 @@ class Employee extends DataBase {
     }
 
     return true;
+  }
+
+  private function userLogged($username) {
+    $sql = "
+    SELECT 
+      id,
+      first_name,
+      last_name,
+      role
+    FROM Employees 
+    WHERE username = :username;";
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ':username' => $username
+      ]
+    );
+
+    return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
   private function deleted($username) {

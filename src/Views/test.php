@@ -154,6 +154,7 @@ $timsheet_info = [
 
 var_dump($timesheet->createTimesheet($timsheet_info));
 */
+/*
 $timsheet_info = [
     'id_event' => 1,
     'id_employee' => 1,
@@ -165,18 +166,19 @@ $timsheet_info = [
 ];
 
 var_dump($timesheet->createTimesheet($timsheet_info));
-
+*/
+/*
 $data_print = [
     'id_employee' => 1,
     'from' => '2021-06-13',
     'to' => '2021-06-19'
 ]; 
 $timesheet->print($data_print);
-
+*/
 ?>
 
  <section class="test-data-dump">
-  <pre><?php print_r($timesheet->get(1, 1623557201, 1623949600)); ?></pre>
+  <pre><?php //print_r($timesheet->get(1, 1623557201, 1623949600)); ?></pre>
 </section>
 
 <style>
