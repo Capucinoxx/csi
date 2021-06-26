@@ -1,22 +1,27 @@
 <?php 
 
-namespace App\Views;
+namespace App\Constructors;
 
 class Input {
   public function __construct() {}
 
-  protected function FieldWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
+  public function FieldWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
+    $input = ($type === 'textarea')
+      ? "<textarea  class='form__input' name='{$key}'></textarea>"
+      : "<input type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
+    
+
     return <<<HTML
       <div class="form__div block {$extra_class}">
-        <input type="{$type}" class="form__input" placeholder=" ">
-        <label for="" name="{$key}" class="form__label">{$label}</label>
+        {$input}
+        <label for="{$key}"  class="form__label">{$label}</label>
       </div>
     HTML;
   }
 
-  protected function Choice(int $id, ?string $color = null, string $title, ?array $informations = []): string {
+  protected function Choice(int $id, ?string $color = null, string $title): string {
     return <<<HTML
-      <li class="choice flex" data-id="{$id}" data-informations="{$informations}">
+      <li class="choice flex" data-id="{$id}">
         <div class="flex-center mr-2" style="flex: 0 1 0">
           <i class="round" style="background: {$color}"></i>
         </div>
@@ -43,6 +48,25 @@ class Input {
       </div>
     HTML;
   }
+
+  protected function Dropdown(string $label, string $key, ?array $options = [], string $k): string {
+    $optionsHTML = [];
+
+    foreach($options as $option) {
+      $optionsHTML[] = "<li><span>{$option[$k]}</span></li>";
+    }
+    $optionsHTML = implode('', $optionsHTML);
+    
+    return <<<HTML
+      <div class="dropdown filled form__div full">
+        <ul>
+          {$optionsHTML} 
+        </ul>
+        <input type="text" name="{$key}" class="form__input" placeholder=" "/>
+        <label class="form__label">{$label}</label>
+      </div>
+    HTML;
+  }
 }
 
 class Forms extends Input {
@@ -61,6 +85,7 @@ class Forms extends Input {
    * de projet / évennement / employé / libellé
    * @param string $type le sujet du formulaire
    * @param string $id Id de la section
+   * @return string
    */
   public function draw(string $type, string $id): string {
     $options = [];
@@ -113,7 +138,37 @@ class Forms extends Input {
   }
 
   /**
+   * Génère la fenêtre modale pour ajouter ou modifier un évennements au 
+   * calendrier hebdomadaire
+   * @return string
+   */
+  public function draw_timesheet_form(string $id): string {
+    return <<<HTML
+      <div id="{$id}" class="manage__container">
+        <div class="grid manage__wrapper">
+          {$this->Dropdown("Projet", "project", $this->events, "title_event")}
+          {$this->FieldWithLabel("Journée", "date", "date", "full")}
+          {$this->FieldWithLabel("Heure de début", "start", "time")}
+          {$this->FieldWithLabel("Heure de fin", "end", "time")}
+          {$this->FieldWithLabel("Description", "description", "textarea", "full grid-height")}
+          <div class="full flex-end mt-2 panel-option">
+            <button class="save-btn mr-2">
+              <i class="fas fa-check-circle"></i>
+              Sauvegarder
+            </button>
+            <button class="close-btn">
+              <i class="fas fa-times-circle"></i>
+              Fermeture
+            </button>
+          </div>
+        </div>
+      </div>
+    HTML;
+  }
+
+  /**
    * génère le header du formulaire
+   * @return string
    */
   private function draw_header(): string {
     return <<<HTML
@@ -131,7 +186,10 @@ class Forms extends Input {
   }
 
   /**
-   * Génère le 
+   * Génère la liste des options pour choisir quel sujet va être modifié
+   * @param array $options Liste des choix
+   * @param string $type Type du formulaire
+   * @return string
    */
   private function draw_list(array $options, string $type): string {
     $optionsHTML = [];
@@ -140,6 +198,12 @@ class Forms extends Input {
       case "employé":
         foreach($options as $option) {
           $optionsHTML[] = $this->Choice(intval($option['id']), null, "{$option['last_name']}, {$option['first_name']}");
+        }
+      break;
+
+      case "projet":
+        foreach($options as $option) {
+          $optionsHTML[] = $this->Choice(intval($option['id_event']), $option['color'], $option['title_event']);
         }
       break;
 
@@ -155,6 +219,10 @@ class Forms extends Input {
     return $optionsHTML;
   }
 
+  /**
+   * Génère le formulaire pour l'ajout ou l'édition des libellés
+   * @return string
+   */
   private function draw_form_label(): string {
     return <<<HTML
       {$this->FieldWithLabel("Nom", "name", "text")}
@@ -162,6 +230,10 @@ class Forms extends Input {
     HTML;
   }
 
+  /**
+   * Génère le formulaire pour l'ajout ou l'édition des employés
+   * @return string
+   */
   private function draw_form_employee(): string {
     return <<<HTML
       {$this->FieldWithLabel("Nom d'utilisateur", "username", "text", "full")}
@@ -170,12 +242,21 @@ class Forms extends Input {
     HTML;
   }
 
+  /**
+   * Génère le formulaire pour l'ajout ou l'édition des projets
+   * @return string
+   */
   private function draw_form_event(): string {
     return <<<HTML
-
+      {$this->Dropdown("Libellé", "label", $this->labels, "title")}
     HTML;
   }
 
+  /**
+   * Génère le bon formulaire selon le type
+   * @param string $type Type de formulaire
+   * @return string
+   */
   private function draw_form(string $type): string {
     $form = "";
 
@@ -198,10 +279,11 @@ class Forms extends Input {
             <span class="name"></span>
           </div>
         </div>
-        <div class="grid px-1">
+        <div class="grid px-1 mb-4">
           {$form}
         </div>
       </div>
     HTML;
   }
+
 }

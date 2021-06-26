@@ -156,9 +156,20 @@
   grid-template-columns: repeat(auto-fill, 245px);
   grid-gap: 24px;
   align-items: stretch;
+  width: 100%;
 
   .full {
     grid-column: 1 / -1;
+  }
+
+  &-height {
+    grid-row-end: span 6;
+    height: 100%;
+    align-content: stretch;
+  }
+
+  &.height {
+    min-height: 400px;
   }
 }
 

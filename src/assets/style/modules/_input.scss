@@ -267,3 +267,72 @@
     opacity: .75;
   }
 }
+
+.dropdown {
+  position: relative;
+
+  input {
+    caret-color: transparent;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    max-height: 300px;
+    border-radius: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transform-origin: 0 0;
+    transition: opacity .2s ease, visibility .2s ease, transform .3s cubic-bezier(.4, .6, .5, 1.32);
+    transform: scale(.8) translate(0, 4px);
+    width: 100%;
+
+    li {
+      opacity: 0;
+      transform: translate(6px, 0);
+      transition: all .3s ease;
+    }
+  }
+
+  &.open {
+    input {
+      z-index: -1;
+    }
+
+    & > label {
+      &::before {
+        transform: scale(.96, .8) rotate(-50deg);
+      }
+      &::after {
+        transform: scale(.96, .8) rotate(50deg);
+      }
+    }
+
+    ul {
+      z-index: 500;
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translate(0, 42px);
+      transition: opacity .3s ease, visibility .3s ease, transform .3s cubic-bezier(.4, .6, .5, 1.32);
+
+      li {
+        opacity: 1;
+        transform: translate(0,0);
+        z-index: 500;
+        cursor:pointer;
+        background: var(--color);
+
+        span {
+          display: block;
+          padding: 10px 16px;
+          transition: all .3s ease;
+
+        }
+      }
+    }
+  }
+}
