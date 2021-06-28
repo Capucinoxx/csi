@@ -177,20 +177,46 @@ document.querySelectorAll('.dropdown').forEach(
   }
 )
 
-const openTimesheetModal = (date) => {
-  const modal = document.getElementById('ajout-timesheet')
+/**
+ * Gestion des évennements relier à la fenêtre d'ajout de timesheet
+ */
+const addmodal = document.getElementById('ajout-timesheet')
+// gestion btn fermeture
+addmodal.querySelector('.close-btn').addEventListener('click', () => addmodal.classList.remove('visible'))
 
-  modal.querySelector('[name="date"]').value = date.toISOString().slice(0, 10)
+// gestion btn ajout
+addmodal.querySelector('.save-btn').addEventListener('click', () => {
+  const formData = new FormData()
+  formData.append('context', 'addTimesheetEvent')
+  addmodal.querySelectorAll('input, textarea').forEach(
+    (field) => {
+      formData.append(input.getAttribute('name'), field.value)
+    }
+  )
+
+  fetch(
+    window.location,
+    { method: 'POST', body: formData },
+    true
+  ).then(() => document.location.reload())
+})
+
+/**
+ * Gestion de l'ouverture de la fenêtre gérant l'ajout de timesheet
+ * @param {Date} date 
+ */
+const openTimesheetModal = (date) => {
+  addmodal.querySelector('[name="date"]').value = date.toISOString().slice(0, 10)
   
-  modal.querySelector('[name="end"]').value = getTime(date)
+  addmodal.querySelector('[name="end"]').value = getTime(date)
   date.setHours( date.getHours() - 1 )
-  modal.querySelector('[name="start"]').value = getTime(date)
+  addmodal.querySelector('[name="start"]').value = getTime(date)
 
   const percent = (date.getDay() + 1) % 7 / 7 * 100
   percent < 30 
-    ? (modal.style.left = `${percent}%`) 
-    : (modal.style.right = `${100 - percent}%`)
-  modal.classList.add('visible')
+    ? (addmodal.style.left = `${percent}%`) 
+    : (addmodal.style.right = `${100 - percent}%`)
+    addmodal.classList.add('visible')
 }
 
 const getTime = (d) => {
