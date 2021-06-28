@@ -7,23 +7,27 @@
           Ajout
         </button>
       </div>
-      <div class="panel-option">
-        <button id="btn-trigger-gestion">
-          <i class="fas fa-cog"></i>
-          Gestion
-        </button>
-        <ul class="gestion-options">
-          <li>
-            <i data-modal="gestion-labels" class="gestion-option fas fa-tag"></i>
-          </li>
-          <li>
-            <i data-modal="gestion-users" class="gestion-option fas fa-users"></i>
-          </li>
-          <li>
-            <i data-modal="gestion-projects" class="gestion-option fas fa-archive"></i>
-          </li>
-        </ul>
-      </div>
+      <?php if (isset($_SESSION['role']) && filter_var($_SESSION['role'], FILTER_VALIDATE_BOOLEAN)): ?>
+        <div class="panel-option">
+          <button id="btn-trigger-gestion">
+            <i class="fas fa-cog"></i>
+            Gestion
+          </button>
+          
+          <ul class="gestion-options">
+            <li>
+              <i data-modal="gestion-labels" class="gestion-option fas fa-tag"></i>
+            </li>
+            <li>
+              <i data-modal="gestion-users" class="gestion-option fas fa-users"></i>
+            </li>
+            <li>
+              <i data-modal="gestion-projects" class="gestion-option fas fa-archive"></i>
+            </li>
+          </ul>
+          
+        </div>
+      <?php endif; ?>
     </section>
     <?= $calendar->draw_monthly_calendar() ?>
       <span class="employee-name">Jacty Milena</span>
@@ -41,6 +45,10 @@
   </div>
 </div>
 
-<?= $forms->draw("libellé", "gestion-labels") ?>
-<?= $forms->draw("employé", "gestion-users") ?>
-<?= $forms->draw("projet", "gestion-projects") ?>
+<?php var_dump($_SESSION); ?>
+
+<?php if (isset($_SESSION['role']) && filter_var($_SESSION['role'], FILTER_VALIDATE_BOOLEAN)):?>
+  <?= $forms->draw("libellé", "gestion-labels") ?>
+  <?= $forms->draw("employé", "gestion-users") ?>
+  <?= $forms->draw("projet", "gestion-projects") ?>
+<?php endif; ?>
