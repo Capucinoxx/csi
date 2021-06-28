@@ -25,12 +25,13 @@
               <i data-modal="gestion-projects" class="gestion-option fas fa-archive"></i>
             </li>
           </ul>
-          
         </div>
       <?php endif; ?>
     </section>
     <?= $calendar->draw_monthly_calendar() ?>
-      <span class="employee-name">Jacty Milena</span>
+      <span class="employee-name">
+        <?= $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?>
+      </span>
     <div class="flex-y-end" style="flex: 1 1 auto">
       <div class="panel-option">
         <button onClick="logout()">

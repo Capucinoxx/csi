@@ -59,7 +59,8 @@ admin_panel && admin_panel.querySelectorAll('li i').forEach(
 /**
  * Ajout évennements relatifs boutons d'options
  */
-document.getElementById('btn-trigger-gestion').addEventListener('click', () => {
+const gestionBtn = document.getElementById('btn-trigger-gestion')
+gestionBtn && gestionBtn.addEventListener('click', () => {
   admin_panel.classList.toggle('visible')
 })
 
