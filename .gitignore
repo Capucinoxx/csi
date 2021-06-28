@@ -10,3 +10,5 @@ vendor/
 .todo
 
 .vscode
+
+*.css.map

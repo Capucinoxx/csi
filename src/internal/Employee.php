@@ -1,15 +1,15 @@
 <?php
 namespace App\Internal;
-use App\Internal\Database;
+use App\Internal\DataBase;
 use App\Internal\Leave;
 use \PDO;
 
 
-class Employee extends Database {
+class Employee extends DataBase {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = 'employees';
+    $this->table_name = "Employees";
   }
 
   public function getByID($id) {
@@ -44,8 +44,10 @@ class Employee extends Database {
 		# Vérifier si l'employé existe déjà
 		if(!$this->exists($params['username'])) {
       # Création de l'employé
+      $params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);
+      $params['created_at'] = time()*1000;
       if(!$this->insert($params)) {
-        return (object) [
+        return [
           "error" => "Erreur lors de la création de l'employé."
         ];
       }
@@ -56,7 +58,7 @@ class Employee extends Database {
       return true;
     }
 
-    return (object) [
+    return [
       "error" => "Un employé existe déjà avec le nom d'utilisateur {$params['username']}."
     ];
 	}
@@ -64,7 +66,7 @@ class Employee extends Database {
   public function login($params) {
     # Valider que l'employé existe
     if(!$this->exists($params['username'])) {
-      return (object) [
+      return [
         "error" => "Nom d'utilisateur incorrect."
       ];
     }
@@ -74,7 +76,11 @@ class Employee extends Database {
 
     if(!$isDeleted) {
       # Validation du mot de passe
-      return $this->passwordValidation($params);
+      if($this->passwordValidation($params)) {
+        return $this->userLogged($params['username']);
+      }
+      
+      return false;
     }
 
     return $isDeleted;
@@ -82,7 +88,7 @@ class Employee extends Database {
 
   ##  QUERIES ##
   private function passwordValidation($params) {
-    $sql = "SELECT password FROM employees WHERE username = :username;";
+    $sql = "SELECT password FROM Employees WHERE username = :username;";
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
@@ -93,7 +99,7 @@ class Employee extends Database {
 
     if(!password_verify($params['password'], $row['password'])) {
 
-      return (object) [
+      return [
         "error" => "Mot de passe incorrect."
       ];
     }
@@ -101,8 +107,28 @@ class Employee extends Database {
     return true;
   }
 
+  private function userLogged($username) {
+    $sql = "
+    SELECT 
+      id,
+      first_name,
+      last_name,
+      role
+    FROM Employees 
+    WHERE username = :username;";
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ':username' => $username
+      ]
+    );
+
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   private function deleted($username) {
-    $sql = "SELECT deleted_at, id FROM employees WHERE username = :username;";
+    $sql = "SELECT deleted_at, id FROM Employees WHERE username = :username;";
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
@@ -114,14 +140,14 @@ class Employee extends Database {
       $row = $query->fetch(PDO::FETCH_ASSOC);
 
       if($row['deleted_at'] && (time()*1000)> $row['deleted_at']) {
-        return (object) [ 
+        return [ 
           "error" => "Cet usager a été supprimé le " . date("Y-m-d", $row['deleted_at']/1000)
         ];
       }
     } 
 
     if($query->errorCode() == "23000") {
-      return (object) [ 
+      return [ 
         "error" => "Nom d'utilisateur incorrect."
       ];
     }
@@ -150,7 +176,7 @@ class Employee extends Database {
       rate, rate_AMC, 
       rate_CSI, created_at, 
       deleted_at 
-    FROM employees WHERE deleted_at IS NULL";
+    FROM Employees WHERE deleted_at IS NULL";
 
     if(!$isOne) {
       # Select all employees
@@ -166,22 +192,19 @@ class Employee extends Database {
     return (($query->errorCode() == "23000") ? false : $query);
   }
 
-  // private function insert($params) {
-  //   # Hashage du mot de passe
-  //   $hashed_password = password_hash($params['password'], PASSWORD_DEFAULT);
-  //   $params['password'] = $hashed_password;
+  public function getEmployeeStatus($id_employee) {
+    $sql = "SELECT regular FROM Employees WHERE id = :id;";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ':id' => $id_employee
+      ]
+    );
 
-  //   # Insertion de l'employé
-  //   $sql = sprintf(
-  //   "INSERT INTO employees (%s) VALUES (%s)", 
-  //   implode(', ', array_keys($params)),
-  //   ':' . implode(', :', array_keys($params))
-  //   );
-  //   $query = $this->db_connection->prepare($sql);
-  //   $query->execute($params);
+    $data = $query->fetch(PDO::FETCH_ASSOC);
 
-	// 	return $params['username'];
-  // }
+    return $data['regular'];
+  }
 
   private function insertLeaves($username) {
   	# Id de l'employé créé
