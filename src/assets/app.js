@@ -227,3 +227,14 @@ const getTime = (d) => {
 
   return `${hours}:${minutes}`
 }
+
+const logout = () => {
+  const formData = new FormData()
+  formData.append('context', 'disconnect')
+
+  fetch(
+    window.location, 
+    { method: 'POST', body: formData },
+    true
+  ).then(() => document.location.reload())
+}
