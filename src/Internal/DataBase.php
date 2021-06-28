@@ -34,7 +34,6 @@ class DataBase {
   }
 
   ## QUERIES ##
-
   protected function delete($id) {
     $sql = "
     UPDATE {$this->table_name} 
@@ -72,7 +71,6 @@ class DataBase {
   }
 
   protected function insert($params) {
-    $params['created_at'] = time()*1000;
 
     $sql = sprintf(
       "INSERT INTO {$this->table_name} (%s) VALUES (%s)", 
@@ -85,5 +83,30 @@ class DataBase {
 
     return $query;
   }
+
+  protected function isValid($id, $at) {
+    $sql = "SELECT deleted_at FROM {$this->table_name} WHERE id = :id";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ':id' => $id
+      ]
+    );
+
+    if($query->rowCount() == 0) {
+      # Aucune donnée donc l'objet n'a pas été créé
+      return false;
+    } 
+
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+
+    if($row['deleted_at'] && $at > $row['deleted_at']) {
+      # L'évènement existe, mais il a été supprimé
+      return false;
+    }
+
+    return true;
+  }
+
 }
 ?>

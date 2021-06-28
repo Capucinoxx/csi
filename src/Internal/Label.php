@@ -17,16 +17,29 @@ class Label extends DataBase {
     return ($this->select())->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function getIDByEvent($id_event) {
+    $sql = "SELECT id_label FROM Events WHERE id = :id";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ":id" => $id_event
+      ]
+    );
+
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function createLabel($params) {
     # Vérifier si le label existe déjà
     if(!$this->exists($params['title'])) {
       # Création du label
+      $params['created_at'] = time()*1000;
       $this->insert($params);
 
       return true;
     }
 
-    return (object) [
+    return [
       "error" => "Un libellé existe déjà avec le titre {$params['title']}."
     ];
   }
@@ -43,7 +56,7 @@ class Label extends DataBase {
       return true;
     }
 
-    return (object) [
+    return [
       "error" => "Ce libellé ne peut pas être supprimé."
     ];
   }

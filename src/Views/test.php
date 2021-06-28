@@ -13,7 +13,7 @@ $employee = new Employee();
 ## Tests employees creation ##
 
 $employee_info = [
-    'username' => 'test123456101',
+    'username' => 'test1234561012',
     'first_name' => 'Robert',
     'last_name' => 'Masson',
     'password' => '1234',
@@ -26,7 +26,7 @@ $employee_info = [
     'deleted_at' => null
 ];
 // var_dump($employee_info);
-// var_dump($employee->createEmployee($employee_info));
+var_dump($employee->createEmployee($employee_info));
 
 
 
@@ -122,13 +122,63 @@ $timesheet = new Timesheet();
 
 ## Tests get timesheet ##
 # Get By id_employee, from, to
-$timesheet->get(1, 1581120000000, 1596099200000);
+// var_dump($timesheet->get(100, 1, 2));
+# Get employee by id
+// var_dump($timesheet->getByID(1));
+//var_dump($timesheet->get(1, 152394900, 1623949600));
 
+## Tests timesheet creation ##
+# Project
+/*
+$timsheet_info = [
+    'id_event' => 1,
+    'id_employee' => 1,
+    'start' => 8,
+    'end' => 10,
+    'at' => 1623697500,
+    'hours_invested' => 2,
+    'description' => 'test'
+];
 
+var_dump($timesheet->createTimesheet($timsheet_info));
+
+$timsheet_info = [
+    'id_event' => 1,
+    'id_employee' => 1,
+    'start' => 12,
+    'end' => 15,
+    'at' => 1623697500,
+    'hours_invested' => 2,
+    'description' => 'test'
+];
+
+var_dump($timesheet->createTimesheet($timsheet_info));
+*/
+/*
+$timsheet_info = [
+    'id_event' => 1,
+    'id_employee' => 1,
+    'start' => 8,
+    'end' => 15,
+    'at' => 1623816401,
+    'hours_invested' => 7,
+    'description' => 'test'
+];
+
+var_dump($timesheet->createTimesheet($timsheet_info));
+*/
+/*
+$data_print = [
+    'id_employee' => 1,
+    'from' => '2021-06-13',
+    'to' => '2021-06-19'
+]; 
+$timesheet->print($data_print);
+*/
 ?>
 
-<section class="test-data-dump">
-  <pre><?php print_r($timesheet->getByID(1)); ?></pre>
+ <section class="test-data-dump">
+  <pre><?php //print_r($timesheet->get(1, 1623557201, 1623949600)); ?></pre>
 </section>
 
 <style>
@@ -137,4 +187,4 @@ $timesheet->get(1, 1581120000000, 1596099200000);
     overflow-y: scroll;
     z-index: 100;
   }
-</style>
+</style> 

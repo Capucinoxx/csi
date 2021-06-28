@@ -45,8 +45,9 @@ class Employee extends DataBase {
 		if(!$this->exists($params['username'])) {
       # Création de l'employé
       $params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);
+      $params['created_at'] = time()*1000;
       if(!$this->insert($params)) {
-        return (object) [
+        return [
           "error" => "Erreur lors de la création de l'employé."
         ];
       }
@@ -57,7 +58,7 @@ class Employee extends DataBase {
       return true;
     }
 
-    return (object) [
+    return [
       "error" => "Un employé existe déjà avec le nom d'utilisateur {$params['username']}."
     ];
 	}
@@ -65,7 +66,7 @@ class Employee extends DataBase {
   public function login($params) {
     # Valider que l'employé existe
     if(!$this->exists($params['username'])) {
-      return (object) [
+      return [
         "error" => "Nom d'utilisateur incorrect."
       ];
     }
@@ -98,7 +99,7 @@ class Employee extends DataBase {
 
     if(!password_verify($params['password'], $row['password'])) {
 
-      return (object) [
+      return [
         "error" => "Mot de passe incorrect."
       ];
     }
@@ -139,14 +140,14 @@ class Employee extends DataBase {
       $row = $query->fetch(PDO::FETCH_ASSOC);
 
       if($row['deleted_at'] && (time()*1000)> $row['deleted_at']) {
-        return (object) [ 
+        return [ 
           "error" => "Cet usager a été supprimé le " . date("Y-m-d", $row['deleted_at']/1000)
         ];
       }
     } 
 
     if($query->errorCode() == "23000") {
-      return (object) [ 
+      return [ 
         "error" => "Nom d'utilisateur incorrect."
       ];
     }
@@ -191,22 +192,19 @@ class Employee extends DataBase {
     return (($query->errorCode() == "23000") ? false : $query);
   }
 
-  // private function insert($params) {
-  //   # Hashage du mot de passe
-  //   $hashed_password = password_hash($params['password'], PASSWORD_DEFAULT);
-  //   $params['password'] = $hashed_password;
+  public function getEmployeeStatus($id_employee) {
+    $sql = "SELECT regular FROM Employees WHERE id = :id;";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ':id' => $id_employee
+      ]
+    );
 
-  //   # Insertion de l'employé
-  //   $sql = sprintf(
-  //   "INSERT INTO employees (%s) VALUES (%s)", 
-  //   implode(', ', array_keys($params)),
-  //   ':' . implode(', :', array_keys($params))
-  //   );
-  //   $query = $this->db_connection->prepare($sql);
-  //   $query->execute($params);
+    $data = $query->fetch(PDO::FETCH_ASSOC);
 
-	// 	return $params['username'];
-  // }
+    return $data['regular'];
+  }
 
   private function insertLeaves($username) {
   	# Id de l'employé créé
