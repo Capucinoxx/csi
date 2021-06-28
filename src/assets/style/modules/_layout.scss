@@ -474,3 +474,35 @@
   color: #80868B;
   font-size: .95em;
 }
+
+.alert-notice {
+  padding: 1em;
+  background-color: var(--color);
+  border-bottom: 7px solid var(--alert);
+  color: var(--background);
+  margin-bottom: 1.4em;
+  font-size: 1.7em;
+  position: absolute;
+  top: 20px;
+  left: 30px;
+  width: 30vw; 
+  z-index: 9999;
+  border-radius: .75em;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    margin-left: 15px;
+    font-weight: bold;
+    float: right;
+    font-size: 1.7em;
+    line-height: 1.7em;
+    cursor: pointer;
+    transition: 0.3s;
+    &:hover {
+      color: #df5065;
+    }
+  }
+}

@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] != "GET") {
 }
 
 $_SESSION['loggedin'] = true;
+$_SESSION['error'] = "test alert";
 
 require_once(dirname(__DIR__).'/html/Views/head.html');
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
@@ -35,6 +36,11 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $forms = new Forms([], [], []);
   require_once('./Views/Login.php');
 }
+
+if (isset($_SESSION['error'])) {
+  echo $forms->draw_alert($_SESSION['error']);  
+}
+
 
 
 

@@ -81,6 +81,19 @@ class Forms extends Input {
   }
 
   /**
+   * Fonction imprimant la fenêtre comportant les erreurs
+   */
+  public function draw_alert(string $message): string {
+    return <<<HTML
+      <div class="alert-notice">
+        {$message}
+        <span onclick="this.parentElement.style.display='none';">&times;</span>
+        
+      </div>
+    HTML;
+  }
+
+  /**
    * fonction imprimant la fenêtre du formulaire pour l'édition ou l'ajout
    * de projet / évennement / employé / libellé
    * @param string $type le sujet du formulaire
