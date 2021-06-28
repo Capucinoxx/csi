@@ -128,8 +128,6 @@ document.getElementById('btn-trigger-timesheet').addEventListener('click', (e) =
   openTimesheetModal(new Date())
 })
 
-
-
 /**
  * Ajout des évennements relatif aux différents dropdown
  */
