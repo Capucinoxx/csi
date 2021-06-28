@@ -69,6 +69,8 @@ class Actions {
     // // unset all of the session variables
     $_SESSION = array();
 
+    header("Refresh:0");
+
     session_destroy();
   }
 
@@ -76,7 +78,7 @@ class Actions {
    * ajoute un évennement pour l'utilisateur courant
    */
   private function addTimesheet() {
-
+    header("Refresh:0");
   }
 }
 

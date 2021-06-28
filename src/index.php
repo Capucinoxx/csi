@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__).'/src/vendor/autoload.php');
+require_once(dirname(__DIR__).'/html/vendor/autoload.php');
 
 session_start();
 
@@ -20,23 +20,23 @@ if ($_SERVER["REQUEST_METHOD"] != "GET") {
   (new Actions($IEvent, $IEmployee, $ITimesheet))->execute();
 }
 
-// $_SESSION['loggedin'] = true;
+$_SESSION['loggedin'] = true;
 
-$calendar = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, null);
-
-
-require_once(dirname(__DIR__).'/src/Views/head.html');
+require_once(dirname(__DIR__).'/html/Views/head.html');
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $forms = new Forms(
     $ILabel->get(),
     $IEvent->get(1),
     $IEmployee->get()
   );
+  $calendar = new Calendar($forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
   require_once('./Views/Calendar.php');
 } else {  
   $forms = new Forms([], [], []);
   require_once('./Views/Login.php');
 }
 
-require_once(dirname(__DIR__).'/src/Views/footer.html');
+
+
+require_once(dirname(__DIR__).'/html/Views/footer.html');
 ?>

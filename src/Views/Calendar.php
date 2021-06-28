@@ -2,7 +2,7 @@
   <div class="flex-x p-2">
     <section class="controls-panel">
       <div class="panel-option">
-        <button data-modal="ajout-timesheet">
+        <button id="btn-trigger-timesheet" data-modal="ajout-timesheet">
           <i class="fas fa-plus"></i>
           Ajout
         </button>
@@ -44,4 +44,3 @@
 <?= $forms->draw("libellé", "gestion-labels") ?>
 <?= $forms->draw("employé", "gestion-users") ?>
 <?= $forms->draw("projet", "gestion-projects") ?>
-<?= $forms->draw_timesheet_form("ajout-timesheet") ?>

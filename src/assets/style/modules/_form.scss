@@ -33,6 +33,7 @@
   &.editing-mode {
     max-height: 1000px;
     transition: max-height 1.5s ease-in;
+    display: block !important;
   }
 }
 

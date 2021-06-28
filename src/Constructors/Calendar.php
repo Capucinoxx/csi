@@ -1,6 +1,7 @@
 <?php 
 
 namespace App\Constructors;
+use \App\Constructors\Forms;
 
 class Calendar {
   
@@ -33,7 +34,7 @@ class Calendar {
   public $projects;
   public $week;
   public $year;
-
+  public $forms;
 
   /**
    * Calendar contructor
@@ -41,10 +42,10 @@ class Calendar {
    * @param int $year L'année
    * @param array $proejcts Liste des projets de la semaine en cours
    */
-  public function __construct(?int $week = null, ?int $year = null, ?array $projects = null) {
+  public function __construct(Forms $forms, ?int $week = null, ?int $year = null, ?array $projects = null) {
     $this->projects = $projects === null ? [[],[],[],[],[],[],[]] : $projects;
 
-
+    $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
   }
@@ -137,7 +138,7 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('next month') : $date->modify('+8 days');
 
-    return new Calendar($date->format('W'), $date->format('o'));
+    return new Calendar($this->forms, $date->format('W'), $date->format('o'));
   }
 
   /**
@@ -149,7 +150,7 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('last month') : $date;
 
-    return new Calendar($date->format('W'), $date->format('o'));
+    return new Calendar($this->forms, $date->format('W'), $date->format('o'));
   }
 
 
@@ -274,6 +275,8 @@ class Calendar {
 
     // $form = ob_get_contents(); 
 
+    $form = $this->forms->draw_timesheet_form("ajout-timesheet");
+
     return <<<HTML
       <div class='schedule__events'>
         <div class='scroll'>
@@ -282,7 +285,8 @@ class Calendar {
               {$html_hours}
             </ul>
             <ul id="week-calendar" class='ml-60 z-10' style='align-items: stretch'>
-            <div class='cursor'></div>
+              {$form}
+              <div class='cursor'></div>
               {$html_days}
             </ul>
           </div>

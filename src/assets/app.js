@@ -1,335 +1,203 @@
-class ListFilter extends HTMLElement {
-  constructor () {
-    super()
-    this.root = this.attachShadow({ mode: 'open' })
-  }
+/**
+ * Ajout des évennements appropriés sur le calendrier hebdomadaire
+ */
+const dailyLists = document.querySelectorAll('.event-list')
+dailyLists.forEach(
+  (list) => {
+    list.addEventListener('click', (e) => {
+      console.log(e.target)
+      const [y,m,d] = list.getAttribute('data-date').split('-')
+      const date = new Date(y, m-1,d)
+      console.log(date.getDay())
 
-  connectedCallback() {
-    const items = JSON.parse(this.getAttribute('items')) || []
-    const subject = this.getAttribute('subject') || ''
-
-    let childs = ''
-    items.forEach(item => {
-      childs += `
-        <li class="list-item" data-id="${item['id']}">
-          <span>${item['name']}</span>
-          <button>Éditer</button>
-        </li>
-      `
+      openTimesheetModal(date)
     })
 
-    this.root.innerHTML = `
-      <style>
-        :host {
-          display: block;
-        }
-        li:hover {
-          --edit-opacity: 1;
-        }
-        @media(hover:none) {
-          --edit-opacity: 1;
-        }
-
-        .searchlist {
-          width: 100%;
-        }
-
-        .scroll {
-          padding: 20px;
-          overflow-y: auto;
-          max-height: 100%;
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-          position: relative;
-          padding-bottom: 0;
-          padding-top: 0;
-          box-shadow: 0 1px 2px rgba(0,0,0,0.07), 
-                0 2px 4px rgba(0,0,0,0.07), 
-                0 4px 8px rgba(0,0,0,0.07), 
-                0 8px 16px rgba(0,0,0,0.07),
-                0 16px 32px rgba(0,0,0,0.07), 
-                0 32px 64px rgba(0,0,0,0.07);
-        }
-        
-        .searchlist {
-          margin-bottom: 44px;
-        }
-
-        .scroll::-webkit-scrollbar {
-          display: none;
-        }
-
-        .list-container {
-          list-style: none;
-          min-height: 200px;
-          max-height: 200px;
-          padding: 0 16px;
-          margin: 0;
-          font-size: 14px;
-        }
-
-        .form__div {
-          position: relative;
-          height: 48px;
-          flex: 1 1 auto;
-        }
-        
-        .form__input {
-          position: absolute;
-          top: 0;
-          top: 0;
-          left: 0;
-          width: calc(100% - 2rem);
-          border: 1px solid #DADCE0;
-          border-radius: .5rem;
-          outline: none;
-          padding: 1rem;
-          background: none;
-          z-index: 1;
-        }
-        
-        .form__label {
-          position: absolute;
-          left: 1rem;
-          top: 1.4rem;
-          padding: 0 .25rem;
-          background-color: #fff;
-          font-size: 1.4rem;
-          color: #80868B;
-          transition: .3s;
-        }
-        
-        .form__input:focus + .form__label{
-          top: -.5rem;
-          left: .8rem;
-          color: #275EFE;
-          font-size: 1rem;
-          font-weight: 500;
-          z-index: 10;
-        }
-        
-        .form__input:not(:placeholder-shown).form__input:not(:focus)+ .form__label{
-          top: -.5rem;
-          left: .8rem;
-          font-size: 1.4rem;
-          font-weight: 500;
-          z-index: 10;
-        }
-        
-        .form__input:focus{
-          border: 1.5px solid #275EFE;
-        }
-
-        .list-item {
-          padding: 12px 0;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .list-item:not(:last-child) {
-          border-bottom: 1px solid #D1D6EE;
-        }
-
-        span {
-          display: block;
-        }
-
-        button {
-          -webkit-appearance: none;
-          color: #646B8C;
-          border: none;
-          outline: none;
-          cursor: pointer;
-          border-radius: 8px;
-          padding: 4px 12px;
-          margin: 0;
-          line-height: 17px;
-          font-family: inherit;
-          font-size: 12px;
-          font-weight: 500;
-          background: var(--hover-bg, #ECEFFC);
-          opacity: var(--edit-opacity, 0);
-        }
-        button:hover {
-          --hover-bg: #E1E6F9;
-        }
-      </style>
-
-      <div class="searchlist">
-        <div class="form__div">
-          <input type="text" class="form__input searchbox" placeholder=" ">
-          <label for="" name="" class="form__label">
-            Recherche dans la liste des ${subject}
-          </label>
-        </div>
-        <div class="scroll">
-          <ul class="list-container">
-            ${childs}
-          </ul>
-        </div>
-      </div>
-    `
-
-    // attache la logique permettant à l'utilisateur de filtrer la liste
-    // à l'aide de la barre de recherche
-    const list_childrens = Array.from(this.root.querySelectorAll('.list-item'))
-    this.root.querySelector('.searchbox').addEventListener('keyup',
-      (e) => {
-        const value = e.target.value.toLowerCase()
-
-        // pour chaque enfant de la liste, on regarde si le contenu
-        // correspond à la valeur de la barre de recherche
-        list_childrens.forEach(children => {
-          let label = children.querySelector('span').innerText.toLowerCase()
-
-          // on met en display none si l'enfant n'est pas concerné par la recherche
-          children.style.display = label.indexOf(value) !== -1 ? 'flex' : 'none'
+    // pour chaque évennement de la journée, ajoute listener click
+    // pour éditer les informations
+    list.querySelectorAll('.event-card').forEach(
+      (card) => {
+        card.addEventListener('click', (e) => {
+          e.stopPropagation()
         })
       }
     )
   }
-}
+)
 
-customElements.define('list-filter', ListFilter)
-
-/* ======== FONCTIONS RELATIVES AUX FENÊTRES MODALES ======== */
-
-/* bindModal
- * ------------------------------------------
- * Gestion des interractions avec les différentes
- * fenêtres modales.
+/**
+ * Ajout des évennements appropriés sur le calendrier mensuel 
  */
-const bindModal = () => {
-  // pour chaque btn ouvrant une fenêtre modale
-  [...document.querySelectorAll('[data-modal]')].forEach(el => {
-    // récupère l'id de la modale
-    const modalId = el.getAttribute('data-modal')
-
-    // récupère l'action de la modale
-    const modalAction = el.getAttribute('data-action')
-
-    if (modalId === undefined || modalId === '') {
-      return
-    }
-
-    const modal = document.getElementById(modalId)
-
-    el.addEventListener('click',
-      () => {
-        modal.classList.remove('close-modal')
-
-        // si une action spécifique est enregistré, la disposé sinon effacé le titre existant
-        modalAction 
-          ? bindActionModal(modal, modalAction) 
-          : modal.querySelector('.modal-title').innerText = ''
-
-        // rend visible la fenêtre
-        modal.classList.add('visible')
-      }
-    )
-
-    modal.querySelector('.cmb').addEventListener('click', 
-      () => {
-        modal.classList.add('close-modal')
-        modal.classList.remove('visible')
-        
-      }
-    )
+document.querySelectorAll('.calendar__day').forEach(
+  (day) => day.addEventListener('click', () => {
+    window.location.replace(`/index.php?week=${day.getAttribute('data-week')}&year=${day.getAttribute('data-year')}`)
   })
-}
-
-const bindActionModal = (modal, action) => {
-  // changement du titre de la modale
-  modal.querySelector('.modal-title').innerText = action
-
-  switch(action) {
-    case 'Ajout':
-      break;
-    case 'Édition':
-      // si l'on édite les sections, l'on doit pouvoir lister les éléments existant
-      [['#slide-2', 'employées'], ['#slide-3', 'projets'], ['#slide-4', 'libellées']].forEach(section => {
-        const el = modal.querySelector(`${section[0]} form`)
-
-        const searchList = document.createElement('list-filter')
-        searchList.setAttribute('items', JSON.stringify([{ id: 1, name: 'toto' }, { id: 2, name: 'tata' }, { id: 1, name: 'toto' }, { id: 2, name: 'tata' }, { id: 1, name: 'toto' }, { id: 2, name: 'tata' }]))
-        searchList.setAttribute('subject', section[1])
-
-        el.insertBefore(searchList, el.firstChild)
-      })
-    
-      // retire la section évennement du formulaire
-      modal.querySelector('#slide-1').style.display = 'none'
-      modal.querySelector('#tabbar-slide-1').style.display = 'none'
-      modal.querySelector('label[for="tabbar-slide-1"]').style.display = 'none'
-
-      break;
-  }
-
-}
-
-bindModal()
-
-const bindEditEvents = () => {
-  const { top: top_wrapper, bottom: bottom_wrapper } = document.getElementById('cw').getBoundingClientRect()
-
-  const form = document.getElementById('edit-modal')
-  const { width: width_form } = form.getBoundingClientRect()
-
-  // gestion evennement lorsque l'on clique sur bouton fermeture de la modale
-  form.querySelector('.cmb').addEventListener('click', 
-    () => {
-      form.classList.add('close-modal')
-      form.classList.remove('visible')
-    }
-  )
-
-  document.querySelectorAll('.event-card').forEach(
-    (card) => {
-      console.log(card.innerText)
-      card.addEventListener('click', (e) => {
-        e.stopPropagation()
-        const { bottom, top, right, left, width } = card.getBoundingClientRect()
-
-        form.querySelector('.modal-title').innerText = card.innerText
-        form.classList.remove('close-modal')
-        form.classList.add('visible')
-
-        // gestion de la position sur l'axe des x
-        right > window.innerWidth / 2
-          ? form.style.right = `${window.innerWidth - left}px`
-          : form.style.right = `${window.innerWidth - right - width_form}px`
-
-        // gestion sur l'axe des y
-        let y_axis = ((top - top_wrapper) + (bottom_wrapper - bottom))
-        y_axis < window.innerHeight * .3 && (y_axis = window.innerHeight * .3)
-        form.style.top = `${y_axis}px`
-
-        // ajout des informations dans le formulaire
-        form.querySelector('[name="id_event"]').childNodes.forEach(e => e.selected = e.value === card.getAttribute('id_event'))
-        form.querySelector('[name="from"]').value = card.getAttribute('data-start')
-        form.querySelector('[name="to"]').value = card.getAttribute('data-end')
-        form.querySelector('[name="description"]').value = card.getAttribute('data-content')
-
-      })
-    }
-  )
-}
+)
 
 
-bindEditEvents()
 
+/**
+ * Ajout des évennements relatifs à la modération
+ */
+const admin_panel = document.querySelector('#btn-trigger-gestion + .gestion-options')
+admin_panel && admin_panel.querySelectorAll('li i').forEach(
+  (panel) => {
+    console.log(panel)
+    panel.addEventListener('click', () => {
+      // on cherche l'id de la fenetre modale et on l'ouvre
+      const ref = panel.getAttribute('data-modal')
 
-const bincOnClickAddEvent = () => {
-  document.querySelectorAll('.event-list').forEach(
-    (list) => addEventListener('click', (e) => {
-      let rect = e.target.getBoundingClientRect()
-      
-      let x = e.clientX - rect.left
-      let y = e.clientY - rect.top
+      const modal = document.getElementById(ref)
+      modal && modal.classList.add('visible-modal')
 
-      console.log(Math.round(y / rect.height * 36) / 2 / 18 * 100)
+      // on referme la sélection des choix
+      admin_panel.classList.remove('visible')
     })
-  )
+  }
+)
+
+/**
+ * Ajout évennements relatifs boutons d'options
+ */
+document.getElementById('btn-trigger-gestion').addEventListener('click', () => {
+  admin_panel.classList.toggle('visible')
+})
+
+/**
+ * Ajout évennements relatifs panneaux édition administratif
+ */
+document.querySelectorAll('.manage__container').forEach(
+  (container) => {
+    let form = container.querySelector('.edit-form')
+
+    container.querySelectorAll('.choice').forEach(
+      (choice) => choice.addEventListener('click', () => {
+        container.querySelector('.choices').classList.add('editing-mode')
+
+        form.querySelector('.name').innerText = choice.querySelector('span').innerText
+        form.classList.add('editing-mode')
+        form.style.maxHeight = ""
+      })
+    )
+
+    const titles = container.querySelectorAll('.manage__title')
+    titles.forEach(
+      (title) => {
+        title.addEventListener('click', () => {
+          titles.forEach((e) => e.classList.toggle('is-active'))
+
+          const wrapper = container.querySelector('.manage__wrapper')
+          
+          let isAddTitle = (title.textContent.indexOf("Ajouter") !== -1)
+
+          form = container.querySelector('.edit-form')
+          form.style.maxHeight = isAddTitle ? "1000px" : "0"
+
+
+
+          wrapper.querySelector('.choices').style.maxHeight = isAddTitle
+            ? "0px"
+            : "300px"
+
+          wrapper.querySelector('.form__div.block').style.display = isAddTitle
+            ? "none"
+            : "block"       
+
+          const titleSection = wrapper.querySelector('.title-section')
+          titleSection.querySelector('.underline').textContent = isAddTitle
+            ? "Ajout"
+            : "Édition de"
+          form.classList.remove('editing-mode')
+        })
+      }
+    )
+  
+    container.querySelector('.close-btn').addEventListener('click', () => {
+      container.classList.remove('visible-modal')
+
+      form && (form.querySelector('.name').innerText = "")
+      form && form.classList.remove('editing-mode')
+    })
+  }
+)
+
+/**
+ * Ajout des évennements relatifs au bouton d'ajout d'évennement
+ */
+document.getElementById('btn-trigger-timesheet').addEventListener('click', (e) => {
+  openTimesheetModal(new Date())
+})
+
+
+
+/**
+ * Ajout des évennements relatif aux différents dropdown
+ */
+document.querySelectorAll('.dropdown').forEach(
+  (dropdown) => {
+    const input = dropdown.querySelector('input')
+    let query = ''
+
+    dropdown.parentNode.classList.add('height')
+
+    input.addEventListener('click', (e) => {
+      e.stopPropagation()
+      e.preventDefault()
+      dropdown.classList.add('open')
+    })
+
+    dropdown.parentNode.addEventListener('click', (e) => {
+      dropdown.classList.remove('open')
+    })
+
+    input.onkeydown = (e) => {
+      if (/^.$/u.test(e.key)) {
+        query += e.key
+      } else if (e.key === "Backspace") {
+        query = query.slice(0, -1)
+      }
+
+      input.parentNode.querySelectorAll('ul li span').forEach(
+        (span) => {
+          span.textContent.toLowerCase().includes(query.toLowerCase())
+           ? span.parentNode.style.display = 'block'
+           : span.parentNode.style.display = 'none';
+        }
+      )
+    }
+
+    dropdown.querySelectorAll('ul li span').forEach(
+      (span) => {
+        span.addEventListener('click', (e) => {
+          dropdown.classList.remove('open')
+          input.value = e.target.textContent
+        })
+      }
+    )
+  }
+)
+
+const openTimesheetModal = (date) => {
+  const modal = document.getElementById('ajout-timesheet')
+
+  modal.querySelector('[name="date"]').value = date.toISOString().slice(0, 10)
+  
+  modal.querySelector('[name="end"]').value = getTime(date)
+  date.setHours( date.getHours() - 1 )
+  modal.querySelector('[name="start"]').value = getTime(date)
+
+  const percent = (date.getDay() + 1) % 7 / 7 * 100
+  percent < 30 
+    ? (modal.style.left = `${percent}%`) 
+    : (modal.style.right = `${100 - percent}%`)
+  modal.classList.add('visible')
 }
-bincOnClickAddEvent()
+
+const getTime = (d) => {
+  const t = d.getHours() + Math.round(d.getMinutes()/60 * 2) / 2
+
+  const hours = ('0' + Math.ceil(t)).slice(-2)
+  const minutes = ('0' + (t - hours) * 60).slice(-2)
+
+  return `${hours}:${minutes}`
+}

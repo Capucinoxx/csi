@@ -68,7 +68,8 @@ const drawFormManageEvent = (top, left, right, date) => {
      : form.style.right = `${window.innerWidth - right - widthForm}px`
 
     //  gestion de la position sur l'axe des y
-    form.style.top = `${top}%`
+    form.style.top = `50%`
+    form.style.transform = `translateY(-50%)`
 
     console.log(form);
   }
@@ -198,18 +199,37 @@ const handleEventEditingModal = () => {
           title.addEventListener('click', () => {
             container.querySelectorAll('.manage__title').forEach(e => e.classList.toggle('is-active'))
 
-            
+            const wrapper = container.querySelector('.manage__wrapper')
+
+            console.log(wrapper.querySelector('.form__div.block'), title.innerText, title.innerText === "AJOUTER")
+
+            wrapper.querySelector('.form__div.block').style.display = (
+              (title.textContent.indexOf("Ajouter") !== -1) ? "none" : "block"
+            )
+
+            wrapper.querySelector('.choices').style.maxHeight = (
+              (title.textContent.indexOf("Ajouter") !== -1) ? "0px" : "300px"
+            )
+
+            wrapper.querySelector('.edit-form').style.maxHeight = (
+              (title.textContent.indexOf("Ajouter") !== -1) ? "1000px" : "0"
+            )
+
+            // form title section
+            const titleSection = wrapper.querySelector('.title-section')
+            titleSection.querySelector('.underline').textContent = (
+              (title.textContent.indexOf("Ajouter") !== -1) ?  "Ajout" : "Édition de"
+            )
+
           })
-        
-        
         }
       )
 
       container.querySelector('.close-btn').addEventListener('click', () => {
-        console.log('click ')
         container.classList.remove('visible-modal')
-        edit_form.querySelector('.name').innerText = ""
-        edit_form.classList.remove('editing-mode')
+        container.classList.remove('visible')
+        edit_form && (edit_form.querySelector('.name').innerText = "")
+        edit_form && edit_form.classList.remove('editing-mode')
       })
     }
   )
@@ -232,8 +252,6 @@ const dropdown = () => {
       })
 
       select.parentNode.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
         select.classList.remove('open')
       })
 
@@ -243,15 +261,15 @@ const dropdown = () => {
           query += e.key
         } else if (e.key === "Backspace") {
           query = query.slice(0, -1)
-
-          input.parentNode.querySelectorAll('ul li span').forEach(
-            (span) => {
-              span.textContent.toLowerCase().includes(query.toLowerCase())
-               ? span.parentNode.style.display = 'block'
-               : span.parentNode.style.display = 'none'
-            }
-          )
         }
+
+        input.parentNode.querySelectorAll('ul li span').forEach(
+          (span) => {
+            span.textContent.toLowerCase().includes(query.toLowerCase())
+             ? span.parentNode.style.display = 'block'
+             : span.parentNode.style.display = 'none'
+          }
+        )
       }
 
       select.querySelectorAll("ul li span").forEach(
