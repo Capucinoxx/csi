@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] != "GET") {
   (new Actions($IEvent, $IEmployee, $ITimesheet))->execute();
 }
 
-// $_SESSION['loggedin'] = true;
+$_SESSION['loggedin'] = true;
 
 $calendar = new Calendar($_GET['week'] ?? null, $_GET['year'] ?? null, null);
 

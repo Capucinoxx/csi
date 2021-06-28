@@ -44,6 +44,7 @@ class Employee extends DataBase {
 		# Vérifier si l'employé existe déjà
 		if(!$this->exists($params['username'])) {
       # Création de l'employé
+      $params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);
       if(!$this->insert($params)) {
         return (object) [
           "error" => "Erreur lors de la création de l'employé."
@@ -74,7 +75,11 @@ class Employee extends DataBase {
 
     if(!$isDeleted) {
       # Validation du mot de passe
-      return $this->passwordValidation($params);
+      if($this->passwordValidation($params)) {
+        return $this->userLogged($params['username']);
+      }
+      
+      return false;
     }
 
     return $isDeleted;
@@ -99,6 +104,26 @@ class Employee extends DataBase {
     }
 
     return true;
+  }
+
+  private function userLogged($username) {
+    $sql = "
+    SELECT 
+      id,
+      first_name,
+      last_name,
+      role
+    FROM Employees 
+    WHERE username = :username;";
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ':username' => $username
+      ]
+    );
+
+    return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
   private function deleted($username) {

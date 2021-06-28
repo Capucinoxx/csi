@@ -56,6 +56,10 @@ class Actions {
       'password' => $_POST['password']
     ]);
 
+    if (!isset($rep['error'])) {
+      $_SESSION['loggedin'] = true;
+    }
+
     var_dump($rep);
     die();
 
