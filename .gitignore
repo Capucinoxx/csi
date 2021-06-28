@@ -8,7 +8,16 @@
 vendor/
 
 .todo
-
+.temp.*
 .vscode
 
+
+# css généré à partir du scss
+*.css
 *.css.map
+
+# data directory 
+/data
+
+# timesheet généré
+timesheet.html

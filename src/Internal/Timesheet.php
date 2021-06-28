@@ -6,7 +6,7 @@ use \PDO;
 class Timesheet extends DataBase {
   public function __construct() {
     parent::__construct();
-    $this->table_name = "Timesheets";
+    $this->table_name = 'Timesheets';
   }
 
   public function get(int $id, int $from, int $to) {

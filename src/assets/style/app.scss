@@ -1,0 +1,151 @@
+:root {
+  --color: #f6f8ff;
+  --white-bg: #eaedfabb;
+  --background: #1e2235;
+  --shadow: #00093d20;
+  --progress: #28c767;
+  --outer-border: #aeb7e7;
+  --fill: #2b3044;
+  --alert: #EF8D9C;
+  --warning: #FFC39E;
+  --alert-bg: #ffd3e288;
+  --blue-bg: #171C28;
+  --blue-active: #275EFE;
+  --gray: #d6d6d7;
+  --gray-dark: #9498a0;
+}
+
+// Générique
+// ==========--------------------==========
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Hide arrows from input number */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 62.5%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1em 2em;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--white-bg);
+  color: var(--background);
+  font-family: "Roboto", sans-serif;
+  line-height: 1.4;
+}
+
+body:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    163deg,
+    rgba(31, 29, 43, 1) 21%,
+    rgba(31, 29, 43, 0.3113620448179272) 64%
+  );
+  opacity: .4;
+  z-index: -1;
+}
+
+
+ul {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+textarea {
+  resize: none;
+  vertical-align: top; 
+}
+
+// Modules
+// ==========--------------------==========
+@import 'modules/btn';
+@import 'modules/input';
+@import 'modules/layout';
+@import 'modules/modal';
+@import 'modules/schedule';
+@import 'modules/form';
+
+// gestion font awesome
+.fas {
+  color: var(--blue-bg);
+}
+
+// Pages
+// ==========--------------------==========
+@import 'pages/calendar';
+@import 'pages/login';
+
+
+.event-list {
+  z-index: 0;
+}
+
+// temp
+.event-card {
+  z-index: 3;
+  position: absolute;
+  color: var(--background);
+  background: #e6e6e8;
+  padding: 14px 12px 0 12px;
+  border-radius: 2px;
+  border-bottom-left-radius: 7px; 
+  border-bottom-right-radius: 7px;
+}
+
+.employee-name {
+  font-size: 1.05em;
+  font-weight: 600;
+  color: var(--blue-bg);
+}
+
+.cursor {
+  width: calc(100% / 7);
+  height: 2px;
+  background: red;
+  position: absolute;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+.round {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+}
+
+.fz-14 {
+  font-size: 1.4rem;
+}

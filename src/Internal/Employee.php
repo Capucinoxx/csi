@@ -9,7 +9,7 @@ class Employee extends DataBase {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = "Employees";
+    $this->table_name = 'Employees';
   }
 
   public function getByID($id) {
@@ -23,7 +23,7 @@ class Employee extends DataBase {
   }
 
   private function getId($username) {
-    $sql = "SELECT id FROM employees WHERE username = :username";
+    $sql = "SELECT id FROM Employees WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
     $query->execute([':username' => $username]);
     $row = $query->fetch(PDO::FETCH_ASSOC);
@@ -159,7 +159,7 @@ class Employee extends DataBase {
     # Vérifier si le username de l'employé existe déjà
     $sql = "
     SELECT id  
-    FROM employees
+    FROM Employees
     WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
     $query->execute([':username' => $username]);

@@ -57,8 +57,8 @@ class Event extends DataBase {
       max_hours, 
       labels.title as title_label, 
       color
-    FROM Events events 
-    LEFT JOIN Labels labels 
+    FROM Events events
+    LEFT JOIN Labels labels
       ON events.id_label = labels.id
     WHERE 
       events.deleted_at IS NULL 

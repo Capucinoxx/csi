@@ -10,7 +10,7 @@ class Leave extends DataBase {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = "Events";
+    $this->table_name ="Events";
   }
 
   public function createLeaves($id) {

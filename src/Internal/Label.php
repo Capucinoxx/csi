@@ -9,7 +9,7 @@ class Label extends DataBase {
 
   public function __construct() {
     parent::__construct();
-    $this->table_name = "Labels";
+    $this->table_name = 'Labels';
   }
 
   public function get() {
@@ -63,7 +63,7 @@ class Label extends DataBase {
 
   ## QUERIES ##
   private function select() {
-    $sql = "SELECT * FROM labels;";
+    $sql = "SELECT * FROM Labels;";
 
     $query = $this->db_connection->prepare($sql);
     $query->execute();

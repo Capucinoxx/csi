@@ -1,0 +1,130 @@
+.daily-title {
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: 1.1;
+}
+
+
+table {
+  padding: 12px 14px;
+}
+
+
+tbody td {
+  padding: 6px;
+  color: var(--blue-bg);
+}
+
+.current-week {
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px 0px, rgba(#275EFE, 0.95) 0px 0px 0px 1px;
+  border-radius: 1em;
+}
+
+.calendar__weekday {
+  font-weight: 700;
+}
+
+.calendar__day {
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+
+  &:hover:not(:has(.is-today)) {
+    color: var(--blue-bg) !important;
+  }
+
+  &:hover::before {
+    background: var(--outer-border);
+  }
+
+  &::before {
+    content: '';
+    top: -20%;
+    left: 10%;
+    position: absolute;
+    height: 0%;
+    width: 80%;
+    padding-bottom: 80%;
+    
+    z-index: -1;
+    opacity: .95;
+    border-radius: 50%;
+  }
+}
+
+.is-today.calendar__day {
+  color: var(--color);
+  
+
+  &::before {
+    background: var(--blue-active);
+  }
+}
+
+.controls-panel {
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(auto-fill, 1fr);
+  padding-bottom: 5rem;
+  margin-top: 4rem;
+}
+
+.panel-option {
+  position: relative;
+}
+
+.panel-option button {
+  border: 2px solid var(--blue-active);
+  border-radius: 2rem;
+  box-shadow: 0px 10px 30px -14px rgba(#171C28, .45);
+  width: auto !important;
+  height: auto !important;
+  cursor: pointer;
+  display: flex;
+  background-color: var(--color);
+  padding: 8px;
+  padding-right: 20px;
+  flex-shrink: 1;
+  line-height: 1.5;
+  align-items: center;
+  z-index: 2;
+
+  transition: transform 350ms ease;
+  transition-timing-function: cubic-bezier(0.05,1.8,1,1.57);
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  i {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--blue-active);
+    margin-right: 1rem;
+    border: 1px solid #d0d0e9;
+    border-radius: 50%;
+    padding: 4px;
+  }
+}
+
+#edit-event {
+  z-index: 5000;
+  height: 400px;
+}
+
+.calendar__day.calendar__othermonth {
+  color: var(--outer-border);
+}
+
+.manage__wrapper {
+  padding: 3rem;
+}
+
+.manage__container {
+  display: none;
+
+  &.visible-modal {
+    display: block;
+  }
+}

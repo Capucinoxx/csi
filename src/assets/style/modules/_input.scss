@@ -1,0 +1,338 @@
+.dropdown {
+  &-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 34rem;
+  }
+
+  &-title-icon, &-arrow {
+    display: inline-flex;
+  }
+
+  &-title {
+    margin: 0 auto 0 1.8rem;
+    text-transform: capitalize;
+  }
+
+  &-button {
+    font-weight: 400;
+    font-size: 1.7rem;
+    display: flex;
+    align-items: center;
+    padding: 0 1.8rem;
+
+    svg {
+      transition: all var(--transition-time) var(--transition-timing);
+      fill: var(--text-color); 
+    }
+
+    svg, span {
+      pointer-events: none;
+    }
+
+    &:hover, &:focus {
+      color: var(--text-active);
+
+      svg {
+        fill: var(--text-active);
+      }
+    }
+  }
+
+  &-list {
+    position: relative;
+    list-style-type: none;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 0;
+      opacity: 0;
+      height: var(--list-button-height);
+      background-color: var(--button-hover-bg-color);
+      transition: all var(--transition-time) linear;
+      transform: translateY(var(--translate-value));
+      border-radius: var(--border-radius);
+      pointer-events: none;
+    }
+
+    &:hover::before, :hover ~ .floating-icon {
+      opacity: 1;
+    }
+
+    &-container {
+      overflow: hidden;
+      max-height: var(--dropdown-height);
+      transition: max-height var(--transition-time) var(--transition-timing);
+    }
+
+    &-wrapper {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: var(--primary-bg-color);
+      border-radius: var(--border-radius);
+      border: 0.1rem solid var(--border-color);
+      position: relative;
+    }
+
+    &-item {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+      opacity: var(--list-opacity);
+      transition: opacity 0.8s var(--transition-timing);
+    }
+  }
+}
+
+.main-button {
+  height: 5.2rem;
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  background-color: var(--primary-bg-color);
+  border: 0.1rem solid var(--border-color);
+  transition: all var(--transition-time) var(--transition-timing);
+
+  &:focus {
+    border: 0.1rem solid var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(44, 98, 246, 0.4);
+  }
+
+  .dropdown-arrow {
+    transition: transform var(--transition-time) var(--transition-timing);
+    transform: rotate(var(--rotate-arrow));
+    margin-left: 1.8rem;
+  }
+}
+
+.list-button {
+  height: var(--list-button-height);
+  transition: color var(--transition-time) var(--transition-timing);
+  color: var(--text-color);
+  overflow: hidden;
+  cursor: none;
+}
+
+.floating-icon {
+  height: calc(var(--floating-icon-size) * 1px);
+  width: calc(var(--floating-icon-size) * 1px);
+  position: absolute;
+  top: var(--floating-icon-top);
+  left: var(--floating-icon-left);
+  background-color: var(--border-color);
+  border-radius: 1rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-time) var(--transition-timing);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    fill: var(--text-active);
+  }
+}
+
+// form input
+.form {
+  &-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-content: flex-start;
+    grid-template-rows: min-content;
+    grid-gap: 8px;
+    color: var(--background);
+  }
+
+  &-control {
+    display: block;
+    width: 100%;
+    border: 1px solid #D2D6DB;
+    border-radius: 6px;
+    font-size: 16px;
+    padding: 14px 10px;
+  }
+
+  &-modal {
+    position: absolute;
+    top: 150%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 50px);
+    height: calc(100% - 70px);
+    transition: all 0.2s ease;
+  }
+
+  &__div {
+    position: relative;
+    height: 48px;
+    margin-bottom: .9rem;
+    flex: 1 1 auto;
+  }
+
+  &__input {
+    position: absolute;
+    top: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #DADCE0;
+    border-radius: .5rem;
+    outline: none;
+    padding: 1rem;
+    background: none;
+    z-index: 1;
+
+    &:focus {
+      border: 1px solid var(--blue-active);
+    }
+
+  }
+
+  &__input:focus + &__label {
+    top: -.5rem;
+    left: .8rem;
+    color: var(--blue-active);
+    font-size: 1rem;
+    font-weight: 500;
+    z-index: 10;
+  }
+
+  &__label {
+    position: absolute;
+    left: 1rem;
+    top: 1.4rem;
+    padding: 0 .25rem;
+    background-color: #fff;
+    font-size: 1.4rem;
+    color: #80868B;
+    transition: .3s;
+  }
+}
+
+.form__input:not(:placeholder-shown).form__input:not(:focus)+ .form__label{
+  top: -.5rem;
+  left: .8rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+  z-index: 10;
+}
+
+// input color
+.input-color {
+  height: 49px;
+  padding: 6px !important;
+
+  & ~ .form__label {
+    background: transparent !important;
+
+    &::before {
+      content: '';
+      background: white;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 3px;
+      top: 0;
+      z-index: -1;
+    }
+  }
+}
+
+.h-45 {
+  height: 45px !important;
+}
+
+.input-color-container {
+  width: 35px;
+  height: 35px;
+  border-radius: 5px;
+  overflow: hidden;
+  border:none;
+
+  input[type="color"] {
+    border: 0;
+    padding: 0;
+    width: 200%;
+    height: 200%;
+    cursor: pointer;
+    transform: translate(-25%, -25%);
+    opacity: .75;
+  }
+}
+
+.dropdown {
+  position: relative;
+
+  input {
+    caret-color: transparent;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    max-height: 300px;
+    border-radius: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transform-origin: 0 0;
+    transition: opacity .2s ease, visibility .2s ease, transform .3s cubic-bezier(.4, .6, .5, 1.32);
+    transform: scale(.8) translate(0, 4px);
+    width: 100%;
+
+    li {
+      opacity: 0;
+      transform: translate(6px, 0);
+      transition: all .3s ease;
+    }
+  }
+
+  &.open {
+    input {
+      z-index: -1;
+    }
+
+    & > label {
+      &::before {
+        transform: scale(.96, .8) rotate(-50deg);
+      }
+      &::after {
+        transform: scale(.96, .8) rotate(50deg);
+      }
+    }
+
+    ul {
+      z-index: 500;
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translate(0, 42px);
+      transition: opacity .3s ease, visibility .3s ease, transform .3s cubic-bezier(.4, .6, .5, 1.32);
+
+      li {
+        opacity: 1;
+        transform: translate(0,0);
+        z-index: 500;
+        cursor:pointer;
+        background: var(--color);
+
+        span {
+          display: block;
+          padding: 10px 16px;
+          transition: all .3s ease;
+
+        }
+      }
+    }
+  }
+}

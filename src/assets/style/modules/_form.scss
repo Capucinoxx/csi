@@ -1,0 +1,54 @@
+.choice {
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+
+  animation: background .25s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  &:hover {
+    background: var(--gray);
+  }
+}
+
+.choices {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  transition: all .5s;
+  overflow: hidden;
+  max-height: 300px;
+  height: 300px;
+
+  &.editing-mode {
+    flex-grow: 0.0001;
+    height: 100px;
+  }
+}
+
+.edit-form {
+  transition: max-height 1.5s ease-out;
+  max-height: 0;
+  overflow: hidden;
+
+  &.editing-mode {
+    max-height: 1000px;
+    transition: max-height 1.5s ease-in;
+    display: block !important;
+  }
+}
+
+@keyframes openF {
+  from { height: 0; }
+  to { height: 100%; }
+}
+
+.title-section {
+  color: var(--blue-active);
+  font-size: 1.45em;
+
+  .underline {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    font-weight: 700;
+  }
+}
