@@ -144,7 +144,7 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('next month') : $date->modify('+8 days');
 
-    return new Calendar($this->forms, $date->format('W'), $date->format('o'));
+    return new Calendar($this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
   }
 
   /**
@@ -156,7 +156,7 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('last month') : $date;
 
-    return new Calendar($this->forms, $date->format('W'), $date->format('o'));
+    return new Calendar($this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
   }
 
 
