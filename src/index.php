@@ -16,7 +16,7 @@ $ILabel = new Label();
 $IEmployee = new Employee();
 $ITimesheet = new Timesheet();
 
-if ($_SERVER["REQUEST_METHOD"] != "GET") {
+if ($_SERVER["REQUEST_METHOD"] != "GET" || isset($_GET['context'])) {
   (new Actions($IEvent, $IEmployee, $ITimesheet))->execute();
 }
 

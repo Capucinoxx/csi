@@ -16,7 +16,7 @@ class Timesheet extends DataBase {
   }
 
   public function getByID($id) {
-    return ($this->selectByID($id))->fetchAll(PDO::FETCH_ASSOC);
+    return ($this->selectByID($id))->fetch(PDO::FETCH_ASSOC);
   }
 
   public function createTimesheet($params) {

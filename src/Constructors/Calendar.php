@@ -174,7 +174,6 @@ class Calendar {
     foreach($this->timesheet->get($_SESSION['id'], $start, $end) as $timesheet) {
       $pos = ((new DateTime)->setTimeStamp(intval($timesheet['at'])/1000)->format('N')) % 7;
 
-      var_dump($pos);
       if (isset($this->projects[$pos])) {
         array_push($this->projects[$pos], $timesheet);
       }
@@ -273,7 +272,7 @@ class Calendar {
           <li
             class='event-card'
             style='{$this->generate_style_event(floatval($project['start']), floatval($project['end']), $project['color'])}'
-          
+            data-id='{$project['id']}'
           >
             {$project['event_title']}<br/>
             {$this->format_date($project['start'])}-

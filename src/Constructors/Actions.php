@@ -15,35 +15,20 @@ class Actions {
   public function execute() {
     switch($_SERVER["REQUEST_METHOD"]) {
       case "POST":
-        $this->execute_post();
+        isset($_POST["context"]) && $this->{$_POST["context"]}();
       break;
 
-      case "PUT":
-        $this->execute_put();
-      break;
-
-      case "DELETE":
-        $this->execute_delete();
+      case "GET":
+        isset($_GET["context"]) && $this->{$_GET["context"]}();
       break;
     }
   }
 
-  private function execute_post() {
-    if (isset($_POST["context"])) {
-      $this->{$_POST["context"]}();
-    }
-  }
+  private function getTimesheetById() {
+    $rep = ($this->ITimesheet)->getByID($_POST['id']);
 
-  private function execute_put() {
-    if (isset($_POST["context"])) {
-      $this->{$_POST["context"]}();
-    }
-  }
-
-  private function execute_delete() {
-    if (isset($_POST["context"])) {
-      $this->{$_POST["context"]}();
-    }
+    echo json_encode($rep);
+    die();
   }
 
   /**
@@ -80,6 +65,22 @@ class Actions {
 
     ($this->ITimesheet)->createTimesheet([
       'id_event' => $_POST['id_event'],
+      'id_employee' => $_SESSION['id'],
+      'start' => $start,
+      'end' => $end,
+      'at' => intval(date('U', strtotime($_POST['date']))),
+      'hours_invested' => $end - $start,
+      'description' => $_POST['description']
+    ]);
+    die();
+  }
+
+  private function editTimesheetEvent() {
+    $start = $this->convertTime($_POST['start']);
+    $end = $this->convertTime($_POST['end']);
+
+    ($this->ITimesheet)->update([
+      'id' => $_POST['id_event'],
       'id_employee' => $_SESSION['id'],
       'start' => $start,
       'end' => $end,
