@@ -1,11 +1,10 @@
 <?php 
 
 namespace App\Constructors;
-use \App\Constructors\Forms;
+use App\Constructors\Forms;
+use App\Internal\Timesheet;
 
 class Calendar {
-  
-
   private $days = [
     'Dim', 
     'Lun', 
@@ -35,6 +34,7 @@ class Calendar {
   public $week;
   public $year;
   public $forms;
+  public $timesheet;
 
   /**
    * Calendar contructor
@@ -42,12 +42,18 @@ class Calendar {
    * @param int $year L'année
    * @param array $proejcts Liste des projets de la semaine en cours
    */
-  public function __construct(Forms $forms, ?int $week = null, ?int $year = null, ?array $projects = null) {
+  public function __construct(Timesheet $timesheet, Forms $forms, ?int $week = null, ?int $year = null, ?array $projects = null) {
     $this->projects = $projects === null ? [[],[],[],[],[],[],[]] : $projects;
 
+    $this->timesheet = $timesheet;
     $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
+
+    $start = $this->getStartingWeeklyDay()->format('u');
+    $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('u');
+
+    var_dump($this->timesheet->get($_SESSION['id'], $start, $end));
   }
 
   /**
@@ -240,6 +246,7 @@ class Calendar {
 
     $html_days = "";
     $start = $this->getStartingWeeklyDay();
+
     foreach (range(0, 6) as $day) {
       $html_daily_events = "";
       foreach($this->projects[$day] as $project) {
