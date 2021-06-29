@@ -49,6 +49,8 @@ class Calendar {
     $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
+
+    $this->setupEvents();
   }
 
   public function dump(): string {
@@ -165,8 +167,17 @@ class Calendar {
     return new Calendar($this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
   }
 
+  private function setupEvents() {
+    $start = $this->getStartingWeeklyDay()->format('U');
+    $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('U');
+    foreach($this->timesheet->get($_SESSION['id'], $start, $end) as $timesheet) {
+      $pos = ((new DateTime)->setTimeStamp($value['at']/1000)->format('N')) % 7;
 
-
+      if (isset($this->projects[$pos])) {
+        array_push($this->projects[$pos], $value);
+      }
+    }
+  }
 
 
   public function draw_monthly_calendar(): string {

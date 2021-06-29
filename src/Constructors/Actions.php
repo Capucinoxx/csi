@@ -87,16 +87,6 @@ class Actions {
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);
-
-    // var_dump([
-    //   'id_event' => $_POST['id_event'],
-    //   'id_employee' => $_SESSION['id'],
-    //   'start' => $start,
-    //   'end' => $end,
-    //   'at' => intval(date('U', strtotime($_POST['date']))),
-    //   'hours_invested' => $end - $start,
-    //   'description' => $_POST['description']
-    // ]);
     die();
   }
 
@@ -120,7 +110,7 @@ class Actions {
   }
 
   private function convertTime(string $time): float {
-    $parts = explode(':', $time);
+    $parts = explode(':', $value);
     return $parts[0] + floor(($parts[1]/60)*100) / 100;
   }
 }

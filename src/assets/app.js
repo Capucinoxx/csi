@@ -204,7 +204,7 @@ addmodal.querySelector('.save-btn').addEventListener('click', () => {
     window.location,
     { method: 'POST', body: formData },
     true
-  )
+  ).then(() => window.location = window.location)
 })
 
 /**
@@ -242,5 +242,5 @@ const logout = () => {
     window.location, 
     { method: 'POST', body: formData },
     true
-  ).then(() => document.location.reload())
+  ).then(() => window.location = window.location)
 }
