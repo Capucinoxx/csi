@@ -3,6 +3,7 @@
 namespace App\Constructors;
 use App\Constructors\Forms;
 use App\Internal\Timesheet;
+use DateTime;
 
 class Calendar {
   private $days = [
@@ -171,10 +172,11 @@ class Calendar {
     $start = $this->getStartingWeeklyDay()->format('U');
     $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('U');
     foreach($this->timesheet->get($_SESSION['id'], $start, $end) as $timesheet) {
-      $pos = ((new DateTime)->setTimeStamp($value['at']/1000)->format('N')) % 7;
+      $pos = ((new DateTime)->setTimeStamp(intval($timesheet['at'])/1000)->format('N')) % 7;
 
+      var_dump($pos);
       if (isset($this->projects[$pos])) {
-        array_push($this->projects[$pos], $value);
+        array_push($this->projects[$pos], $timesheet);
       }
     }
   }
@@ -270,7 +272,7 @@ class Calendar {
         $html_daily_events .= "
           <li
             class='event-card'
-            style='{$this->generate_style_event($project->start, $project->end, $project->color)}'
+            style='{$this->generate_style_event(floatval($project['start']), floatval($project['end']), $project['color'])}'
           
           >
             {$project->title}<br/>
@@ -331,6 +333,7 @@ class Calendar {
    * de l'évennement ciblé
    */
   function generate_style_event(float $start_time, float $end_time, string $color = ""): string {
+    var_dump($start_time, $end_time);
     $top_position = (string)(($start_time - 6.0) * 100.0 / (24.0 - 6.0));
     $height = (string)(($end_time - $start_time) * 100.0 / (24.0 - 6.0));
 

@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__).'/src/vendor/autoload.php');
+require_once(dirname(__DIR__).'/html/vendor/autoload.php');
 
 session_start();
 
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] != "GET") {
 // $_SESSION['loggedin'] = true;
 // $_SESSION['error'] = "test alert";
 
-require_once(dirname(__DIR__).'/src/Views/head.html');
+require_once(dirname(__DIR__).'/html/Views/head.html');
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $forms = new Forms(
     $ILabel->get(),
@@ -41,8 +41,5 @@ if (isset($_SESSION['error'])) {
   echo $forms->draw_alert($_SESSION['error']);  
 }
 
-
-
-
-require_once(dirname(__DIR__).'/src/Views/footer.html');
+require_once(dirname(__DIR__).'/html/Views/footer.html');
 ?>

@@ -110,7 +110,7 @@ class Actions {
   }
 
   private function convertTime(string $time): float {
-    $parts = explode(':', $value);
+    $parts = explode(':', $time);
     return $parts[0] + floor(($parts[1]/60)*100) / 100;
   }
 }
