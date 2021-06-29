@@ -30,7 +30,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     $IEvent->get($_SESSION['id']),
     $IEmployee->get()
   );
-  $calendar = new Calendar($forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
+  $calendar = new Calendar($ITimesheet, $forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
   require_once('./Views/Calendar.php');
 } else {  
   $forms = new Forms([], [], []);
