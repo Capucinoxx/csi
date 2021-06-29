@@ -46,8 +46,6 @@
   </div>
 </div>
 
-<?php var_dump($_SESSION); ?>
-
 <?php if (isset($_SESSION['role']) && filter_var($_SESSION['role'], FILTER_VALIDATE_BOOLEAN)):?>
   <?= $forms->draw("libellé", "gestion-labels") ?>
   <?= $forms->draw("employé", "gestion-users") ?>

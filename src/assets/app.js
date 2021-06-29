@@ -200,11 +200,11 @@ addmodal.querySelector('.save-btn').addEventListener('click', () => {
   for (var pair of formData.entries()) {
     console.log(pair[0]+ ', ' + pair[1]); 
   }
-  // fetch(
-  //   window.location,
-  //   { method: 'POST', body: formData },
-  //   true
-  // ).then(() => document.location.reload())
+  fetch(
+    window.location,
+    { method: 'POST', body: formData },
+    true
+  )
 })
 
 /**

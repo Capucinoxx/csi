@@ -124,7 +124,7 @@ class Employee extends DataBase {
       ]
     );
 
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+    return $query->fetch(PDO::FETCH_ASSOC);
   }
 
   private function deleted($username) {

@@ -60,17 +60,15 @@ class Actions {
       // on store les informations dans les variables de sessions
       $_SESSION['loggedin'] = true;
 
-      $_SESSION['id'] = $rep['id'];
-      $_SESSION['first_name'] = $rep['first_name'];
-      $_SESSION['last_name'] = $rep['last_name'];
-      $_SESSION['role'] = $rep['role'];
+      isset($rep['id']) && $_SESSION['id'] = $rep['id'];
+      isset($rep['first_name']) && $_SESSION['first_name'] = $rep['first_name'];
+      isset($rep['last_name']) && $_SESSION['last_name'] = $rep['last_name'];
+      isset($rep['role']) && $_SESSION['role'] = $rep['role'];
+
     } else {
       $_SESSION['loggedin'] = false;
       $_SESSION['error'] = $rep['error'];
     }
-
-    var_dump($rep);
-    die();
   }
 
   /**
@@ -98,7 +96,7 @@ class Actions {
    * déconnection l'utilisateur de sa session
    */
   private function disconnect() {
-    // // unset all of the session variables
+    // unset all of the session variables
     $_SESSION = array();
 
     header("Refresh:0");
