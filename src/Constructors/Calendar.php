@@ -49,11 +49,17 @@ class Calendar {
     $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
+  }
 
-    $start = $this->getStartingWeeklyDay()->format('u');
-    $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('u');
-
-    var_dump($this->timesheet->get($_SESSION['id'], $start, $end));
+  public function dump(): string {
+    $start = $this->getStartingWeeklyDay()->format('U');
+    $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('U');
+    $dump = print_r($this->timesheet->get($_SESSION['id'], $start, $end));
+    return <<<HTML
+      <div style="overflow:hidden; max-height: 400px">
+        <pre>{$dump}</pre>
+      </div>
+    HTML;
   }
 
   /**
