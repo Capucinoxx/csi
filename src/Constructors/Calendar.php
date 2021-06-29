@@ -275,9 +275,9 @@ class Calendar {
             style='{$this->generate_style_event(floatval($project['start']), floatval($project['end']), $project['color'])}'
           
           >
-            {$project->title}<br/>
-            {$this->format_date($project->start)}
-            {$this->format_date($project->end)}
+            {$project['event_title']}<br/>
+            {$this->format_date($project['start'])}-
+            {$this->format_date($project['end'])}
           </li>
         ";
       }

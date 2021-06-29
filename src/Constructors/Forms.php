@@ -6,10 +6,16 @@ class Input {
   public function __construct() {}
 
   public function FieldWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
-    $input = ($type === 'textarea')
-      ? "<textarea  class='form__input' name='{$key}'></textarea>"
-      : "<input type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
-    
+    switch($type) {
+      case 'textarea':
+        $input = "<textarea  class='form__input' name='{$key}'></textarea>";
+        break;
+      case 'time':
+        $input = "<input type='{$type}' class='form__input' name='{$key}' max='23:59' placeholder=' '/>";
+        break;
+      default:
+        $input = "<input type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
+    }
 
     return <<<HTML
       <div class="form__div block {$extra_class}">
@@ -162,6 +168,8 @@ class Forms extends Input {
           <input name="id_event" type="hidden" />
           {$this->Dropdown("Projet", "project", $this->events, "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
+          <div></div>
+          {$this->FieldWithLabel("Nombre d'heures", "hours_invested", "number")}
           {$this->FieldWithLabel("Heure de début", "start", "time")}
           {$this->FieldWithLabel("Heure de fin", "end", "time")}
           {$this->FieldWithLabel("Description", "description", "textarea", "full grid-height")}

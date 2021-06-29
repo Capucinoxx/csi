@@ -223,13 +223,41 @@ const openTimesheetModal = (date) => {
     ? (addmodal.style.left = `${percent}%`) 
     : (addmodal.style.right = `${100 - percent}%`)
     addmodal.classList.add('visible')
+
+  const inputsTime = addmodal.querySelectorAll('input[type="time"]')
+  const hoursInput = addmodal.querySelector('input[type="number"]')
+  inputsTime.forEach(
+    (input) => input.addEventListener('input', (e) => {
+      const start = stringToFloat(inputsTime[0].value, ':', 60)
+      const end = stringToFloat(inputsTime[1].value, ':', 60)
+
+      hoursInput.value =  +(Math.round(end - start + "e+2")  + "e-2")
+    })
+  )
+  hoursInput.addEventListener('input', (e) => {
+    const end = stringToFloat(inputsTime[1].value, ':', 60)
+    console.log(end, e.target.value, end - e.target.value)
+    
+    inputsTime[0].value = floatToTime(end - e.target.value)
+  })
+}
+
+const stringToFloat = (value, separator, step = 60) => {
+  let result = 0
+  value.split(separator).forEach((v, i) => result += v / ((step ** (i + 1)) / step))
+
+  return result
 }
 
 const getTime = (d) => {
   const t = d.getHours() + Math.round(d.getMinutes()/60 * 2) / 2
 
-  const hours = ('0' + Math.ceil(t)).slice(-2)
-  const minutes = ('0' + (t - hours) * 60).slice(-2)
+  return floatToTime(t)
+}
+
+const floatToTime = (f) => {
+  const hours = ('0' + Math.ceil(f)).slice(-2)
+  const minutes = ('0' + (f - hours) * 60).slice(-2)
 
   return `${hours}:${minutes}`
 }
