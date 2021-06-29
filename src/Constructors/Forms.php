@@ -53,7 +53,7 @@ class Input {
     $optionsHTML = [];
 
     foreach($options as $option) {
-      $optionsHTML[] = "<li><span>{$option[$k]}</span></li>";
+      $optionsHTML[] = "<li><span data-id='{$option['id_event']}'>{$option[$k]}</span></li>";
     }
     $optionsHTML = implode('', $optionsHTML);
     
@@ -159,6 +159,7 @@ class Forms extends Input {
     return <<<HTML
       <div id="{$id}" class="manage__container">
         <div class="grid manage__wrapper">
+          <input name="id_event" type="hidden" />
           {$this->Dropdown("Projet", "project", $this->events, "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
           {$this->FieldWithLabel("Heure de début", "start", "time")}

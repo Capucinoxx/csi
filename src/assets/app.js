@@ -170,6 +170,10 @@ document.querySelectorAll('.dropdown').forEach(
         span.addEventListener('click', (e) => {
           dropdown.classList.remove('open')
           input.value = e.target.textContent
+
+          const input_event = dropdown.parentNode.querySelector('[name="id_event"]')
+          console.log(input_event, span)
+          input_event && (input_event.value = span.getAttribute('data-id'))
         })
       }
     )
@@ -189,15 +193,18 @@ addmodal.querySelector('.save-btn').addEventListener('click', () => {
   formData.append('context', 'addTimesheetEvent')
   addmodal.querySelectorAll('input, textarea').forEach(
     (field) => {
-      formData.append(input.getAttribute('name'), field.value)
+      formData.append(field.getAttribute('name'), field.value)
     }
   )
 
-  fetch(
-    window.location,
-    { method: 'POST', body: formData },
-    true
-  ).then(() => document.location.reload())
+  for (var pair of formData.entries()) {
+    console.log(pair[0]+ ', ' + pair[1]); 
+  }
+  // fetch(
+  //   window.location,
+  //   { method: 'POST', body: formData },
+  //   true
+  // ).then(() => document.location.reload())
 })
 
 /**

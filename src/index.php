@@ -20,8 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] != "GET") {
   (new Actions($IEvent, $IEmployee, $ITimesheet))->execute();
 }
 
-$_SESSION['loggedin'] = true;
-$_SESSION['error'] = "test alert";
+// $_SESSION['loggedin'] = true;
+// $_SESSION['error'] = "test alert";
 
 require_once(dirname(__DIR__).'/html/Views/head.html');
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {

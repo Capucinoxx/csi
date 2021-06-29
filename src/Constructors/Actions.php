@@ -65,13 +65,33 @@ class Actions {
       $_SESSION['last_name'] = $rep['last_name'];
       $_SESSION['role'] = $rep['role'];
     } else {
+      $_SESSION['loggedin'] = false;
       $_SESSION['error'] = $rep['error'];
     }
 
     var_dump($rep);
     die();
+  }
 
-    
+  /**
+   * ajout un 
+   */
+  private function addTimesheetEvent() {
+    $start = $this->convertTime($_POST['start']);
+    $end = $this->convertTime($_POST['end']);
+
+    ($this->ITimesheet)->createTimesheet([
+      'id_event' => $_POST['id_event'],
+      'id_employee' => $_SESSION['id'],
+      'start' => $start,
+      'end' => $end,
+      'at' => date('U', strtotime($_POST['date'])),
+      'hours_invested' => $end - $start,
+      'description' => $_POST['description']
+    ]);
+
+    var_dump($_POST);
+    die();
   }
 
   /**
@@ -91,6 +111,11 @@ class Actions {
    */
   private function addTimesheet() {
     header("Refresh:0");
+  }
+
+  private function convertTime(string $time): float {
+    $parts = explode(':', $value);
+    return $parts[0] + floor(($parts[1]/60)*100) / 100;
   }
 }
 
