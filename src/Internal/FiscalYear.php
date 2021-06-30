@@ -5,7 +5,7 @@ use App\Internal\Employee;
 use \PDO;
 
 
-class Leave extends DataBase {
+class FiscalYear extends DataBase {
 
   public function __construct() {
     parent::__construct();
@@ -13,7 +13,6 @@ class Leave extends DataBase {
   }
 
   public function get() {
-
     return ($this->select())->fetch(PDO::FETCH_ASSOC);
   }
 
