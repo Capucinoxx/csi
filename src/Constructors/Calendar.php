@@ -332,7 +332,7 @@ class Calendar {
    * de l'évennement ciblé
    */
   function generate_style_event(float $start_time, float $end_time, string $color = ""): string {
-    var_dump($start_time, $end_time);
+    $color = str_replace("O", "0", $color);
     $top_position = (string)(($start_time - 6.0) * 100.0 / (24.0 - 6.0));
     $height = (string)(($end_time - $start_time) * 100.0 / (24.0 - 6.0));
 
