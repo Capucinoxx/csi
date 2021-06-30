@@ -41,7 +41,10 @@
              { method: 'POST', body: formData },
              true
            ).then(async (resp) => await resp.json())
-           .then((data) => openTimesheetModal(date, data))
+           .then((data) => {
+             data = { ...data, id: e.target.getAttribute('data-id') }
+            openTimesheetModal(date, data)
+           })
          })
        }
      )
@@ -290,6 +293,7 @@
    saveBtn.addEventListener('click', function save() {
      const formData = new FormData()
      formData.append('context', defaultValue !== undefined ? 'editTimesheetEvent' : 'addTimesheetEvent')
+     defaultValue !== undefined && formData.append('id', defaultValue.id)
      addmodal.querySelectorAll('input, textarea').forEach(
        (field) => {
          formData.append(field.getAttribute('name'), field.value)

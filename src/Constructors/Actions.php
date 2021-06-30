@@ -80,9 +80,11 @@ class Actions {
   private function editTimesheetEvent() {
     $start = $this->convertTime($_POST['start']);
     $end = $this->convertTime($_POST['end']);
+    var_dump('update');
 
-    ($this->ITimesheet)->update([
-      'id' => $_POST['id_event'],
+    $rep = ($this->ITimesheet)->update([
+      'id' => $_POST['id'],
+      'id_event' => $_POST['id_event'],
       'id_employee' => $_SESSION['id'],
       'start' => $start,
       'end' => $end,
@@ -90,6 +92,8 @@ class Actions {
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);
+
+    var_dump($rep);
     die();
   }
 
