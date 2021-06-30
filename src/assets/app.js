@@ -8,16 +8,18 @@
      const date = new Date()
      date.setFullYear(y)
      date.setMonth(m-1)
-     date.setDate(d)
+     date.setDate(d - 1)
  
      
      list.addEventListener('click', (e) => {
        const { top, height } = e.target.getBoundingClientRect()
        const  yaxis = e.clientY - top
-       const hours = (Math.ceil(Math.round(yaxis / (height - 54) * 36) / 2) + 6)
+       const time = (Math.round(yaxis / (height - 54) * 36) / 2)
+       const hours = (Math.ceil(time) + 6)
        const t = date
       //  console.log(hours)
-      //  t.setHours(hours)
+       t.setHours(hours)
+
        
        openTimesheetModal(t)
      })
@@ -298,7 +300,7 @@
        window.location,
        { method: 'POST', body: formData },
        true
-     ).then(() => window.location = window.location)
+     )
    })
    
    const pos = (date.getDay()) % 7

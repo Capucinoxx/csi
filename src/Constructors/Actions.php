@@ -63,7 +63,7 @@ class Actions {
     $start = $this->convertTime($_POST['start']);
     $end = $this->convertTime($_POST['end']);
 
-    ($this->ITimesheet)->createTimesheet([
+    $resp = ($this->ITimesheet)->createTimesheet([
       'id_event' => $_POST['id_event'],
       'id_employee' => $_SESSION['id'],
       'start' => $start,
@@ -72,6 +72,8 @@ class Actions {
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);
+
+    var_dump($resp);
     die();
   }
 
