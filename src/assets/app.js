@@ -8,7 +8,7 @@
      const date = new Date()
      date.setFullYear(y)
      date.setMonth(m-1)
-     date.setDate(d - 1)
+     date.setDate(d)
  
      
      list.addEventListener('click', (e) => {
