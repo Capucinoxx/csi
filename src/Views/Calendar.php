@@ -51,4 +51,3 @@
   <?= $forms->draw("employé", "gestion-users") ?>
   <?= $forms->draw("projet", "gestion-projects") ?>
 <?php endif; ?>
-<?= $calendar->dump() ?>

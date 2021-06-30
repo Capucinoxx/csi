@@ -25,8 +25,9 @@ class Label extends DataBase {
         ":id" => $id_event
       ]
     );
-
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    
+    return intval($row['id_label']);
   }
 
   public function createLabel($params) {

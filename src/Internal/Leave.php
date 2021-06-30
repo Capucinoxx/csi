@@ -58,7 +58,7 @@ class Leave extends DataBase {
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
-        ':id' => $id_event
+        ':id_event' => $id_event
       ]
     );
 
@@ -93,8 +93,10 @@ class Leave extends DataBase {
       $query = $this->db_connection->prepare($sql);
       $query->execute(
         [
-          ':start_fiscal_year' => $start_fiscal_year,
-          ':end_fiscal_year' => $end_fiscal_year
+          ':id_event' => $id_event,
+          ':id_employee' => $id_employee,
+          ':start_fiscal_year' => $fiscal_year_data['start_fiscal_year'],
+          ':end_fiscal_year' => $fiscal_year_data['end_fiscal_year']
         ]
       );
     }
@@ -165,7 +167,7 @@ class Leave extends DataBase {
 
   public function validateLeave($data) {
     extract($data);
-
+    
     # Get ID du leave
     $id_leave = $this->getIDLeave($id_event);
 
@@ -195,26 +197,28 @@ class Leave extends DataBase {
     } 
     if($employee_status == 1) { // regular employee
       # Vérifier que ca dépasse pas le nombre d'heures dispo.
-      $max_hours = $this->getLeaveMaxHours($id_employee, $id_event);
+      $max_hours = floatval($this->getLeaveMaxHours($id_employee, $id_event));
 
       if($total_hours > $max_hours) {
-
         return [
           "error" => "Impossible de rentrer les heures."
         ];
       }
-    } 
-    # Au prorata employee
-    # Calculer le nombre d'heures dispo et vérifier si la somme des heures courantes et les heures rentrées les dépassent 
-    $max_hours = $this->getRegularLeaveMaxHours($id_leave);
-    $weeks_worked = $this->getWeeksWorked($id_employee);
-    $hours_permitted = ($max_hours/52) * $weeks_worked;
-    
-    if($total_hours > $hours_permitted) {
-      return [
-        "error" => "Impossible de rentrer les heures. Les heures permises sont : " . $hours_permitted . ".\n"
-      ]; 
+
+    } else {
+      # Au prorata employee
+      # Calculer le nombre d'heures dispo et vérifier si la somme des heures courantes et les heures rentrées les dépassent 
+      $max_hours = $this->getRegularLeaveMaxHours($id_leave);
+      $weeks_worked = $this->getWeeksWorked($id_employee);
+      $hours_permitted = ($max_hours/52) * $weeks_worked;
+      
+      if($total_hours > $hours_permitted) {
+        return [
+          "error" => "Impossible de rentrer les heures. Les heures permises sont : " . $hours_permitted . ".\n"
+        ]; 
+      }
     }
+    
     
     return true;
   }

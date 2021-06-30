@@ -207,20 +207,20 @@ class Event extends DataBase {
     $label = new Label();
     $id_label = $label->getIDByEvent($id_event);
 
-    if($id_label != 1) {
-      // c'est un projet
-      $response = $this->validateProject($data);
-      if(isset($response['error'])) {
-        
-        return $response;
-      }
-    } else {
+    if($id_label == 1) {
       // c'est un leave
       $leave = new Leave();
       $response = $leave->validateLeave($data);
 
       if(isset($response['error'])) {
 
+        return $response;
+      }
+    } else {
+      // c'est un projet
+      $response = $this->validateProject($data);
+      if(isset($response['error'])) {
+        
         return $response;
       }
     }
