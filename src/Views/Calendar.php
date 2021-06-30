@@ -28,7 +28,9 @@
         </div>
       <?php endif; ?>
     </section>
+    <div class="toto-tata">
     <?= $calendar->draw_monthly_calendar() ?>
+    </div>
       <span class="employee-name">
         <?= $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?>
       </span>
@@ -51,4 +53,3 @@
   <?= $forms->draw("employé", "gestion-users") ?>
   <?= $forms->draw("projet", "gestion-projects") ?>
 <?php endif; ?>
-<?= $calendar->dump() ?>

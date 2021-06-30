@@ -121,6 +121,17 @@ textarea {
   border-radius: 2px;
   border-bottom-left-radius: 7px; 
   border-bottom-right-radius: 7px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-top: 20px solid var(--color-triangle);
+    border-right: 20px solid transparent;
+  }
 }
 
 .employee-name {

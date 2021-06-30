@@ -138,6 +138,17 @@
          })
        }
      )
+
+     // gère la gestion de la sélection de la palette de couleur si existante
+     const palletColors = container.querySelector('.colors-choice')
+     palletColors && palletColors.querySelectorAll('.color__choices').forEach(
+       (color) => {
+          color.addEventListener('click', () => {
+            console.log(window.getComputedStyle(color))
+            container.querySelector('input[type="color"]').value = color.getAttribute('data-color')
+          })
+        }
+     )
    
      container.querySelector('.close-btn').addEventListener('click', () => {
        container.classList.remove('visible-modal')

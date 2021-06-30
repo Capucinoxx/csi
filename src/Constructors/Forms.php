@@ -3,7 +3,13 @@
 namespace App\Constructors;
 
 class Input {
+  private $colors = [
+    "#0f9b0f", "#0f3443", "#34e89e", "#4AC29A", 
+    "#20002c", "#cbb4d4", "#1D2671", "#C33764"
+  ];
+
   public function __construct() {}
+
 
   public function FieldWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
     switch($type) {
@@ -35,6 +41,24 @@ class Input {
           <span>{$title}</span>
         </div>
       </li>
+    HTML;
+  }
+
+  protected function ColorsChoice(): string {
+    $html = "";
+    
+    foreach($this->colors as $color) {
+      $data_color = str_replace("#", "", $color);
+      $html .= "<div data-color='{$color}' style='background: {$color}' class='color__choices'></div>";
+    }
+
+    return <<<HTML
+      <div class="full title-section colors-choice">
+        <span class="underline color-choice__title">Selection couleur rapide</span>
+        <div class="flex">
+          {$html}
+        </div>
+      </div>
     HTML;
   }
 
@@ -249,6 +273,7 @@ class Forms extends Input {
     return <<<HTML
       {$this->FieldWithLabel("Nom", "name", "text")}
       {$this->FieldColor("Couleur du libellé", "color", null)}
+      {$this->ColorsChoice()}
     HTML;
   }
 
