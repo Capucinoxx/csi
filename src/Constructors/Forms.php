@@ -189,7 +189,8 @@ class Forms extends Input {
   public function draw_timesheet_form(string $id): string {
     return <<<HTML
       <div id="{$id}" class="manage__container">
-        <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper">
+        <!-- <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper"> -->
+        <div class="grid manage__wrapper">
           <input name="id_event" type="hidden" />
           {$this->Dropdown("Projet", "project", $this->events, "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
@@ -208,7 +209,8 @@ class Forms extends Input {
               Fermeture
             </button>
           </div>
-        </form>
+        <!-- </form> -->
+        </div>
       </div>
     HTML;
   }

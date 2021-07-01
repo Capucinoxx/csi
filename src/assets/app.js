@@ -225,24 +225,7 @@
  addmodal.querySelector('.close-btn').addEventListener('click', () => addmodal.classList.remove('visible'))
  
  // gestion btn ajout
- addmodal.querySelector('.save-btn').addEventListener('click', () => {
-   const formData = new FormData()
-   formData.append('context', 'addTimesheetEvent')
-   addmodal.querySelectorAll('input, textarea').forEach(
-     (field) => {
-       formData.append(field.getAttribute('name'), field.value)
-     }
-   )
- 
-   for (var pair of formData.entries()) {
-     console.log(pair[0]+ ', ' + pair[1]); 
-   }
-   fetch(
-     window.location,
-     { method: 'POST', body: formData },
-     true
-   ).then(() => window.location = window.location)
- })
+
  
  /**
   * Gestion de l'ouverture de la fenêtre gérant l'ajout de timesheet
@@ -273,6 +256,7 @@
      )
  
      saveBtn.lastChild.textContent = 'Enregistrer'
+    //  addmodal.querySelector('form').setAttribute('data-context', 'editing')
    } else {
      // on met les heures par défault
      addmodal.querySelector('[name="date"]').value = date.toISOString().slice(0, 10)
@@ -286,6 +270,7 @@
      setTimeElapsed(start, end, hoursInvestedEl)
      
      saveBtn.lastChild.textContent = 'Ajouter'
+    //  addmodal.querySelector('form').setAttribute('data-context', 'adding')
    }
  
    [start, end].forEach(
@@ -293,6 +278,26 @@
        setTimeElapsed(start, end, hoursInvestedEl)
      })
    )
+
+   addmodal.querySelector('.save-btn').addEventListener('click', () => {
+    const formData = new FormData()
+    formData.append('context', defaultValue !== undefined ? 'editTimesheetEvent' : 'addTimesheetEvent')
+    defaultValue !== undefined && formData.append('id', defaultValue.id)
+    addmodal.querySelectorAll('input, textarea').forEach(
+      (field) => {
+        formData.append(field.getAttribute('name'), field.value)
+      }
+    )
+  
+    for (var pair of formData.entries()) {
+      console.log(pair[0]+ ', ' + pair[1]); 
+    }
+    fetch(
+      window.location,
+      { method: 'POST', body: formData },
+      true
+    ).then(() => window.location = window.location)
+  })
  
    hoursInvestedEl.addEventListener('input', (e) => {
      start.value = floatToTime(stringToFloat(end.value, ':', 60) - e.target.value)
@@ -433,9 +438,10 @@ handleSubmit = (event) => {
 
 function sendTimesheetEvent(e,form) {
   const formData = new FormData()
-  const defaultValue = undefined
-  formData.append('context', defaultValue !== undefined ? 'editTimesheetEvent' : 'addTimesheetEvent')
-  defaultValue !== undefined && formData.append('id', defaultValue.id)
+  
+  const ctx = e.target.getAttribute('data-context')
+  formData.append('context', ctx == "editing" ? 'editTimesheetEvent' : 'addTimesheetEvent')
+  ctx == "editing" && formData.append('id', defaultValue.id)
   form.querySelectorAll('input, textarea').forEach(
     (field) => {
       formData.append(field.getAttribute('name'), field.value)

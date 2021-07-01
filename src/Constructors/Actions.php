@@ -68,7 +68,7 @@ class Actions {
       'id_employee' => $_SESSION['id'],
       'start' => $start,
       'end' => $end,
-      'at' => intval(date('U', strtotime($_POST['date']))),
+      'at' => intval(date('U', strtotime($_POST['date']))) * 1000,
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);
@@ -88,7 +88,7 @@ class Actions {
       'id_employee' => $_SESSION['id'],
       'start' => $start,
       'end' => $end,
-      'at' => intval(date('U', strtotime($_POST['date']))),
+      'at' => intval(date('U', strtotime($_POST['date']))) * 1000,
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);
