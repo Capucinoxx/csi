@@ -173,15 +173,26 @@ class Event extends DataBase {
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function validateProject($data) {
+  public function getHoursInserted($params) {
+      $timesheet = new Timesheet();
+      $data = $timesheet->getByID($params['id']);
+
+      return $data['hours_invested'];
+  }
+
+  public function validateProject($data, $isUpdate) {
     extract($data);
 
     # Get nombre limite d'heures par jour et par semaine
     $limit_hours = $this->getLimitHours($id_event);
 
+    # Si c'est un update, get le nombre d'heures inserted
+    $hours_inserted = 0;
+    if($isUpdate) $hours_inserted = getHoursInserted($data); 
+
     # Get nombre d'heures travaillées par jour et par semaine
-    $hours_per_day = $this->getCurrentHoursPerDay($id_event, $id_employee, $at);
-    $hours_per_week = $this->getCurrentHoursPerWeek($id_event, $id_employee, $at);
+    $hours_per_day = $this->getCurrentHoursPerDay($id_event, $id_employee, $at) - $hours_inserted;
+    $hours_per_week = $this->getCurrentHoursPerWeek($id_event, $id_employee, $at) - $hours_inserted;
 
     # Vérifier si le total des heures rentrées dépassent la limite d'heures par jour
     if(($hours_invested + $hours_per_day) > $limit_hours['max_hours_per_day']) {
@@ -201,7 +212,7 @@ class Event extends DataBase {
     return true;
   }
 
-  public function validateHours($data) {
+  public function validateHours($data, $isUpdate) {
     extract($data);
 
     $label = new Label();
@@ -210,7 +221,7 @@ class Event extends DataBase {
     if($id_label == 1) {
       // c'est un leave
       $leave = new Leave();
-      $response = $leave->validateLeave($data);
+      $response = $leave->validateLeave($data, $isUpdate);
 
       if(isset($response['error'])) {
 
@@ -218,7 +229,7 @@ class Event extends DataBase {
       }
     } else {
       // c'est un projet
-      $response = $this->validateProject($data);
+      $response = $this->validateProject($data, $isUpdate);
       if(isset($response['error'])) {
         
         return $response;
