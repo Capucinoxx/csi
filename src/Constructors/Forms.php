@@ -79,11 +79,12 @@ class Input {
     HTML;
   }
 
-  protected function Dropdown(string $label, string $key, ?array $options = [], string $k): string {
+  protected function Dropdown(string $label, string $key, ?array $options = [], ?string $k = ""): string {
     $optionsHTML = [];
 
     foreach($options as $option) {
-      $optionsHTML[] = "<li><span data-id='{$option['id_event']}'>{$option[$k]}</span></li>";
+      $id_event = $option['id_event'] ?? '';
+      $optionsHTML[] = "<li><span data-id='{$id_event}'>{$option[$k]}</span></li>";
     }
     $optionsHTML = implode('', $optionsHTML);
     
@@ -188,7 +189,7 @@ class Forms extends Input {
   public function draw_timesheet_form(string $id): string {
     return <<<HTML
       <div id="{$id}" class="manage__container">
-        <div class="grid manage__wrapper">
+        <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper">
           <input name="id_event" type="hidden" />
           {$this->Dropdown("Projet", "project", $this->events, "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
@@ -207,7 +208,7 @@ class Forms extends Input {
               Fermeture
             </button>
           </div>
-        </div>
+        </form>
       </div>
     HTML;
   }
