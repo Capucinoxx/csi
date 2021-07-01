@@ -21,15 +21,25 @@ class Timesheet extends DataBase {
 
   public function createTimesheet($params) {
     $params['at'] *= 1000;
-    $response = $this->validateInsertion($params);
+    $response = $this->validateInsertion($params, false);
 
     if(isset($response['error'])) {
       return $response;
     }
     
-    // var_dump($params);
-    
     $this->insert($params);
+    return true;
+  }
+
+  public function updateTimesheet($params) {
+    $params['at'] *= 1000;
+    $response = $this->validateInsertion($params, true);
+
+    if(isset($response['error'])) {
+      return $response;
+    }
+    
+    $this->update($params);
     return true;
   }
 
@@ -42,8 +52,6 @@ class Timesheet extends DataBase {
     fclose($fh);
     
     return $content;
-    // $content = $this->getEventsInfo($data);
-    // var_dump($content->fetch(PDO::FETCH_ASSOC));
   }
 
   ## QUERIES ##
@@ -200,7 +208,7 @@ class Timesheet extends DataBase {
     return (($query->errorCode() == "23000") ? false : $query);
  }
 
-  public function validateInsertion($data) {
+  public function validateInsertion($data, $isUpdate) {
     # Validation de l'évènement
     $event = new Event();
 
@@ -221,7 +229,7 @@ class Timesheet extends DataBase {
       ];
     }
 
-    $response = $event->validateHours($data);
+    $response = $event->validateHours($data, $isUpdate);
     if(isset($response['error'])) {
       return $response;
     }
