@@ -358,7 +358,7 @@
  }
  
  const floatToTime = (f) => {
-   const hours = ('0' + Math.ceil(f)).slice(-2)
+   const hours = ('0' + Math.floor(f)).slice(-2)
    const minutes = ('0' + (f - hours) * 60).slice(-2)
  
    return `${hours}:${minutes}`
