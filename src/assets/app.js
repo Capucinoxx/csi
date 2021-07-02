@@ -107,6 +107,9 @@
        })
      )
  
+    // gestion du bouton de sauvegarde
+    // container.querySelector('')
+
      const titles = container.querySelectorAll('.manage__title')
      titles.forEach(
        (title) => {
@@ -288,10 +291,7 @@
         formData.append(field.getAttribute('name'), field.value)
       }
     )
-  
-    for (var pair of formData.entries()) {
-      console.log(pair[0]+ ', ' + pair[1]); 
-    }
+
     fetch(
       window.location,
       { method: 'POST', body: formData },
@@ -303,33 +303,6 @@
      start.value = floatToTime(stringToFloat(end.value, ':', 60) - e.target.value)
    })
  
- 
-   // on ajoute un évennement au click pour sauvegerder les modifications ou ajouter
-   // un nouvel évennement
-  //  saveBtn.addEventListener('click', async (e) =>  {
-  //    e.stopPropagation()
-  //    e.preventDefault()
-
-  //    // on crée un faux formulaire
-
-  //    const formData = new FormData()
-  //    formData.append('context', defaultValue !== undefined ? 'editTimesheetEvent' : 'addTimesheetEvent')
-  //    defaultValue !== undefined && formData.append('id', defaultValue.id)
-  //    addmodal.querySelectorAll('input, textarea').forEach(
-  //      (field) => {
-  //        formData.append(field.getAttribute('name'), field.value)
-  //      }
-  //    )
-
-  //    formData.submit( window.location, (err, res) => {
-  //      if (err) {} else {
-  //        console.log(res)
-  //        window.location = window.location
-  //      }
-  //    })
- 
-  //  })
-   
    const pos = (date.getDay()) % 7
    const percent = (pos > 3 ? 7 - pos  : pos + 1) / 7 * 100
    addmodal.style.left = pos <= 3 ? `${percent}%` : ''
@@ -375,80 +348,3 @@
    ).then(() => window.location = window.location)
  }
  
-
-// const onSumbintTimesheet = (e, form) => {
-//   e.preventDefault()
-
-//   fetch('', {
-//     method: 'post',
-
-//   })
-// }
-
-
-
-// e.preventDefault();
-    
-// fetch('file.php', {
-//   method: 'post',
-//   body: JSON.stringify({name: form.formName.value, email: form.formEmail.value})
-// }).then(function(response) {
-//   return response.json();
-// }).then(function(data) {
-//   //Success code goes here
-//   alert('form submited')
-// }).catch(function(err) {
-//   //Failure
-//   alert('Error')
-// });
-// }
-
-
-
-const submitTimesheet = (e) => {
-  e.preventDefault()
-
-  const formData = new FormData()
-  formData.append('context', defaultValue !== undefined ? 'editTimesheetEvent' : 'addTimesheetEvent')
-  defaultValue !== undefined && formData.append('id', defaultValue.id)
-  addmodal.querySelectorAll('input, textarea').forEach(
-    (field) => {
-      formData.append(field.getAttribute('name'), field.value)
-    }
-  )
-
-  fetch(
-    window.location,
-    {
-      method: 'post', body: formData
-    }
-  ).then(() => window.location = window.location)
-}
-
-
-handleSubmit = (event) => {
-  event.preventDefault()
-  fetch("https://jsonplaceholder.typicode.com/todos/1")
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json)
-      window.location.reload()
-    })
-}
-
-function sendTimesheetEvent(e,form) {
-  const formData = new FormData()
-  
-  const ctx = e.target.getAttribute('data-context')
-  formData.append('context', ctx == "editing" ? 'editTimesheetEvent' : 'addTimesheetEvent')
-  ctx == "editing" && formData.append('id', defaultValue.id)
-  form.querySelectorAll('input, textarea').forEach(
-    (field) => {
-      formData.append(field.getAttribute('name'), field.value)
-    }
-  )  
-
-  fetch('localhost:8002/', {method:'post', body: formData}).catch((err) => console.error(err));
-
-  e.preventDefault();
-}
