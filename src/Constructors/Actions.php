@@ -5,8 +5,10 @@ namespace App\Constructors;
 class Actions {
   private $IEvent;
   private $Iemployee;
+  private $ITimesheet;
+  private $ILabel;
 
-  public function __construct($IEvent, $IEmployee, $ITimesheet) {
+  public function __construct($IEvent, $IEmployee, $ITimesheet, $ILabel) {
     $this->IEvent = $IEvent;
     $this->IEmployee = $IEmployee;
     $this->ITimesheet = $ITimesheet;
@@ -80,7 +82,6 @@ class Actions {
   private function editTimesheetEvent() {
     $start = $this->convertTime($_POST['start']);
     $end = $this->convertTime($_POST['end']);
-    var_dump('update');
 
     $rep = ($this->ITimesheet)->update([
       'id' => $_POST['id'],
@@ -92,6 +93,49 @@ class Actions {
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);
+
+    var_dump($rep);
+    die();
+  }
+
+  private function editAdminElem() {
+    $rep = null;
+    switch ($_POST['action']) {
+      case 'employee':
+        $rep = ($this->IEmployee)->update([
+          'id' => $_POST['id']
+        ]);
+        break;
+      case 'label':
+        $rep = ($this->ILabel)->update([
+          'id' => $_POST['id']
+        ]);
+        break;
+      case 'project':
+        $rep = ($this->IEvent)->update([
+          'id' => $_POST['id']
+        ]);
+        break;
+    }
+
+    var_dump($rep);
+    die();
+  }
+
+  private function addAdminElem() {
+    $rep = null;
+
+    switch ($_POST['action']) {
+      case 'employee':
+        
+        break;
+      case 'label':
+        
+        break;
+      case 'project':
+        
+        break;
+    }
 
     var_dump($rep);
     die();
