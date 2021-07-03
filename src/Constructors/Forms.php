@@ -276,7 +276,9 @@ class Forms extends Input {
     return <<<HTML
       {$this->FieldWithLabel("Nom", "name", "text")}
       {$this->FieldColor("Couleur du libellé", "color", null)}
+      {$this->FieldWithLabel("affaire mondiale Canada", "amc", "checkbox")}
       {$this->ColorsChoice()}
+      
     HTML;
   }
 

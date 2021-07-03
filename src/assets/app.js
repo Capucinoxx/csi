@@ -112,7 +112,6 @@
      
      // on va chercher le contexte de la modale
      const ctx = (container.getAttribute('id') || '').split('-')[1].slice(0, -1)
-     console.log('ctx', ctx)
  
      container.querySelector('.save-btn').addEventListener('click', () => {
        const formData = new FormData()

@@ -58,13 +58,15 @@ class Actions {
   }
 
   /**
-   * ajout un 
+   * fait la passerelle entre la demande fait en javascript
+   * et la partie logique en ce qui attrait à l'ajout d'évennement
+   * dans la feuille de temps
    */
   private function addTimesheetEvent() {
     $start = $this->convertTime($_POST['start']);
     $end = $this->convertTime($_POST['end']);
 
-    $resp = ($this->ITimesheet)->createTimesheet([
+    $rep = ($this->ITimesheet)->createTimesheet([
       'id_event' => $_POST['id_event'],
       'id_employee' => $_SESSION['id'],
       'start' => $start,
@@ -75,10 +77,15 @@ class Actions {
     ]);
 
     $this->check($rep);
-    var_dump($resp);
+    var_dump($rep);
     die();
   }
 
+  /**
+   * fait la passerelle entre la demande fait en javascript
+   * et la partie logique en ce qui attrait à la modification 
+   * d'évennement dans la feuille de temps
+   */
   private function editTimesheetEvent() {
     $start = $this->convertTime($_POST['start']);
     $end = $this->convertTime($_POST['end']);
@@ -98,6 +105,31 @@ class Actions {
     var_dump($rep);
     die();
   }
+
+  /**
+   * fait la passerelle entre la demande fait en javascript
+   * et la partie logique en ce qui attrait à l'ajout de libellé
+   */
+  private function addLabel() {
+    $rep = ($this->ILabel)->createLabel([
+      'title' => $_POST['title'],
+      'color' => $_POST['color'],
+      'amc' => $_POST['amc']
+    ]);
+
+    $this->check($rep);
+    var_dump($rep);
+    die();
+  }
+
+  /**
+   * fait la passerelle entre la demande fait en javascript
+   * et la partie logique en ce qui attrait à l'ajout d'employée
+   */
+  private function addEmployee() {
+
+  }
+
 
   private function editAdminElem() {
     $rep = null;
@@ -168,9 +200,13 @@ class Actions {
     return $parts[0] + floor(($parts[1]/60)*100) / 100;
   }
 
-  private function check(object $obj) {
-    if ($obj['error']) {
+  private function check($obj) {
+    var_dump($obj);
+    session_start();
+    if (isset($obj['error'])) {
       $_SESSION['error'] = $obj['error'];
+    } else if (isset($obj->error)) {
+      $_SESSION['error'] = $obj->error;
     } else {
       unset($_SESSION['error']);
     }
