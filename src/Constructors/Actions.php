@@ -69,7 +69,7 @@ class Actions {
       'id_employee' => $_SESSION['id'],
       'start' => $start,
       'end' => $end,
-      'at' => intval(date('U', strtotime($_POST['date']))) * 1000,
+      'at' => intval(date('U', strtotime($_POST['date']))),
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);
@@ -83,13 +83,13 @@ class Actions {
     $start = $this->convertTime($_POST['start']);
     $end = $this->convertTime($_POST['end']);
 
-    $rep = ($this->ITimesheet)->update([
+    $rep = ($this->ITimesheet)->updateTimesheet([
       'id' => $_POST['id'],
       'id_event' => $_POST['id_event'],
       'id_employee' => $_SESSION['id'],
       'start' => $start,
       'end' => $end,
-      'at' => intval(date('U', strtotime($_POST['date']))) * 1000,
+      'at' => intval(date('U', strtotime($_POST['date']))),
       'hours_invested' => $end - $start,
       'description' => $_POST['description']
     ]);

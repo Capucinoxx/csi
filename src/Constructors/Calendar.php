@@ -50,8 +50,6 @@ class Calendar {
     $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
-
-    $this->setupEvents();
   }
 
   public function dump(): string {
@@ -183,6 +181,8 @@ class Calendar {
 
 
   public function draw_monthly_calendar(): string {
+    $this->setupEvents();
+    
     $prev_href = "/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
     $next_href = "/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
 
