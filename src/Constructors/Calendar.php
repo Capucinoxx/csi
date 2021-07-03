@@ -171,7 +171,8 @@ class Calendar {
   private function setupEvents() {
     $start = $this->getStartingWeeklyDay()->format('U');
     $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('U');
-    foreach($this->timesheet->get($_SESSION['id'], $start, $end) as $timesheet) {
+    $events = $this->timesheet->get($_SESSION['id'], $start, $end);
+    foreach($events as $timesheet) {
       $pos = ((new DateTime)->setTimeStamp(intval($timesheet['at'])/1000)->format('N')) % 7;
 
       if (isset($this->projects[$pos])) {

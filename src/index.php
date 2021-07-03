@@ -41,6 +41,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 }
 
 if (isset($_SESSION['error'])) {
+  var_dump('ok');
   echo $forms->draw_alert($_SESSION['error']);  
 }
 

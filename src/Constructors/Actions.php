@@ -51,7 +51,6 @@ class Actions {
       isset($rep['first_name']) && $_SESSION['first_name'] = $rep['first_name'];
       isset($rep['last_name']) && $_SESSION['last_name'] = $rep['last_name'];
       isset($rep['role']) && $_SESSION['role'] = $rep['role'];
-
     } else {
       $_SESSION['loggedin'] = false;
       $_SESSION['error'] = $rep['error'];
@@ -75,6 +74,7 @@ class Actions {
       'description' => $_POST['description']
     ]);
 
+    $this->check($rep);
     var_dump($resp);
     die();
   }
@@ -94,6 +94,7 @@ class Actions {
       'description' => $_POST['description']
     ]);
 
+    $this->check($rep);
     var_dump($rep);
     die();
   }
@@ -118,6 +119,7 @@ class Actions {
         break;
     }
 
+    $this->check($rep);
     var_dump($rep);
     die();
   }
@@ -137,6 +139,7 @@ class Actions {
         break;
     }
 
+    $this->check($rep);
     var_dump($rep);
     die();
   }
@@ -164,6 +167,15 @@ class Actions {
     $parts = explode(':', $time);
     return $parts[0] + floor(($parts[1]/60)*100) / 100;
   }
+
+  private function check(object $obj) {
+    if ($obj['error']) {
+      $_SESSION['error'] = $obj['error'];
+    } else {
+      unset($_SESSION['error']);
+    }
+  }
 }
 
 ?>
+
