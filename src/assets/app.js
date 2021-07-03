@@ -68,7 +68,6 @@
  const admin_panel = document.querySelector('#btn-trigger-gestion + .gestion-options')
  admin_panel && admin_panel.querySelectorAll('li i').forEach(
    (panel) => {
-     console.log(panel)
      panel.addEventListener('click', () => {
        // on cherche l'id de la fenetre modale et on l'ouvre
        const ref = panel.getAttribute('data-modal')
@@ -95,71 +94,97 @@
   */
  document.querySelectorAll('.manage__container').forEach(
    (container) => {
-     let form = container.querySelector('.edit-form')
+     if (container.getAttribute('id') !== 'ajout-timesheet') {
+      let form = container.querySelector('.edit-form')
  
-     container.querySelectorAll('.choice').forEach(
-       (choice) => choice.addEventListener('click', () => {
-         container.querySelector('.choices').classList.add('editing-mode')
+      container.querySelectorAll('.choice').forEach(
+        (choice) => choice.addEventListener('click', () => {
+          container.querySelector('.choices').classList.add('editing-mode')
+          container.classList.add('with-save-btn')
+  
+          form.querySelector('.name').innerText = choice.querySelector('span').innerText
+          form.classList.add('editing-mode')
+          form.style.maxHeight = ""
+        })
+      )
+  
+     // gestion du bouton de sauvegarde
+     
+     // on va chercher le contexte de la modale
+     const ctx = (container.getAttribute('id') || '').split('-')[1].slice(0, -1)
+     console.log('ctx', ctx)
  
-         form.querySelector('.name').innerText = choice.querySelector('span').innerText
-         form.classList.add('editing-mode')
-         form.style.maxHeight = ""
-       })
-     )
+     container.querySelector('.save-btn').addEventListener('click', () => {
+       const formData = new FormData()
+       formData.append('context', 'add' + ctx.charAt(0).toUpperCase() + ctx.slice(1))
+       form.querySelectorAll('input, textarea').forEach(
+         (field) => {
+           formData.append(field.getAttribute('name'), field.value)
+         }
+       )
  
-    // gestion du bouton de sauvegarde
-    // container.querySelector('')
+      //  fetch(window.location, 
+      //    { method: 'post', body: formData }
+      //  ).then(() => window.location = window.location)
+        for (var pair of formData.entries()) {
+          console.log(pair[0]+ ', ' + pair[1]); 
+        }
+     })
+ 
+      const titles = container.querySelectorAll('.manage__title')
+      titles.forEach(
+        (title) => {
+          title.addEventListener('click', () => {
+            titles.forEach((e) => e.classList.toggle('is-active'))
+  
+            const wrapper = container.querySelector('.manage__wrapper')
+            
+            let isAddTitle = (title.textContent.indexOf("Ajouter") !== -1)
+  
+            form = container.querySelector('.edit-form')
+            form.style.maxHeight = isAddTitle ? "1000px" : "0"
 
-     const titles = container.querySelectorAll('.manage__title')
-     titles.forEach(
-       (title) => {
-         title.addEventListener('click', () => {
-           titles.forEach((e) => e.classList.toggle('is-active'))
- 
-           const wrapper = container.querySelector('.manage__wrapper')
-           
-           let isAddTitle = (title.textContent.indexOf("Ajouter") !== -1)
- 
-           form = container.querySelector('.edit-form')
-           form.style.maxHeight = isAddTitle ? "1000px" : "0"
- 
- 
- 
-           wrapper.querySelector('.choices').style.maxHeight = isAddTitle
-             ? "0px"
-             : "300px"
- 
-           wrapper.querySelector('.form__div.block').style.display = isAddTitle
-             ? "none"
-             : "block"       
- 
-           const titleSection = wrapper.querySelector('.title-section')
-           titleSection.querySelector('.underline').textContent = isAddTitle
-             ? "Ajout"
-             : "Édition de"
-           form.classList.remove('editing-mode')
-         })
-       }
-     )
-
-     // gère la gestion de la sélection de la palette de couleur si existante
-     const palletColors = container.querySelector('.colors-choice')
-     palletColors && palletColors.querySelectorAll('.color__choices').forEach(
-       (color) => {
-          color.addEventListener('click', () => {
-            console.log(window.getComputedStyle(color))
-            container.querySelector('input[type="color"]').value = color.getAttribute('data-color')
+            isAddTitle || container.classList.contains('eidting-mode') 
+              ? container.classList.add('with-save-btn')
+              : container.classList.remove('with-save-btn')  
+  
+  
+            wrapper.querySelector('.choices').style.maxHeight = isAddTitle
+              ? "0px"
+              : "300px"
+  
+            wrapper.querySelector('.form__div.block').style.display = isAddTitle
+              ? "none"
+              : "block"       
+  
+            const titleSection = wrapper.querySelector('.title-section')
+            titleSection.querySelector('.underline').textContent = isAddTitle
+              ? "Ajout"
+              : "Édition de"
+            form.classList.remove('editing-mode')
           })
         }
-     )
-   
-     container.querySelector('.close-btn').addEventListener('click', () => {
-       container.classList.remove('visible-modal')
+      )
  
-       form && (form.querySelector('.name').innerText = "")
-       form && form.classList.remove('editing-mode')
-     })
-   }
+      // gère la gestion de la sélection de la palette de couleur si existante
+      const palletColors = container.querySelector('.colors-choice')
+      palletColors && palletColors.querySelectorAll('.color__choices').forEach(
+        (color) => {
+           color.addEventListener('click', () => {
+             console.log(window.getComputedStyle(color))
+             container.querySelector('input[type="color"]').value = color.getAttribute('data-color')
+           })
+         }
+      )
+    
+      container.querySelector('.close-btn').addEventListener('click', () => {
+        container.classList.remove('visible-modal')
+  
+        form && (form.querySelector('.name').innerText = "")
+        form && form.classList.remove('editing-mode')
+      })
+    }
+  }
  )
  
  /**

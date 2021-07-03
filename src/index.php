@@ -16,6 +16,8 @@ $ILabel = new Label();
 $IEmployee = new Employee();
 $ITimesheet = new Timesheet();
 
+date_default_timezone_set('America/Los_Angeles');
+
 if ($_SERVER["REQUEST_METHOD"] != "GET" || isset($_GET['context'])) {
   (new Actions($IEvent, $IEmployee, $ITimesheet))->execute();
 } 

@@ -511,3 +511,15 @@
     }
   }
 }
+
+#gestion-labels, #gestion-employees, #gestion-projects {
+  &.with-save-btn {
+    .save-btn {
+      display: flex;
+    }
+  }
+
+  .save-btn {
+    display: none;
+  }
+}
