@@ -321,7 +321,9 @@
       window.location,
       { method: 'POST', body: formData },
       true
-    ).then(() => window.location = window.location)
+    ).then(async (resp) => await resp.text())
+    .then((data) => console.log(data))
+    .then(() => window.location = window.location)
   })
  
    hoursInvestedEl.addEventListener('input', (e) => {
@@ -330,7 +332,7 @@
  
    const pos = (date.getDay()) % 7
    const percent = (pos > 3 ? 7 - pos  : pos + 1) / 7 * 100
-   addmodal.style.left = pos <= 3 ? `${percent}%` : ''
+   addmodal.style.left = pos <= 3 ? `calc(${percent}% + 80px)` : ''
    addmodal.style.right = pos <= 3 ? '' : `${percent}%`
    addmodal.classList.add('visible')
  }

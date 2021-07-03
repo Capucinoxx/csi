@@ -304,13 +304,14 @@ class Calendar {
 
     return <<<HTML
       <div class='schedule__events'>
+      {$form}
         <div class='scroll'>
+        
           <div style='position: relative'>
             <ul class='py-30'>
               {$html_hours}
             </ul>
             <ul id="week-calendar" class='ml-60 z-10' style='align-items: stretch'>
-              {$form}
               <div class='cursor'></div>
               {$html_days}
             </ul>
