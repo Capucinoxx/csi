@@ -40,6 +40,9 @@ class Input {
         <div class="flex-y-center">
           <span>{$title}</span>
         </div>
+        <div class="flex110">
+          <i class="delete-btn flex-y-center fas fa-ban"></i>
+        </div>
       </li>
     HTML;
   }

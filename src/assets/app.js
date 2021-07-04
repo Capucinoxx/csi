@@ -12,6 +12,7 @@
  
      
      list.addEventListener('click', (e) => {
+       e.stopPropagation()
        const { top, height } = e.target.getBoundingClientRect()
        const  yaxis = e.clientY - top
        const time = (Math.round(yaxis / (height - 54) * 36) / 2)
@@ -28,24 +29,51 @@
      // pour éditer les informations
      list.querySelectorAll('.event-card').forEach(
        (card) => {
-         card.addEventListener('click', (e) => {
-           e.stopPropagation()
-          //  const date = new Date(y, m-1,d)
-           
-           const formData = new FormData()
-           formData.append('context', 'getTimesheetById')
-           formData.append('id', e.target.getAttribute('data-id'))
- 
-           fetch(
-             window.location,
-             { method: 'POST', body: formData },
-             true
-           ).then(async (resp) => await resp.json())
-           .then((data) => {
-             data = { ...data, id: e.target.getAttribute('data-id') }
-            openTimesheetModal(date, data)
-           })
+
+
+         // gestion du retrait d'un évennement 
+        //  const deleteBtn = console.log(card.querySelector('.delete-btn'))
+         card.querySelector('.delete-btn').addEventListener('click', (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            let ok = confirm(`êtes vous certains de vouloir effacer l\'insertion de temps ?`)
+            if (ok == true) {
+              const id = card.getAttribute('data-id')
+              const formData = new FormData()
+              formData.append('context', 'delete')
+              formData.append('ctx-el', 'timesheet')
+              formData.append('id', id)
+  
+              fetch(window.location,
+                { method: 'post', body: formData }
+              ).then(async (res) => await res.text())
+              .then((data) => console.log(data))
+              .then(() =>  window.location = window.location)
+            }
+
          })
+
+
+         card.addEventListener('click', (e) => {
+          e.stopPropagation()
+          e.preventDefault()
+         //  const date = new Date(y, m-1,d)
+          
+          const formData = new FormData()
+          formData.append('context', 'getTimesheetById')
+          formData.append('id', e.target.getAttribute('data-id'))
+
+          fetch(
+            window.location,
+            { method: 'POST', body: formData },
+            true
+          ).then(async (resp) => await resp.json())
+          .then((data) => {
+            data = { ...data, id: e.target.getAttribute('data-id') }
+           openTimesheetModal(date, data)
+          })
+        })
+
        }
      )
    }
@@ -123,32 +151,57 @@
       }
  
       container.querySelectorAll('.choice').forEach(
-        (choice) => choice.addEventListener('click', () => {
-          container.querySelector('.choices').classList.add('editing-mode')
-          container.classList.add('with-save-btn')
+        (choice) => {
+          // action effacter un choix
+          choice.querySelector('.delete-btn').addEventListener('click', (e) => {
+            e.stopPropagation()
+
+            let ok = confirm(`Vous êtes sur le point d'effacter ${translateCtx(ctx)} ${choice.querySelector('span').innerText}, êtes vous certains ?`)
+            if (ok == true) {
+              const formData = new FormData()
+              formData.append('context', 'delete')
+              formData.append('ctx-el', 'timesheet')
+              formData.append('id', choice.getAttribute('data-id'))
+
+              fetch(window.location,
+                { method: 'post', body: formData }
+              ).then(async (res) => await res.text())
+              .then((data) => console.log(data))
+              .then(() =>  window.location = window.location)
+            }
+          })
+
+          // action edition d'un choix
+          choice.addEventListener('click', () => {
+            container.querySelector('.choices').classList.add('editing-mode')
+            container.classList.add('with-save-btn')
+    
+            container.querySelector('input[name="id"]').value = choice.getAttribute('data-id')
   
-          container.querySelector('input[name="id"]').value = choice.getAttribute('data-id')
+            const label = container.querySelector('input[name="label"]')
+            if (label) {
+              const el = label.parentNode.querySelector(`li[data-id="${choice.getAttribute('data-id')}"]`)
+              console.log(el)
+            }
+  
+            form.querySelector('.name').innerText = choice.querySelector('span').innerText
+            form.classList.add('editing-mode')
+  
+            // pred les valeurs par défault et les ajoutes
+            const formData = new FormData()
+            formData.append('context', 'get' + ctx.charAt(0).toUpperCase() + ctx.slice(1) + 'ById')
+            formData.append('id', choice.getAttribute('data-id'))
+            fetch(window.location,
+              { method: 'post', body: formData }
+            ).then(async (resp) => await resp.json())
+            .then((data) => fillValue(ctx, form, data))
+  
+            form.style.maxHeight = ""
+          })
 
-          const label = container.querySelector('input[name="label"]')
-          if (label) {
-            const el = label.parentNode.querySelector(`li[data-id="${choice.getAttribute('data-id')}"]`)
-            console.log(el)
-          }
 
-          form.querySelector('.name').innerText = choice.querySelector('span').innerText
-          form.classList.add('editing-mode')
+        }
 
-          // pred les valeurs par défault et les ajoutes
-          const formData = new FormData()
-          formData.append('context', 'get' + ctx.charAt(0).toUpperCase() + ctx.slice(1) + 'ById')
-          formData.append('id', choice.getAttribute('data-id'))
-          fetch(window.location,
-            { method: 'post', body: formData }
-          ).then(async (resp) => await resp.json())
-          .then((data) => fillValue(ctx, form, data))
-
-          form.style.maxHeight = ""
-        })
       )
   
      // gestion du bouton de sauvegarde
@@ -434,5 +487,16 @@
       form.querySelector('input[name="color"]').value = data.color
       form.querySelector('input[name="amc"]').checked = !!(+data.amc)
       break;
+   }
+ }
+
+ const translateCtx = (ctx) => {
+   switch (ctx) {
+     case 'label': 
+       return 'le libellé';
+    case 'project':
+      return 'le projet';
+    case 'employee':
+      return 'l\'employée';
    }
  }

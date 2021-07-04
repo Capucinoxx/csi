@@ -140,8 +140,10 @@ tbody td {
   .delete-btn {
     position: absolute;
     color: var(--alert);
-    top: -1.15em;
-    right: -1.15em;
+    // top: -1.15em;
+    // right: -1.15em;
+    top: -.25em;
+    right: -.25em;
     font-weight: 700;
     display: none;
     font-size: 1.2em;

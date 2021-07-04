@@ -2,11 +2,29 @@
   border-radius: 5px;
   background: transparent;
   cursor: pointer;
+  position: relative;
 
   animation: background .25s cubic-bezier(0.075, 0.82, 0.165, 1);
 
   &:hover {
     background: var(--gray);
+
+    .delete-btn {
+      display: block;
+    }
+  }
+
+  .delete-btn {
+    color: var(--alert);
+    right: 20px;
+    position: absolute;
+    font-size: 1.25em;
+    display: none;
+
+    &:hover {
+       transform: scale(1.1);
+    }
+
   }
 }
 

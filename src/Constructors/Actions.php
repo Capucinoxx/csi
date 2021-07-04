@@ -221,6 +221,26 @@ class Actions {
    * et la partie logique en ce qui attrait la modification d'évennement
    */
 
+
+  private function delete() {
+    $rep = array();
+    switch($_POST['ctx-el']) {
+      case 'timesheet':
+        $rep = ($this->ITimesheet)->deleteTimesheet(intval($_POST['id']));
+        break;
+      case 'label':
+        $rep = ($this->ILabel)->deleteLabel(intval($_POST['id']));
+        break;
+      case 'event':
+        $rep = ($this->IEvent)->deleteEvent(intval($_POST['id']));
+        break;
+    } 
+
+    $this->check($rep);
+    var_dump($rep, $_POST);
+    die();
+  }
+
   /**
    * déconnection l'utilisateur de sa session
    */
