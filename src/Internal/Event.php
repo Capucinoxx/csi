@@ -22,13 +22,30 @@ class Event extends DataBase {
     return ($this->select($id, true))->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function updateEvent($params) {
+    $pattern = "/[A-Z]{2}[0-9]{2}[0-9]{4}$/i";
+    if(preg_match($pattern, $params['ref']) == 0) {
+      return [
+        "error" => "La référence du projet ne respecte pas le format."
+      ];
+    }
+
+    $this->update($params);
+  }
+
   public function createEvent($params) {
     $params['created_at'] = time()*1000;
+    $pattern = "/[A-Z]{2}[0-9]{2}[0-9]{4}$/i";
+    if(preg_match($pattern, $params['ref']) == 0) {
+      return [
+        "error" => "La référence du projet ne respecte pas le format."
+      ];
+    }
+
     $result = $this->insert($params);
 
     if(($result->errorCode() == "23000")) {
     # Retourner une erreur si le libellé n'existe pas
-
       return [
         "error" => "Ce libellé n'a pas été créé."
       ];
