@@ -78,6 +78,7 @@
      )
    }
  )
+
  
  /**
   * Ajout des évennements appropriés sur le calendrier mensuel 
@@ -101,7 +102,8 @@
        const ref = panel.getAttribute('data-modal')
  
        const modal = document.getElementById(ref)
-       modal && modal.classList.add('visible-modal')
+       modal && modal.parentNode.classList.add('visible-modal') 
+       modal&& modal.classList.add('visible-modal')
  
        // on referme la sélection des choix
        admin_panel.classList.remove('visible')
@@ -281,6 +283,7 @@
       )
     
       container.querySelector('.close-btn').addEventListener('click', () => {
+        container.parentNode.classList.remove('visible-modal')
         container.classList.remove('visible-modal')
   
         form && (form.querySelector('.name').innerText = "")
@@ -353,7 +356,9 @@
   */
  const addmodal = document.getElementById('ajout-timesheet')
  // gestion btn fermeture
- addmodal.querySelector('.close-btn').addEventListener('click', () => addmodal.classList.remove('visible'))
+ addmodal.querySelector('.close-btn').addEventListener('click', () => {
+  addmodal.classList.remove('visible')
+ })
  
  // gestion btn ajout
 
@@ -367,6 +372,14 @@
    const hoursInvestedEl = addmodal.querySelector('input[type="number"]')
    const end = addmodal.querySelector('[name="end"]')
    const start = addmodal.querySelector('[name="start"]')
+   const form = document.getElementById('ajout-timesheet')
+    console.log(form, form.classList)
+   if (form.classList.contains('visible')) {
+    resetForm(form)
+
+    form.classList.remove('visible')
+    return;
+   }
  
    // lorsque qu'il n'y a pas de valeur pas défault, l'utlisateur
    // souhaite ajouter un nouvel évennement, sinon on modifie
@@ -524,7 +537,7 @@
  }
 
  const resetForm = (el) => {
-   el.querySelecotrAll('input, textarea').forEach(
+   el.querySelectorAll('input, textarea').forEach(
      (input) => input.value = ""
    )
  }

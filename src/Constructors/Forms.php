@@ -158,37 +158,39 @@ class Forms extends Input {
     }
 
     return <<<HTML
-      <section id="{$id}" class="manage__container">
-        {$this->draw_header()}
-        <div class="flex-end mt-2">
-          <span class="notice">
-            Veuillez sélectionner un {$type} pour pouvoir l'éditer, si jamais vous voulez 
-            ajouter un {$type}, veuillez aller dans la section ajouter en haut de cette fenêtre
-          </span>
-        </div>
-        <div class="manage__wrapper">
-          {$this->FieldWithLabel("Recherche de {$type}", "key", "text")}
-          <div class="flex-wrapper">
-            <div class="choices ml-4">
-              <ul class="scroll">
-                {$this->draw_list($options, $type)}
-              </ul>
-            
+      <div class="modal">
+        <section id="{$id}" class="manage__container">
+          {$this->draw_header()}
+          <div class="flex-end mt-2">
+            <span class="notice">
+              Veuillez sélectionner un {$type} pour pouvoir l'éditer, si jamais vous voulez 
+              ajouter un {$type}, veuillez aller dans la section ajouter en haut de cette fenêtre
+            </span>
+          </div>
+          <div class="manage__wrapper">
+            {$this->FieldWithLabel("Recherche de {$type}", "key", "text")}
+            <div class="flex-wrapper">
+              <div class="choices ml-4">
+                <ul class="scroll">
+                  {$this->draw_list($options, $type)}
+                </ul>
+              
+              </div>
+              {$this->draw_form($type)}
             </div>
-            {$this->draw_form($type)}
+            <div class="full flex-end mt-2 panel-option">
+              <button class="save-btn mr-2">
+                <i class="fas fa-check-circle"></i>
+                Sauvegarder
+              </button>
+              <button class="close-btn">
+                <i class="fas fa-times-circle"></i>
+                Fermeture
+              </button>
+            </div>
           </div>
-          <div class="full flex-end mt-2 panel-option">
-            <button class="save-btn mr-2">
-              <i class="fas fa-check-circle"></i>
-              Sauvegarder
-            </button>
-            <button class="close-btn">
-              <i class="fas fa-times-circle"></i>
-              Fermeture
-            </button>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
     HTML;
   }
 
