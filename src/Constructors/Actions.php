@@ -199,7 +199,7 @@ class Actions {
     $labels = ($this->ILabel)->get();
     $id_label = -1;
     foreach ($labels as $label) {
-      if ($label['title'] == $_POST['key']) {
+      if ($label['title'] == $_POST['label']) {
         $id_label = $label['id'];
         break;
       }
@@ -218,6 +218,30 @@ class Actions {
     die();
   }
 
+
+  private function editProject() {
+    $labels = ($this->ILabel)->get();
+    $id_label = -1;
+    foreach ($labels as $label) {
+      if ($label['title'] == $_POST['key']) {
+        $id_label = $label['id'];
+        break;
+      }
+    }
+
+    $rep = ($this->IEvent)->update([
+      'id' => $_POST['id'],
+      'ref' => $_POST['ref'],
+      'id_label' => $id_label,
+      'title' => $_POST['title'],
+      'max_hours_per_day' => $_POST['max_hours_per_day'],
+      'max_hours_per_Week' => $_POST['max_hours_per_week']
+    ]);
+
+    $this->check($rep);
+    var_dump($rep);
+    die();
+  }
 
   /**
    * fait la passerelle entre la demande fait en javascript
