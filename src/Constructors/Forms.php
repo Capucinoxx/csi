@@ -4,8 +4,7 @@ namespace App\Constructors;
 
 class Input {
   private $colors = [
-    "#0f9b0f", "#0f3443", "#34e89e", "#4AC29A", 
-    "#20002c", "#cbb4d4", "#1D2671", "#C33764"
+    "#FF1493", "#FF4500", "#FFA500", "#FFD700", "#EE82EE", "#FF00FF", "#8A2BE2", "#7B68EE", "#ADFF2F", "#20B2AA", "#1E90FF", "#4169E1" 
   ];
 
   public function __construct() {}

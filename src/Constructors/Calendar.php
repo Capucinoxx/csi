@@ -277,8 +277,8 @@ class Calendar {
           >
             <div class='event-card-wrapper'>
               {$project['event_title']}<br/>
-              {$this->format_date($project['start'])}-
-              {$this->format_date($project['end'])}
+              {$this->format_date($project['start'], true)}-
+              {$this->format_date($project['end'], true)}
               <i class='delete-btn fas fa-ban'></i>
             </div>
           </li>
@@ -369,10 +369,17 @@ class Calendar {
   }
 
   // formatte l'heure pour retourner sour format hh:mm
-  function format_date($date) {
+  function format_date($date, ?bool $is24Hours = false) {
     $hour = floor($date) < 10 ? '0'.floor($date) : floor($date);
     $minute = ($date - $hour) * 60 < 10 ? '0'.round(($date - $hour) * 60) : round(($date - $hour) * 60);
 
+    if ($is24Hours) {
+      $fix = $hour >= 12 ? 'PM' : 'AM';
+
+      $hour = $hour > 12 ? $hour - 12 : $hour;
+
+      return $hour.":".$minute." ".$fix;
+    }
     return $hour.":".$minute;
   }
 }
