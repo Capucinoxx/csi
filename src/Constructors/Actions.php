@@ -46,6 +46,19 @@ class Actions {
     die();
   }
 
+  private function getProjectById() {
+    $rep = ($this->IEvent)->getById($_POST['id']);
+
+    echo json_encode($rep);
+    die();
+  }
+
+  private function getUserById() {
+    $rep = ($this->IEmployee)->getById($_POST['id']);
+    echo json_encode($rep);
+    die();
+  }
+
   /**
    * enregistre les informations utilisateur dans les variables de session
    */

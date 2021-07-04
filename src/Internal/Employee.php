@@ -14,7 +14,7 @@ class Employee extends DataBase {
 
   public function getByID($id) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id))->fetchAll(PDO::FETCH_ASSOC);
+    return ($this->select($id))->fetch(PDO::FETCH_ASSOC);
   }
 
   public function get() {

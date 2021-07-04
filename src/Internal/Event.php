@@ -53,7 +53,7 @@ class Event extends DataBase {
 
   public function getByID($id) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id, true))->fetchAll(PDO::FETCH_ASSOC);
+    return ($this->select($id, true))->fetch(PDO::FETCH_ASSOC);
   }
 
   public function updateEvent($params) {

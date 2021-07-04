@@ -487,7 +487,29 @@
       form.querySelector('input[name="color"]').value = data.color
       form.querySelector('input[name="amc"]').checked = !!(+data.amc)
       break;
-   }
+
+    case 'project':
+      form.querySelector('input[name="label"]').value = data.title_label
+      form.querySelector('input[name="ref"]').value = data.ref
+      form.querySelector('input[name="title"]').value = data.title_event
+      form.querySelector('input[name="max_hours_per_day"]').value = data.max_hours_per_day || 0
+      form.querySelector('input[name="max_hours_per_week"]').value = data.max_hours_per_week || 0
+      break;
+    
+    case 'user':
+      form.querySelector('input[name="username"]').value = data.username 
+      form.querySelector('input[name="first_name"]').value = data.first_name
+      form.querySelector('input[name="last_name"]').value = data.last_name
+      form.querySelector('input[name="password"]').value = data.password
+
+      form.querySelector('input[name="role"]').checked = data.role == "1" || data.role == "true" ? 1 : 0
+      form.querySelector('input[name="regular"]').checked = data.regular == "1" || data.regular == "true" ? 1 : 0
+
+      form.querySelector('input[name="rate"]').value = data.rate
+      form.querySelector('input[name="rate_amc"]').value = data.rate_AMC
+      form.querySelector('input[name="rate_csi"]').value =data.rate_CSI
+      break;
+  }
  }
 
  const translateCtx = (ctx) => {
@@ -499,4 +521,10 @@
     case 'employee':
       return 'l\'employée';
    }
+ }
+
+ const resetForm = (el) => {
+   el.querySelecotrAll('input, textarea').forEach(
+     (input) => input.value = ""
+   )
  }
