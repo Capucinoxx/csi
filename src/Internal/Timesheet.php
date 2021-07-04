@@ -19,6 +19,10 @@ class Timesheet extends DataBase {
     return ($this->selectByID($id))->fetch(PDO::FETCH_ASSOC);
   }
 
+  public function deleteTimesheet($id) {
+    $this->delete($id);
+  }
+
   public function createTimesheet($params) {
     $params['at'] *= 1000;
     $response = $this->validateInsertion($params, false);
@@ -33,7 +37,7 @@ class Timesheet extends DataBase {
 
   public function updateTimesheet($params) {
     $params['at'] *= 1000;
-    
+
     $response = $this->validateInsertion($params, true);
 
     if(isset($response['error'])) {
