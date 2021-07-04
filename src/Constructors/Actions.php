@@ -192,7 +192,7 @@ class Actions {
    * fait la passerelle entre la demande fait en javascript
    * et la partie logique en ce qui attrait à l'ajout de projet
    */
-  private function addEvent() {
+  private function addProject() {
     $labels = ($this->ILabel)->get();
     $id_label = -1;
     foreach ($labels as $label) {
@@ -234,6 +234,10 @@ class Actions {
       case 'event':
         $rep = ($this->IEvent)->deleteEvent(intval($_POST['id']));
         break;
+      case 'employee':
+        $rep = ($this->IEmployee)->deleteEmployee(intval($_POST['id']));
+        break;
+      
     } 
 
     $this->check($rep);

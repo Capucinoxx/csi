@@ -160,7 +160,7 @@
             if (ok == true) {
               const formData = new FormData()
               formData.append('context', 'delete')
-              formData.append('ctx-el', 'timesheet')
+              formData.append('ctx-el', ctx)
               formData.append('id', choice.getAttribute('data-id'))
 
               fetch(window.location,
