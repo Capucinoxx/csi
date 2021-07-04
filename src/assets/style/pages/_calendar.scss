@@ -22,6 +22,7 @@ tbody td {
 }
 
 .calendar__weekday {
+  font-size: .8em;
   font-weight: 700;
 }
 
@@ -29,6 +30,7 @@ tbody td {
   text-align: center;
   cursor: pointer;
   position: relative;
+  font-size: .8em;
 
   &:hover:not(:has(.is-today)) {
     color: var(--blue-bg) !important;
@@ -126,5 +128,33 @@ tbody td {
 
   &.visible-modal {
     display: block;
+  }
+}
+
+.event-card {
+  .event-card-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .delete-btn {
+    position: absolute;
+    color: var(--alert);
+    top: -1.15em;
+    right: -1.15em;
+    font-weight: 700;
+    display: none;
+    font-size: 1.2em;
+  }
+
+  &:hover {
+    .delete-btn {
+      display: block;
+
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+      }
+    }
   }
 }

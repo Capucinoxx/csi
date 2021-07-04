@@ -194,6 +194,12 @@ class Actions {
     die();
   }
 
+
+  /**
+   * fait la passerelle entre la demande fait en javascript
+   * et la partie logique en ce qui attrait la modification d'évennement
+   */
+
   /**
    * déconnection l'utilisateur de sa session
    */

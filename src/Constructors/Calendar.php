@@ -275,9 +275,12 @@ class Calendar {
             style='{$this->generate_style_event(floatval($project['start']), floatval($project['end']), $project['color'])}'
             data-id='{$project['id']}'
           >
-            {$project['event_title']}<br/>
-            {$this->format_date($project['start'])}-
-            {$this->format_date($project['end'])}
+            <div class='event-card-wrapper'>
+              {$project['event_title']}<br/>
+              {$this->format_date($project['start'])}-
+              {$this->format_date($project['end'])}
+              <i class='delete-btn fas fa-ban'></i>
+            </div>
           </li>
         ";
       }
