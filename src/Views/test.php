@@ -179,7 +179,8 @@ $new_year = [
     'start' => 1625350444,
     'end' => 1656886444
 ]; 
-var_dump($fiscal_year->restartYear($new_year));
+// var_dump($fiscal_year->restartYear($new_year));
+
 ?>
 
  <section class="test-data-dump">
