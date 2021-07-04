@@ -193,7 +193,7 @@ class Leave extends DataBase {
 
     # Nombre d'heures totales si on tient en compte les nouvelles heures rentrées
     $total_hours = $hours_invested + $current_hours - $hours_inserted; 
-
+    
     if ($id_leave == 4) { // Temps accumulé
       # Vérifier que le temps accumulé ne soit pas plus petit que -14 si on lui aditionne le nouveau temps
       if($total_hours < -14){
@@ -201,9 +201,9 @@ class Leave extends DataBase {
           "error" => "Impossible de rentrer les heures : le temps accumulé total ne peut pas dépasser -14 heures."
         ];
       }
-
+      return true;
     } 
-    
+
     # Get statut de l'employé
     $employee = new Employee();
     $employee_status = $employee->getEmployeeStatus($id_employee);
@@ -231,8 +231,7 @@ class Leave extends DataBase {
         ]; 
       }
     }
-    
-    
+  
     return true;
   }
   
