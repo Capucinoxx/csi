@@ -127,7 +127,17 @@ class Actions {
    * et la partie logique en ce qui attrait à l'ajout d'employée
    */
   private function addEmployee() {
-
+    $rep = ($this->IEmployee)->createEmployee([
+      'username' => $_POST['username'],
+      'first_name' => $_POST['first_name'],
+      'last_name' => $_POST['last_name'],
+      'password' => $_POST['password'],
+      'role' => $_POST['role'],
+      'rate' => floatval($_POST['rate']),
+      'rate_AMC' => floatval($_POST['rate_amc']),
+      'rate_CSI' => floatval($_POST['rate_csi']),
+      'created_at' => intval((new Datetime())->format('U')) * 1000
+    ]);
   }
 
 
