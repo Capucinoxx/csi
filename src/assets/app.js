@@ -102,6 +102,8 @@
           container.querySelector('.choices').classList.add('editing-mode')
           container.classList.add('with-save-btn')
   
+          container.querySelector('input[name="id"]').value = choice.getAttribute('data-id')
+
           form.querySelector('.name').innerText = choice.querySelector('span').innerText
           form.classList.add('editing-mode')
           form.style.maxHeight = ""
