@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__).'/src/vendor/autoload.php');
+require_once(dirname(__DIR__).'/html/vendor/autoload.php');
 header("Access-Control-Allow-Origin: *");
 session_start();
 
@@ -27,6 +27,7 @@ $_SERVER["REQUEST_URI"] = strtok($_SERVER["REQUEST_URI"], '?');
 // $_SESSION['error'] = "test alert";
 
 require_once(dirname(__DIR__).'/src/Views/head.html');
+
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $forms = new Forms(
     $ILabel->get(),
@@ -47,5 +48,6 @@ if (isset($_SESSION['error'])) {
 
 // require_once(dirname(__DIR__).'/src/Views/test.php');
 require_once(dirname(__DIR__).'/src/Views/footer.html');
+
 
 ?>
