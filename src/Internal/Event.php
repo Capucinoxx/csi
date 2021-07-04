@@ -188,7 +188,7 @@ class Event extends DataBase {
 
     # Si c'est un update, get le nombre d'heures inserted
     $hours_inserted = 0;
-    if($isUpdate) $hours_inserted = getHoursInserted($data); 
+    if($isUpdate) $hours_inserted = $this->getHoursInserted($data); 
 
     # Get nombre d'heures travaillées par jour et par semaine
     $hours_per_day = $this->getCurrentHoursPerDay($id_event, $id_employee, $at) - $hours_inserted;

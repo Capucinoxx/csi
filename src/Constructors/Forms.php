@@ -304,7 +304,7 @@ class Forms extends Input {
    * @return string
    */
   private function draw_form_event(): string {
-    var_dump($this->labels);
+    // var_dump($this->labels);
     return <<<HTML
       {$this->Dropdown("Libellé", "label", $this->labels, "title")}
       {$this->FieldWithLabel("Référence", "ref", "text")}

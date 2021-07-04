@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__).'/html/vendor/autoload.php');
+require_once(dirname(__DIR__).'/src/vendor/autoload.php');
 header("Access-Control-Allow-Origin: *");
 session_start();
 
@@ -42,7 +42,6 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 }
 
 if (isset($_SESSION['error'])) {
-  var_dump('ok');
   echo $forms->draw_alert($_SESSION['error']);  
 }
 
