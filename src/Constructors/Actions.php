@@ -5,6 +5,7 @@ use App\Internal\Label;
 use App\Internal\Employee;
 use App\Internal\Event;
 use App\Internal\Timesheet;
+use DateTime;
 
 class Actions {
   private $IEvent;
@@ -147,12 +148,13 @@ class Actions {
    * fait la passerelle entre la demande fait en javascript
    * et la partie logique en ce qui attrait à l'ajout d'employée
    */
-  private function addEmployee() {
+  private function addUser() {
     $rep = ($this->IEmployee)->createEmployee([
       'username' => $_POST['username'],
       'first_name' => $_POST['first_name'],
       'last_name' => $_POST['last_name'],
       'password' => $_POST['password'],
+      'regular' => $_POST['regular'] == 'true' ? 1 : 0,
       'role' => $_POST['role'],
       'rate' => floatval($_POST['rate']),
       'rate_AMC' => floatval($_POST['rate_amc']),
@@ -169,7 +171,7 @@ class Actions {
    * fait la passerelle entre la demande fait en javascript
    * et la partie logique en ce qui attrait à la modification d'employée
    */
-  private function editEmployee() {
+  private function editUser() {
     $rep = ($this->IEmployee)->update([
       'id' => $_POST['id'],
       'username' => $_POST['username'],
@@ -177,6 +179,7 @@ class Actions {
       'last_name' => $_POST['last_name'],
       'password' => $_POST['password'],
       'role' => $_POST['role'],
+      'regular' => $_POST['regular'] == 'true' ? 1 : 0,
       'rate' => floatval($_POST['rate']),
       'rate_AMC' => floatval($_POST['rate_amc']),
       'rate_CSI' => floatval($_POST['rate_csi']),
