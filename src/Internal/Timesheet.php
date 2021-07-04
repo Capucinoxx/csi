@@ -33,6 +33,7 @@ class Timesheet extends DataBase {
 
   public function updateTimesheet($params) {
     $params['at'] *= 1000;
+    
     $response = $this->validateInsertion($params, true);
 
     if(isset($response['error'])) {

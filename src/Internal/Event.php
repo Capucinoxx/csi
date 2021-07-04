@@ -236,10 +236,16 @@ class Event extends DataBase {
       }
     }
     
-    if($start > $end) {
+    if($start > $end || $hours_invested < 0) {
       return [
         "error" => "Impossible de rentrer les heures : l'heure du début de l'activité est plus grande que l'heure de fin."
       ];  
+    }
+
+    if($start == $end) {
+      return [
+        "error" => "Impossible de rentrer les heures : l'heure du début de l'activité est égale à l'heure de fin."
+      ]; 
     }
     
     return true;
