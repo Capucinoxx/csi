@@ -89,7 +89,7 @@ class Event extends DataBase {
     if($id_label != 1) {
       $sql = "
       UPDATE Events 
-      SET id_label = null
+      SET id_label = 15
       WHERE id_label = :id_label";
 
       $query = $this->db_connection->prepare($sql);
@@ -217,6 +217,12 @@ class Event extends DataBase {
 
     $label = new Label();
     $id_label = $label->getIDByEvent($id_event);
+
+    if($id_label == 15) {
+      return [
+        "error" => "Le libellé de ce projet a été supprimé. Veillez associer ce projet à un autre libellé."
+      ];
+    }
 
     if($id_label == 1) {
       // c'est un leave
