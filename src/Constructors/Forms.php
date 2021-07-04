@@ -322,7 +322,7 @@ class Forms extends Input {
       {$this->FieldWithPattern("Référence", "ref", "text", null, null, "[A-Z]{2}[0-9]{2}[0-9]{4}")}
       {$this->FieldWithLabel("Titre", "title", "text", "full")}
       {$this->FieldWithLabel("Heures maximum par jour", "max_hours_per_day", "number", "full")}
-      {$this->FieldWithLabel("Heures maximum par semaine", "max_hours_per_day", "number", "full")}
+      {$this->FieldWithLabel("Heures maximum par semaine", "max_hours_per_week", "number", "full")}
     HTML;
   }
 
