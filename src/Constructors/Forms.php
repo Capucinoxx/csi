@@ -291,6 +291,11 @@ class Forms extends Input {
       {$this->FieldWithLabel("Nom d'utilisateur", "username", "text", "full")}
       {$this->FieldWithLabel("Prénom", "first_name", "text")}
       {$this->FieldWithLabel("Nom de famille", "last_name", "text")}
+      {$this->FieldWithLabel("Mot de passe", "password", "password")}
+      {$this->FieldWithLabel("Cet utilisateur est adminisatrateur", "role", "checkbox", "full")}
+      {$this->FieldWithLabel("Taux régulier", "rate", "number")}
+      {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
+      {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}
     HTML;
   }
 
@@ -331,6 +336,7 @@ class Forms extends Input {
             <span class="name"></span>
           </div>
         </div>
+        <input name="id" type="hidden" />
         <div class="grid px-1 mb-4">
           {$form}
         </div>

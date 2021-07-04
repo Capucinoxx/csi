@@ -138,52 +138,29 @@ class Actions {
       'rate_CSI' => floatval($_POST['rate_csi']),
       'created_at' => intval((new Datetime())->format('U')) * 1000
     ]);
-  }
-
-
-  private function editAdminElem() {
-    $rep = null;
-    switch ($_POST['action']) {
-      case 'employee':
-        $rep = ($this->IEmployee)->update([
-          'id' => $_POST['id']
-        ]);
-        break;
-      case 'label':
-        $rep = ($this->ILabel)->update([
-          'id' => $_POST['id']
-        ]);
-        break;
-      case 'project':
-        $rep = ($this->IEvent)->update([
-          'id' => $_POST['id']
-        ]);
-        break;
-    }
 
     $this->check($rep);
     var_dump($rep);
     die();
   }
 
-  private function addAdminElem() {
-    $rep = null;
-
-    switch ($_POST['action']) {
-      case 'employee':
-        
-        break;
-      case 'label':
-        
-        break;
-      case 'project':
-        
-        break;
-    }
-
-    $this->check($rep);
-    var_dump($rep);
-    die();
+  /**
+   * fait la passerelle entre la demande fait en javascript
+   * et la partie logique en ce qui attrait à la modification d'employée
+   */
+  private function editEmployee() {
+    $rep = ($this->IEmployee)->update([
+      'id' => $_POST['id'],
+      'username' => $_POST['username'],
+      'first_name' => $_POST['first_name'],
+      'last_name' => $_POST['last_name'],
+      'password' => $_POST['password'],
+      'role' => $_POST['role'],
+      'rate' => floatval($_POST['rate']),
+      'rate_AMC' => floatval($_POST['rate_amc']),
+      'rate_CSI' => floatval($_POST['rate_csi']),
+      'updated_at' => intval((new Datetime())->format('U')) * 1000
+    ]);
   }
 
   /**
