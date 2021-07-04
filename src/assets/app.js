@@ -95,7 +95,28 @@
  document.querySelectorAll('.manage__container').forEach(
    (container) => {
      if (container.getAttribute('id') !== 'ajout-timesheet') {
+      const input = container.querySelector('input[name="key"]')
+      let query = ''
+      
+
       let form = container.querySelector('.edit-form')
+
+      // ajout du filtre pour la recherche
+      input.onkeydown = (e) => {
+        if (/^.$/u.test(e.key)) {
+          query += e.key
+        } else if (e.key === "Backspace") {
+          query = query.slice(0, -1)
+        }console.log(input.parentNode)
+
+        input.parentNode.parentNode.querySelectorAll('ul li span').forEach(
+          (span) => {
+            span.textContent.toLowerCase().includes(query.toLowerCase())
+              ? span.parentNode.parentNode.style.display = 'flex'
+              : span.parentNode.parentNode.style.display = 'none';
+          }
+        )
+      }
  
       container.querySelectorAll('.choice').forEach(
         (choice) => choice.addEventListener('click', () => {
@@ -103,6 +124,12 @@
           container.classList.add('with-save-btn')
   
           container.querySelector('input[name="id"]').value = choice.getAttribute('data-id')
+
+          const label = container.querySelector('input[name="label"]')
+          if (label) {
+            const el = label.parentNode.querySelector(`li[data-id="${choice.getAttribute('data-id')}"]`)
+            console.log(el)
+          }
 
           form.querySelector('.name').innerText = choice.querySelector('span').innerText
           form.classList.add('editing-mode')

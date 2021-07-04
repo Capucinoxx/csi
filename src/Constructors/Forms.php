@@ -304,8 +304,13 @@ class Forms extends Input {
    * @return string
    */
   private function draw_form_event(): string {
+    var_dump($this->labels);
     return <<<HTML
       {$this->Dropdown("Libellé", "label", $this->labels, "title")}
+      {$this->FieldWithLabel("Référence", "ref", "text")}
+      {$this->FieldWithLabel("Titre", "title", "text", "full")}
+      {$this->FieldWithLabel("Heures maximum par jour", "max_hours_per_day", "number", "full")}
+      {$this->FieldWithLabel("Heures maximum par semaine", "max_hours_per_day", "number", "full")}
     HTML;
   }
 

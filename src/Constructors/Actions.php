@@ -161,6 +161,37 @@ class Actions {
       'rate_CSI' => floatval($_POST['rate_csi']),
       'updated_at' => intval((new Datetime())->format('U')) * 1000
     ]);
+
+    $this->check($rep);
+    var_dump($rep);
+    die();
+  }
+
+    /**
+   * fait la passerelle entre la demande fait en javascript
+   * et la partie logique en ce qui attrait à l'ajout de projet
+   */
+  private function addEvent() {
+    $labels = ($this->ILabel)->get();
+    $id_label = -1;
+    foreach ($labels as $label) {
+      if ($label['title'] == $_POST['key']) {
+        $id_label = $label['id'];
+        break;
+      }
+    }
+
+    $rep = ($this->IEvent)->createEvent([
+      'ref' => $_POST['ref'],
+      'id_label' => $id_label,
+      'title' => $_POST['title'],
+      'max_hours_per_day' => $_POST['max_hours_per_day'],
+      'max_hours_per_Week' => $_POST['max_hours_per_week']
+    ]);
+
+    $this->check($rep);
+    var_dump($rep);
+    die();
   }
 
   /**
