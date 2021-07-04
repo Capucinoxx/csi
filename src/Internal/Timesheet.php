@@ -138,21 +138,34 @@ class Timesheet extends DataBase {
   public function getEmployeeInfo($id_employee) {
     $sql = "
     SELECT first_name, last_name FROM employees
-    WHERE id = {$id_employee};";
+    WHERE id = :id_employee;";
 
     $query = $this->db_connection->prepare($sql);
-    $query->execute();
+    $query->execute(
+      [
+        ':id_employee' => $id_employee
+      ]
+    );
 
     return $query;
   }
 
   public function getAMCHours($at, $id_employee, $id_label) {
-    $sql = "SELECT SUM(hours_invested) as hours FROM Timesheets
-              JOIN events ON events.id = id_event
-              JOIN labels ON labels.id = id_label
-                WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = '{$at}' AND timesheets.id_employee = {$id_employee} AND id_label = {$id_label};";
+    $sql = "
+      SELECT SUM(hours_invested) as hours FROM Timesheets
+        LEFT JOIN events ON events.id = id_event
+        LEFT JOIN labels ON labels.id = id_label
+          WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = :at AND 
+                timesheets.id_employee = :id_employee AND
+                id_label = :id_label;";
     $query = $this->db_connection->prepare($sql);
-    $query->execute();
+    $query->execute(
+      [
+        ':at' => $at,
+        ':id_employee' => $id_employee,
+        ':id_label' => $id_label
+      ]
+    );
 
     return $query;
   }
