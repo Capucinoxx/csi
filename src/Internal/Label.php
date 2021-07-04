@@ -64,7 +64,7 @@ class Label extends DataBase {
 
   ## QUERIES ##
   private function select() {
-    $sql = "SELECT * FROM Labels;";
+    $sql = "SELECT * FROM Labels WHERE deleted_at IS NULL;";
 
     $query = $this->db_connection->prepare($sql);
     $query->execute();
