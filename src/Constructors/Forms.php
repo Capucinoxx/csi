@@ -73,7 +73,7 @@ class Input {
       <div class="flex-align-center h-45">
         <label for="" class="mr-2 fz-14">{$label}</label>
         <div class="input-color-container">
-          <input type="color"/>
+          <input name="{$key}" type="color"/>
         </div>
       </div>
     HTML;
@@ -222,11 +222,11 @@ class Forms extends Input {
   private function draw_header(): string {
     return <<<HTML
       <div class="flex">
-        <div class="manage__title flex-center is-active">
+        <div class="manage__title flex-center is-active" data-ctx="edit">
           <i class="fas fa-pen edit-btn"></i>
           Éditer
         </div>
-        <div class="manage__title flex-center">
+        <div class="manage__title flex-center" data-ctx="add">
           <i class="fas fa-plus add-btn"></i>
           Ajouter
         </div>

@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Constructors;
+use App\Internal\Label;
+use App\Internal\Employee;
+use App\Internal\Event;
+use App\Internal\Timesheet;
 
 class Actions {
   private $IEvent;
@@ -8,10 +12,11 @@ class Actions {
   private $ITimesheet;
   private $ILabel;
 
-  public function __construct($IEvent, $IEmployee, $ITimesheet, $ILabel) {
+  public function __construct(Event $IEvent, Employee $IEmployee, Timesheet $ITimesheet, Label $ILabel) {
     $this->IEvent = $IEvent;
     $this->IEmployee = $IEmployee;
     $this->ITimesheet = $ITimesheet;
+    $this->ILabel = $ILabel;
   }
 
   public function execute() {
@@ -28,6 +33,13 @@ class Actions {
 
   private function getTimesheetById() {
     $rep = ($this->ITimesheet)->getByID($_POST['id']);
+
+    echo json_encode($rep);
+    die();
+  }
+
+  private function getLabelById() {
+    $rep = ($this->ILabel)->getByID($_POST['id']);
 
     echo json_encode($rep);
     die();
@@ -112,14 +124,23 @@ class Actions {
    */
   private function addLabel() {
     $rep = ($this->ILabel)->createLabel([
-      'title' => $_POST['title'],
+      'title' => $_POST['name'],
       'color' => $_POST['color'],
-      'amc' => $_POST['amc']
+      'amc' => $_POST['amc'] == 'false' ? 0 : 1
     ]);
 
     $this->check($rep);
     var_dump($rep);
     die();
+  }
+
+  private function editLabel() {
+    $rep = ($this->ILabel)->update([
+      'id' => intval($_POST['id']),
+      'title' => $_POST['name'],
+      'color' => $_POST['color'],
+      'amc' => $_POST['amc'] == 'false' ? 0 : 1
+    ]);
   }
 
   /**

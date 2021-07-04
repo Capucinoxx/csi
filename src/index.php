@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__).'/src/vendor/autoload.php');
+require_once(dirname(__DIR__).'/html/vendor/autoload.php');
 header("Access-Control-Allow-Origin: *");
 session_start();
 
@@ -26,7 +26,7 @@ $_SERVER["REQUEST_URI"] = strtok($_SERVER["REQUEST_URI"], '?');
 // $_SESSION['loggedin'] = true;
 // $_SESSION['error'] = "test alert";
 
-require_once(dirname(__DIR__).'/src/Views/head.html');
+require_once(dirname(__DIR__).'/html/Views/head.html');
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $forms = new Forms(
@@ -43,10 +43,11 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
 if (isset($_SESSION['error'])) {
   echo $forms->draw_alert($_SESSION['error']);  
+  unset($_SESSION['error']);
 }
 
-// require_once(dirname(__DIR__).'/src/Views/test.php');
-require_once(dirname(__DIR__).'/src/Views/footer.html');
+// require_once(dirname(__DIR__).'/html/Views/test.php');
+require_once(dirname(__DIR__).'/html/Views/footer.html');
 
 
 ?>

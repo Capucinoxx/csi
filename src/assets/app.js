@@ -94,7 +94,11 @@
   */
  document.querySelectorAll('.manage__container').forEach(
    (container) => {
+    // on va chercher le contexte de la modale
+    const ctx = (container.getAttribute('id') || '').split('-')[1].slice(0, -1)
+
      if (container.getAttribute('id') !== 'ajout-timesheet') {
+
       const input = container.querySelector('input[name="key"]')
       let query = ''
       
@@ -133,30 +137,48 @@
 
           form.querySelector('.name').innerText = choice.querySelector('span').innerText
           form.classList.add('editing-mode')
+
+          // pred les valeurs par défault et les ajoutes
+          const formData = new FormData()
+          formData.append('context', 'get' + ctx.charAt(0).toUpperCase() + ctx.slice(1) + 'ById')
+          formData.append('id', choice.getAttribute('data-id'))
+          fetch(window.location,
+            { method: 'post', body: formData }
+          ).then(async (resp) => await resp.json())
+          .then((data) => fillValue(ctx, form, data))
+
           form.style.maxHeight = ""
         })
       )
   
      // gestion du bouton de sauvegarde
      
-     // on va chercher le contexte de la modale
-     const ctx = (container.getAttribute('id') || '').split('-')[1].slice(0, -1)
+
  
      container.querySelector('.save-btn').addEventListener('click', () => {
        const formData = new FormData()
-       formData.append('context', 'add' + ctx.charAt(0).toUpperCase() + ctx.slice(1))
+       
+       formData.append('context', container.querySelector('.manage__title.is-active').getAttribute('data-ctx') + ctx.charAt(0).toUpperCase() + ctx.slice(1))
        form.querySelectorAll('input, textarea').forEach(
          (field) => {
-           formData.append(field.getAttribute('name'), field.value)
+           if (field.getAttribute('type') === 'checkbox') {
+            formData.append(field.getAttribute('name'), field.checked)
+           } else {
+            formData.append(field.getAttribute('name'), field.value)
+           }
+           
          }
        )
  
-      //  fetch(window.location, 
-      //    { method: 'post', body: formData }
-      //  ).then(() => window.location = window.location)
-        for (var pair of formData.entries()) {
-          console.log(pair[0]+ ', ' + pair[1]); 
-        }
+       for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]); 
+      }
+       fetch(window.location, 
+         { method: 'post', body: formData }
+       ).then(async (res) => await res.text())
+       .then((data) => console.log(data))
+       .then(() =>  window.location = window.location)
+
      })
  
       const titles = container.querySelectorAll('.manage__title')
@@ -403,3 +425,14 @@
    ).then(() => window.location = window.location)
  }
  
+
+ const fillValue = (ctx, form, data) => {
+  switch(ctx) {
+
+     case 'label':
+      form.querySelector('input[name="name"]').value = data.title
+      form.querySelector('input[name="color"]').value = data.color
+      form.querySelector('input[name="amc"]').checked = !!(+data.amc)
+      break;
+   }
+ }

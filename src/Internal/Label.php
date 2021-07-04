@@ -84,6 +84,18 @@ class Label extends DataBase {
     return ($query->rowCount() > 0);
   }
 
+  public function getByID($id) {
+    $sql = "
+    SELECT *  
+    FROM Labels
+    WHERE id = :id";
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute([':id' => $id]);
+
+    return $query->fetch(PDO::FETCH_ASSOC);
+  }
+
 }
 
 ?>
