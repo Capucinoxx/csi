@@ -10,7 +10,6 @@ class Input {
 
   public function __construct() {}
 
-
   public function FieldWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
     switch($type) {
       case 'textarea':
@@ -26,6 +25,15 @@ class Input {
     return <<<HTML
       <div class="form__div block {$extra_class}">
         {$input}
+        <label for="{$key}"  class="form__label">{$label}</label>
+      </div>
+    HTML;
+  }
+
+  public function FieldWithPattern(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null, ?string $pattern = "") {
+    return <<<HTML
+      <div class="form__div block {$extra_class}">
+        <input type='{$type}' pattern="{$pattern}" class='form__input' name='{$key}' placeholder=' '/>
         <label for="{$key}"  class="form__label">{$label}</label>
       </div>
     HTML;
@@ -296,6 +304,7 @@ class Forms extends Input {
       {$this->FieldWithLabel("Nom de famille", "last_name", "text")}
       {$this->FieldWithLabel("Mot de passe", "password", "password")}
       {$this->FieldWithLabel("Cet utilisateur est adminisatrateur", "role", "checkbox", "full")}
+      {$this->FieldWithLabel("Cet utilisateur est régulier", "regular", "checkbox", "full")}
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}
       {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
       {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}
@@ -310,7 +319,7 @@ class Forms extends Input {
     // var_dump($this->labels);
     return <<<HTML
       {$this->Dropdown("Libellé", "label", $this->labels, "title")}
-      {$this->FieldWithLabel("Référence", "ref", "text")}
+      {$this->FieldWithPattern("Référence", "ref", "text", null, null, "[A-Z]{2}[0-9]{2}[0-9]{4}")}
       {$this->FieldWithLabel("Titre", "title", "text", "full")}
       {$this->FieldWithLabel("Heures maximum par jour", "max_hours_per_day", "number", "full")}
       {$this->FieldWithLabel("Heures maximum par semaine", "max_hours_per_day", "number", "full")}
