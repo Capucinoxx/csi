@@ -187,10 +187,12 @@ class Timesheet extends DataBase {
         color,
         events.created_at AS event_created_at
       FROM Timesheets timesheets
-        JOIN Events events ON (timesheets.id_event = events.id)
-        JOIN Employees employees ON (timesheets.id_employee = employees.id)
-        JOIN Labels labels ON (events.id_label = labels.id)
-      WHERE timesheets.id_employee = :id AND at BETWEEN (:from)*1000 AND (:to)*1000
+        LEFT JOIN Events events ON (timesheets.id_event = events.id)
+        LEFT JOIN Employees employees ON (timesheets.id_employee = employees.id)
+        LEFT JOIN Labels labels ON (events.id_label = labels.id)
+      WHERE timesheets.id_employee = :id AND 
+            at BETWEEN (:from)*1000 AND (:to)*1000 AND
+            timesheets.deleted_at IS NULL
         ORDER BY id_employee ASC;
     ";
 
