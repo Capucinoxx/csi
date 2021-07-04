@@ -341,13 +341,13 @@ class Calendar {
     $elapsed_time = $end_time - $start_time;
     
     $style = "
-      background: radial-gradient(1019.19% 203.34% at 50% -6.24%, #FEFEFE 29.91%, #45B649 100%), #F0F0F0;
+      background: radial-gradient(1019.19% 203.34% at 50% -6.24%, #FEFEFE 29.91%, {$color} 100%), #F0F0F0;
       top: {$top_position}%;
       height: {$height}%;
       box-shadow: 0px 7px 24px rgba(0, 0, 0, 0.24);
       border-radius: 5px 5px 14px 14px;
 
-      --color-triangle: #45B649;
+      --color-triangle: {$color};
     ";
     
     return $style;
