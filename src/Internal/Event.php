@@ -261,7 +261,7 @@ class Event extends DataBase {
         $newRef = $newRef . $array[$i]; 
       }
       
-      $sql = "UPDATE events SET ref = :newRef WHERE id = :id;";
+      $sql = "UPDATE Events SET ref = :newRef WHERE id = :id;";
       $query = $this->db_connection->prepare($sql);
       $query->execute(
         [

@@ -65,7 +65,7 @@ class Timesheet extends DataBase {
       amc, 
       id_label, 
       labels.title as title_label
-    FROM timesheets 
+    FROM Timesheets 
     JOIN events ON id_event = events.id 
     JOIN labels ON id_label = labels.id
     WHERE timesheets.id_employee =  :id_employee AND
@@ -91,7 +91,7 @@ class Timesheet extends DataBase {
       DAY(FROM_UNIXTIME(at/1000, '%Y-%m-%d')) as day, 
       SUM(hours_invested) as hours, 
       description 
-    FROM timesheets
+    FROM Timesheets
     WHERE id_employee = :id_employee AND 
           at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
           UNIX_TIMESTAMP(:to)*1000 AND 
@@ -115,7 +115,7 @@ class Timesheet extends DataBase {
   public function getTotalHours($at, $id_employee) {
     $sql = "
     SELECT SUM(hours_invested) as total_hours 
-    FROM timesheets
+    FROM Timesheets
     WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = :at AND 
           id_employee = :id_employee;";
 
@@ -142,7 +142,7 @@ class Timesheet extends DataBase {
   }
 
   public function getAMCHours($at, $id_employee, $id_label) {
-    $sql = "SELECT SUM(hours_invested) as hours FROM timesheets
+    $sql = "SELECT SUM(hours_invested) as hours FROM Timesheets
               JOIN events ON events.id = id_event
               JOIN labels ON labels.id = id_label
                 WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = '{$at}' AND timesheets.id_employee = {$id_employee} AND id_label = {$id_label};";

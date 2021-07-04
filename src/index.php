@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__).'/html/vendor/autoload.php');
+require_once(dirname(__DIR__).'/src/vendor/autoload.php');
 header("Access-Control-Allow-Origin: *");
 session_start();
 
@@ -18,32 +18,34 @@ $ITimesheet = new Timesheet();
 
 date_default_timezone_set('America/Los_Angeles');
 
-if ($_SERVER["REQUEST_METHOD"] != "GET" || isset($_GET['context'])) {
-  (new Actions($IEvent, $IEmployee, $ITimesheet, $ILabel))->execute();
-} 
-$_SERVER["REQUEST_URI"] = strtok($_SERVER["REQUEST_URI"], '?');
+// if ($_SERVER["REQUEST_METHOD"] != "GET" || isset($_GET['context'])) {
+//   (new Actions($IEvent, $IEmployee, $ITimesheet, $ILabel))->execute();
+// } 
+// $_SERVER["REQUEST_URI"] = strtok($_SERVER["REQUEST_URI"], '?');
 
-// $_SESSION['loggedin'] = true;
-// $_SESSION['error'] = "test alert";
+// // $_SESSION['loggedin'] = true;
+// // $_SESSION['error'] = "test alert";
 
-require_once(dirname(__DIR__).'/html/Views/head.html');
-if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-  $forms = new Forms(
-    $ILabel->get(),
-    $IEvent->get($_SESSION['id']),
-    $IEmployee->get()
-  );
-  $calendar = new Calendar($ITimesheet, $forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
-  require_once('./Views/Calendar.php');
-} else {  
-  $forms = new Forms([], [], []);
-  require_once('./Views/Login.php');
-}
+// require_once(dirname(__DIR__).'/src/Views/head.html');
+// if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+//   $forms = new Forms(
+//     $ILabel->get(),
+//     $IEvent->get($_SESSION['id']),
+//     $IEmployee->get()
+//   );
+//   $calendar = new Calendar($ITimesheet, $forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
+//   require_once('./Views/Calendar.php');
+// } else {  
+//   $forms = new Forms([], [], []);
+//   require_once('./Views/Login.php');
+// }
 
-if (isset($_SESSION['error'])) {
-  var_dump('ok');
-  echo $forms->draw_alert($_SESSION['error']);  
-}
+// if (isset($_SESSION['error'])) {
+//   var_dump('ok');
+//   echo $forms->draw_alert($_SESSION['error']);  
+// }
 
-require_once(dirname(__DIR__).'/html/Views/footer.html');
+require_once(dirname(__DIR__).'/src/Views/test.php');
+require_once(dirname(__DIR__).'/src/Views/footer.html');
+
 ?>

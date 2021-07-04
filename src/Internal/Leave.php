@@ -189,7 +189,7 @@ class Leave extends DataBase {
     
     # Si c'est un update, get le nombre d'heures inserted
     $hours_inserted = 0;
-    if($isUpdate) $hours_inserted = getHoursInserted($data); 
+    if($isUpdate) $hours_inserted = $this->getHoursInserted($data); 
 
     # Nombre d'heures totales si on tient en compte les nouvelles heures rentrées
     $total_hours = $hours_invested + $current_hours - $hours_inserted; 

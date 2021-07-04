@@ -3,6 +3,7 @@ use App\Internal\Employee;
 use App\Internal\Label;
 use App\Internal\Event;
 use App\Internal\Timesheet;
+use App\Internal\FiscalYear;
 
 $employee = new Employee();
 
@@ -26,15 +27,12 @@ $employee_info = [
     'deleted_at' => null
 ];
 // var_dump($employee_info);
-var_dump($employee->createEmployee($employee_info));
-
-
+// var_dump($employee->createEmployee($employee_info));
 
 ## Tests suppression de l'employé ##
 
 // $employee->deleteEmployee(11);
 // var_dump($employee->getByID(11));
-
 
 ## Tests login ##
 /*
@@ -175,6 +173,13 @@ $data_print = [
 ]; 
 $timesheet->print($data_print);
 */
+
+$fiscal_year = new FiscalYear();
+$new_year = [
+    'start' => 1625350444,
+    'end' => 1656886444
+]; 
+var_dump($fiscal_year->restartYear($new_year));
 ?>
 
  <section class="test-data-dump">
