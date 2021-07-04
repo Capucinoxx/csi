@@ -2,6 +2,7 @@
 namespace App\Internal;
 use App\Internal\DataBase;
 use App\Internal\Employee;
+use App\Internal\Leave;
 use \PDO;
 
 
@@ -10,6 +11,39 @@ class Event extends DataBase {
   public function __construct() {
     parent::__construct();
     $this->table_name = 'Events';
+  }
+
+  public function getByType($isLeave, $id_employee) {
+    if($isLeave) {
+      $leave = new Leave();
+      return $leave->get($id_employee);
+    }
+
+    $sql = "
+    SELECT 
+      events.id as id_event, 
+      id_label,
+      ref, 
+      events.title as title_event, 
+      events.created_at,
+      events.deleted_at, 
+      max_hours_per_day, 
+      max_hours_per_week, 
+      labels.title as title_label, 
+      color
+    FROM Events events
+    LEFT JOIN Labels labels
+      ON events.id_label = labels.id
+    WHERE 
+      events.deleted_at IS NULL AND
+      events.id_label != 1
+    ORDER BY labels.id ASC;
+    ";
+    
+    $query = $this->db_connection->prepare($sql);
+    $query->execute();
+    
+    return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
   public function get($id_employee) {

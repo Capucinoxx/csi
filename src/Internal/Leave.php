@@ -54,6 +54,33 @@ class Leave extends DataBase {
     );
   }
 
+  public function get($id_employee) {
+    $sql = "
+    SELECT 
+      events.id as id_event, 
+      id_employee, 
+      events.title as title_event, 
+      events.created_at,
+      events.deleted_at, 
+      max_hours
+    FROM Events events
+    LEFT JOIN Labels labels
+      ON events.id_label = labels.id
+    WHERE 
+      events.deleted_at IS NULL AND
+      events.id_employee = :id_employee;
+    ";
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ":id_employee" => $id_employee
+      ]
+    );
+    
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   private function getIDLeave($id_event) {
     $sql = "SELECT id_leave FROM Events WHERE id = :id_event";
     $query = $this->db_connection->prepare($sql);
