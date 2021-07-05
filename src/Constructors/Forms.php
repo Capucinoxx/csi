@@ -10,21 +10,25 @@ class Input {
   public function __construct() {}
 
   public function FieldWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
+    $id = $this->generateRandomString();
     switch($type) {
       case 'textarea':
-        $input = "<textarea  class='form__input' name='{$key}'></textarea>";
+        $input = "<textarea  id='{$id}' class='form__input' name='{$key}'></textarea>";
         break;
       case 'time':
-        $input = "<input type='{$type}' class='form__input' name='{$key}' max='23:59' placeholder=' '/>";
+        $input = "<input id='{$id}' type='{$type}' class='form__input' name='{$key}' max='23:59' placeholder=' '/>";
+        break;
+      case 'checkbox':
+        $input = "{$label} <input id='{$id}' type='{$type}' pattern='{$pattern}' class='form__input' name='{$key}' placeholder=' '/>";
         break;
       default:
-        $input = "<input type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
+        $input = "<input id='{$id}' type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
     }
 
     return <<<HTML
       <div class="form__div block {$extra_class}">
         {$input}
-        <label for="{$key}"  class="form__label">{$label}</label>
+        <label for="{$id}"  class="form__label">{$label}</label>
       </div>
     HTML;
   }
@@ -107,6 +111,10 @@ class Input {
         <label class="form__label">{$label}</label>
       </div>
     HTML;
+  }
+
+  private function generateRandomString($length = 10) {
+    return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
   }
 }
 
@@ -288,7 +296,7 @@ class Forms extends Input {
     return <<<HTML
       {$this->FieldWithLabel("Nom", "name", "text")}
       {$this->FieldColor("Couleur du libellé", "color", null)}
-      {$this->FieldWithLabel("affaires mondiales Canada", "amc", "checkbox")}
+      {$this->FieldWithLabel("affaires mondiales Canada", "amc", "checkbox", "full flex-y-center-imp flex-between fz-14")}
       {$this->ColorsChoice()}
       
     HTML;
@@ -304,8 +312,8 @@ class Forms extends Input {
       {$this->FieldWithLabel("Prénom", "first_name", "text")}
       {$this->FieldWithLabel("Nom de famille", "last_name", "text")}
       {$this->FieldWithLabel("Mot de passe", "password", "password")}
-      {$this->FieldWithLabel("Cet utilisateur est adminisatrateur", "role", "checkbox", "full")}
-      {$this->FieldWithLabel("Cet utilisateur est régulier", "regular", "checkbox", "full")}
+      {$this->FieldWithLabel("Cet utilisateur est adminisatrateur", "role", "checkbox", "full flex-y-center-imp flex-between fz-14")}
+      {$this->FieldWithLabel("Cet utilisateur est régulier", "regular", "checkbox", "full flex-y-center-imp flex-between fz-14")}
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}
       {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
       {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}

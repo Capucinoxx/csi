@@ -131,6 +131,11 @@
     &-center {
       display: flex;
       align-items: center;
+
+      &-imp {
+        display: flex !important;
+      align-items: center !important;
+      }
     }
     & > *:nth-child(2n) {
       margin-left: 10px;
@@ -140,6 +145,12 @@
   &-between {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+  }
+
+  &-around {
+    display: flex;
+    justify-content: space-around;
     align-items: center;
   }
 
