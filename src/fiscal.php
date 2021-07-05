@@ -17,7 +17,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
   echo $forms->FieldWithLabel('Début année fiscale', 'start', 'date');
   echo $forms->FieldWithLabel('Fin de l\'année fiscale', 'end', 'date');
-  echo "<button>Réinitialiser l'année fisclae</button>"
+  echo "<button>Réinitialiser l'année fisclae</button>";
 
   echo "</section></div>";
 
