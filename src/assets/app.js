@@ -245,6 +245,7 @@
         (title) => {
           title.addEventListener('click', () => {
             titles.forEach((e) => e.classList.toggle('is-active'))
+            resetForm(form)
   
             const wrapper = container.querySelector('.manage__wrapper')
             
@@ -535,8 +536,13 @@
 
       form.querySelector('#employee-leave').querySelectorAll('.field-row').forEach(
         (field) => {
-          console.log(field.textContent.trim())
-          data.leaves.forEach((leave) => leave.title_event == field.textContent.trim() && (field.querySelector('input').value = leave.max_hours) || (field.querySelector('input').value = 0) )
+          const input = field.querySelector('input')
+          data.leaves.forEach((leave) => {
+            if (leave.title_event == field.textContent.trim() ) {
+              input.value = leave.max_hours
+              input.setAttribute('data-id', leave.id_event)
+            }
+          } )
         }
       )
       break;

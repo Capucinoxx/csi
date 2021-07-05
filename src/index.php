@@ -47,10 +47,6 @@ if (isset($_SESSION['error'])) {
   unset($_SESSION['error']);
 }
 
-foreach($IEvent->getByType(true, $_SESSION['id']) as $t) {
-  print_r($t);
-}
-
 echo '<div id="iframe" class="modal"></div>';
 // require_once(dirname(__DIR__).'/html/Views/test.php');
 require_once(dirname(__DIR__).'/html/Views/footer.html');

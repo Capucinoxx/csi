@@ -1,6 +1,7 @@
 <?php 
 
 namespace App\Constructors;
+use App\Internal\Event;
 
 class Input {
   private $colors = [
@@ -33,7 +34,7 @@ class Input {
     HTML;
   }
 
-  public function FieldRowWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
+  public function FieldRowWithLabel(string $label, string $key, string $type) {
     return <<<HTML
       <div class='form__div block full field-row'>
         <div class='flex-between'>
@@ -215,7 +216,7 @@ class Forms extends Input {
   protected function draw_section(string $title): string {
     return <<<HTML
       <div class='full title-section'>
-        <span class="underline color-choice__title">{$title}</span>
+        <span class="underline">{$title}</span>
       </div>
     HTML;
   }
@@ -326,6 +327,15 @@ class Forms extends Input {
    * @return string
    */
   private function draw_form_employee(): string {
+    $leaves = (new Event())->getByType(true, $_SESSION['id']);
+
+    $leaveshtml = [];
+    foreach($leaves as $leave) {
+      $leaveshtml[] = $this->FieldRowWithLabel($leave['title_event'], $leave['id_event'], 'number');
+    }
+
+
+    $leaveshtml = implode('', $leaveshtml);
     return <<<HTML
       {$this->FieldWithLabel("Nom d'utilisateur", "username", "text", "full")}
       {$this->FieldWithLabel("Prénom", "first_name", "text")}
@@ -339,12 +349,7 @@ class Forms extends Input {
 
       {$this->draw_section("Édition des congés")}
       <div id='employee-leave' class='grid full'>
-        {$this->FieldRowWithLabel('Congé mobile', 'mobile', 'number')}
-        {$this->FieldRowWithLabel('Heures maladie', 'maladie', 'number')}
-        {$this->FieldRowWithLabel('Congé parental', 'parental', 'number')}
-        {$this->FieldRowWithLabel('Temps accumulé', 'accumule', 'number')}
-        {$this->FieldRowWithLabel('Vacances', 'vacance', 'number')}
-        {$this->FieldRowWithLabel('Congé férié', 'ferie', 'number')}
+        {$leaveshtml}
       </div>
     HTML;
   }
