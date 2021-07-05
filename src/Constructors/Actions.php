@@ -236,7 +236,7 @@ class Actions {
     $labels = ($this->ILabel)->get();
     $id_label = -1;
     foreach ($labels as $label) {
-      if ($label['title'] == $_POST['key']) {
+      if ($label['title'] == $_POST['label']) {
         $id_label = $label['id'];
         break;
       }
@@ -281,7 +281,7 @@ class Actions {
     } 
 
     $this->check($rep);
-    var_dump($rep, $_POST);
+    var_dump($rep);
     die();
   }
 
@@ -295,6 +295,17 @@ class Actions {
     header("Refresh:0");
 
     session_destroy();
+  }
+
+  private function generatePrint() {
+    $rep = ($this->ITimesheet)->print(
+      $_SESSION['id'],
+      $_POST['start'], $_POST['end']
+    );
+
+    $this->check($rep);
+    var_dump($rep);
+    die();
   }
 
   /**

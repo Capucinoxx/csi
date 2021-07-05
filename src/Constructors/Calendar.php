@@ -238,8 +238,6 @@ class Calendar {
     $prev_href = "/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
     $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
 
-    $path = dirname(__DIR__) . "/Internal/pdfContent/timesheetHtmlStr.php";
-
     return "
       <div class='wrapper-hidden'>
         <div class='flex-align-center'>
@@ -252,9 +250,9 @@ class Calendar {
 
         {$this->draw_weekly_days()}
       </div>
-      <a id='print-btn' href='{$path}'>
+      <div id='print-btn'>
         <i class='fas fa-print'></i>
-      </a>
+      </div>
     ";
   }
 

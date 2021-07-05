@@ -71,9 +71,9 @@ class Timesheet extends DataBase {
       id_label, 
       labels.title as title_label
     FROM Timesheets 
-    JOIN events ON id_event = events.id 
-    JOIN labels ON id_label = labels.id
-    WHERE timesheets.id_employee =  :id_employee AND
+    JOIN Events events ON id_event = events.id 
+    JOIN Labels labels ON id_label = labels.id
+    WHERE Timesheets.id_employee =  :id_employee AND
           at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
           UNIX_TIMESTAMP(:to)*1000
     GROUP BY id_event
@@ -137,7 +137,7 @@ class Timesheet extends DataBase {
 
   public function getEmployeeInfo($id_employee) {
     $sql = "
-    SELECT first_name, last_name FROM employees
+    SELECT first_name, last_name FROM Employees
     WHERE id = :id_employee;";
 
     $query = $this->db_connection->prepare($sql);

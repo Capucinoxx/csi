@@ -541,3 +541,44 @@
      (input) => input.value = ""
    )
  }
+
+
+/**
+ * gestion action d'impression
+ */
+document.getElementById('print-btn').addEventListener('click', (e) => {
+  e.stopPropagation()
+
+  // on génère le fichier html
+  // prend les dates de debut et de fin
+  const days = document.querySelectorAll('.event-list')
+  
+  const formData = new FormData()
+  formData.append('context', 'generatePrint')
+  formData.append('start', days[0].getAttribute('data-date'))
+  formData.append('end', days[days.length - 1].getAttribute('data-date'))
+  
+  fetch(window.location,
+    { method: 'post', body: formData }
+  ).then(async (resp) => await resp.text())
+  .then((html) => {
+    let i = document.createElement('iframe')
+    i.src = "data:text/html;charset=utf-8," + escape(html);
+    i.style = "width: 100vw; height: 100vh; background: white";
+    document.getElementById('iframe').appendChild(i)
+
+    document.getElementById('iframe').classList.add('visible-modal')
+  })
+
+  
+
+  // i.setAttribute('src', window.location + '/Internal/pdfContent/')
+  // document.getElementById('iframe').innerHTML = i
+
+  // let frm = i.contentWindow
+  // frm.focus()
+  // frm.print()
+  
+
+  // document.getElementById('iframe').classList.add('visible-modal')
+})
