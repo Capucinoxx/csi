@@ -12,6 +12,8 @@ class Employee extends DataBase {
     $this->table_name = 'Employees';
   }
 
+
+
   public function getByID($id) {
     # Retourne le résultat en format dictionnaire
     return ($this->select($id))->fetch(PDO::FETCH_ASSOC);
@@ -38,6 +40,11 @@ class Employee extends DataBase {
     # Suppression des congés de l'employé
     $leaves = new Leave();
     $leaves->deleteByEmployeesID($id);
+  }
+
+  public function updateEmployee($params) {
+    $params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);
+    $this->update($params);
   }
 
   public function createEmployee($params) {
