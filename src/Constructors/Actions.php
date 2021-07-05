@@ -5,6 +5,7 @@ use App\Internal\Label;
 use App\Internal\Employee;
 use App\Internal\Event;
 use App\Internal\Timesheet;
+use App\Internal\FiscalYear;
 use DateTime;
 
 class Actions {
@@ -274,7 +275,7 @@ class Actions {
       case 'event':
         $rep = ($this->IEvent)->deleteEvent(intval($_POST['id']));
         break;
-      case 'employee':
+      case 'user':
         $rep = ($this->IEmployee)->deleteEmployee(intval($_POST['id']));
         break;
       
@@ -310,11 +311,15 @@ class Actions {
     die();
   }
 
-  /**
-   * ajoute un évennement pour l'utilisateur courant
-   */
-  private function addTimesheet() {
-    header("Refresh:0");
+  private function changeFiscalYear() {
+    $rep = (new FiscalYear())->restartYear([
+      'start' => $_POST['start'],
+      'end' => $_POST['end']
+    ]);
+
+    $this->check($rep);
+    print_r($rep);
+    die();
   }
 
   private function convertTime(string $time): float {
