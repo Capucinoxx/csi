@@ -321,8 +321,6 @@ class Actions {
   }
 
   private function check($obj) {
-    var_dump($obj);
-    session_start();
     if (isset($obj['error'])) {
       $_SESSION['error'] = $obj['error'];
     } else if (isset($obj->error)) {

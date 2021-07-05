@@ -560,15 +560,40 @@ document.getElementById('print-btn').addEventListener('click', (e) => {
   
   fetch(window.location,
     { method: 'post', body: formData }
-  ).then(async (resp) => await resp.text())
-  .then((html) => {
-    let i = document.createElement('iframe')
-    i.src = "data:text/html;charset=utf-8," + escape(html);
-    i.style = "width: 100vw; height: 100vh; background: white";
-    document.getElementById('iframe').appendChild(i)
+  ).then(async (data) => {
+    data = await data.text()
 
-    document.getElementById('iframe').classList.add('visible-modal')
+    let i = document.createElement('iframe')
+    i.style = "width: 100vw; height: 100vh; background: white";
+
+    const ifrm = document.getElementById('iframe')
+    ifrm.appendChild(i)
+    console.log(data)
+    i = ifrm.querySelector('iframe')
+    i.contentWindow.document.open()
+    i.contentWindow.document.write(data);
+    i.contentWindow.document.close();
+
+    
+    ifrm.appendChild(i)
+
+    ifrm.classList.add('visible-modal')
   })
+  // .then((html) => {
+  //   let i = document.createElement('iframe')
+  //   i.style = "width: 100vw; height: 100vh; background: white";
+    
+  //   const ifrm = document.getElementById('iframe')
+  //   ifrm.appendChild(i)
+
+  //   console.log(html)
+
+    
+  //   ifrm.querySelector('iframe').contentWindow.document.write = html
+
+
+  //   ifrm.classList.add('visible-modal')
+  // })
 
   
 
