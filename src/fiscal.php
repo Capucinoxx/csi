@@ -17,20 +17,25 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
   echo $forms->FieldWithLabel('Début année fiscale', 'start', 'date');
   echo $forms->FieldWithLabel('Fin de l\'année fiscale', 'end', 'date');
+  echo "<button>Réinitialiser l'année fisclae</button>"
 
   echo "</section></div>";
 
   echo "
   <script>
-    const formData = new FormData()
-    formData.append('context', 'changeFiscalYear)
-    document.querySelectorAll('input').forEach(
-      (input) => {
-        formData.append(input.getAttribute('name'), (new Date(input.value)).getTime())
-      }
-    )
+    document.querySelector('button').addEventListener('click', () => {
+      const formData = new FormData()
+      formData.append('context', 'changeFiscalYear)
+      document.querySelectorAll('input').forEach(
+        (input) => {
+          formData.append(input.getAttribute('name'), (new Date(input.value)).getTime())
+        }
+      )
+  
+      fetch(window.location, { method: 'post', body: formData }).then(() => window.location = window.location)
+    })
+  
 
-    fetch(window.location, { method: 'post', body: formData }).then(() => window.location = window.location)
   </script>
   </body>
 </html>
