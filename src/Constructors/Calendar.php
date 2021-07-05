@@ -239,19 +239,22 @@ class Calendar {
     $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
 
     return "
-      <div class='wrapper-hidden'>
-        <div class='flex-align-center'>
-          <h2>{$this->getWeeklyDate()}</h2>
-          <div class='flex ml-2'>
-            <a href='{$prev_href}' class='arrow left'><i></i></a>
-            <a href='{$next_href}' class='arrow'><i></i></a>
+      <div style='position: relative'>
+        <div class='wrapper-hidden'>
+          <div class='flex-align-center'>
+            <h2>{$this->getWeeklyDate()}</h2>
+            <div class='flex ml-2'>
+              <a href='{$prev_href}' class='arrow left'><i></i></a>
+              <a href='{$next_href}' class='arrow'><i></i></a>
+            </div>
           </div>
-        </div>
 
-        {$this->draw_weekly_days()}
-      </div>
-      <div id='print-btn'>
-        <i class='fas fa-print'></i>
+          {$this->draw_weekly_days()}
+        </div>
+        <div id='print-btn'>
+          <i class='fas fa-print'></i>
+        </div>
+        {$this->forms->draw_timesheet_form('ajout-timesheet')}
       </div>
     ";
   }
@@ -307,11 +310,8 @@ class Calendar {
 
     // $form = ob_get_contents(); 
 
-    $form = $this->forms->draw_timesheet_form("ajout-timesheet");
-
     return <<<HTML
       <div class='schedule__events'>
-      {$form}
         <div class='scroll'>
         
           <div style='position: relative'>

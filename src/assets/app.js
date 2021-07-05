@@ -13,7 +13,10 @@
      
      list.addEventListener('click', (e) => {
        e.stopPropagation()
-       const { top, height } = e.target.getBoundingClientRect()
+
+      console.log(e.target.offsetTop)
+       const { top, height, left } = e.target.getBoundingClientRect()
+       console.log(left)
        const  yaxis = e.clientY - top
        const time = (Math.round(yaxis / (height - 54) * 36) / 2)
        const hours = (Math.ceil(time) + 6)
@@ -449,9 +452,14 @@
  
    const pos = (date.getDay()) % 7
    const percent = (pos > 3 ? 7 - pos  : pos + 1) / 7 * 100
-   addmodal.style.left = pos <= 3 ? `calc(${percent}% + 80px)` : ''
-   addmodal.style.right = pos <= 3 ? '' : `${percent}%`
-   addmodal.classList.add('visible')
+
+    const wrapper_width = document.getElementById('week-calendar').offsetWidth
+
+    addmodal.classList.add('visible')
+
+
+    addmodal.style.left = `${(((date.getDay()) % 7) * 2 + 1) / 14 * wrapper_width - addmodal.offsetWidth + 20}px`
+   
  }
  
  const setTimeElapsed = (startEl, endEl, el) => {
