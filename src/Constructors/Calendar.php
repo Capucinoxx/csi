@@ -184,8 +184,8 @@ class Calendar {
   public function draw_monthly_calendar(): string {
     $this->setupEvents();
     
-    $prev_href = "/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
-    $next_href = "/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
+    $prev_href = dirname(__DIR__)."/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
+    $next_href = dirname(__DIR__)."/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
 
     return "
       <div class='flex-between'>
@@ -235,8 +235,8 @@ class Calendar {
 
 
   public function draw_weekly_calendar(): string {
-    $prev_href = "/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
-    $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
+    $prev_href = dirname(__DIR__)."/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
+    $next_href = dirname(__DIR__)."/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
 
     return "
       <div style='position: relative'>
