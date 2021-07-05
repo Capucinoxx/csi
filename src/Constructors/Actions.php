@@ -186,7 +186,7 @@ class Actions {
    * et la partie logique en ce qui attrait à la modification d'employée
    */
   private function editUser() {
-    $rep = ($this->IEmployee)->update([
+    $rep = ($this->IEmployee)->updateEmployee([
       'id' => $_POST['id'],
       'username' => $_POST['username'],
       'first_name' => $_POST['first_name'],
