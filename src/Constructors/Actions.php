@@ -304,7 +304,7 @@ class Actions {
     );
 
     $this->check($rep);
-    var_dump($rep);
+    print_r($rep);
     die();
   }
 

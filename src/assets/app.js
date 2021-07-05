@@ -570,11 +570,8 @@ document.getElementById('print-btn').addEventListener('click', (e) => {
     ifrm.appendChild(i)
     console.log(data)
     i = ifrm.querySelector('iframe')
-    i.contentWindow.document.open()
-    i.contentWindow.document.write(data);
-    i.contentWindow.document.close();
+    i.src = "data:text/html;charset=utf-8," + escape(data)
 
-    
     ifrm.appendChild(i)
 
     ifrm.classList.add('visible-modal')
