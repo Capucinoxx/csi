@@ -64,7 +64,7 @@ class Input {
 
     return <<<HTML
       <div class="full title-section colors-choice">
-        <span class="underline color-choice__title">Selection couleur rapide</span>
+        <span class="underline color-choice__title">Selection de couleur rapide</span>
         <div class="flex">
           {$html}
         </div>
@@ -288,7 +288,7 @@ class Forms extends Input {
     return <<<HTML
       {$this->FieldWithLabel("Nom", "name", "text")}
       {$this->FieldColor("Couleur du libellé", "color", null)}
-      {$this->FieldWithLabel("affaire mondiale Canada", "amc", "checkbox")}
+      {$this->FieldWithLabel("affaires mondiales Canada", "amc", "checkbox")}
       {$this->ColorsChoice()}
       
     HTML;
