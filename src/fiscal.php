@@ -9,8 +9,16 @@ use \App\Constructors\Forms;
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $forms = new Forms([], [], []);
+
+  echo "
+  <div class='flex-center'>
+    <section class='login-wrapper'>
+  ";
+
   echo $forms->FieldWithLabel('Début année fiscale', 'start', 'date');
   echo $forms->FieldWithLabel('Fin de l\'année fiscale', 'end', 'date');
+
+  echo "</section></div>";
 
   echo "
   <script>
@@ -24,9 +32,14 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
 
     fetch(window.location, { method: 'post', body: formData }).then(() => window.location = window.location)
   </script>
+  </body>
+</html>
   ";
 
 } else {  
   $forms = new Forms([], [], []);
   require_once('./Views/Login.php');
 }
+
+?>
+
