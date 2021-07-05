@@ -33,6 +33,17 @@ class Input {
     HTML;
   }
 
+  public function FieldRowWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
+    return <<<HTML
+      <div class='form__div block full field-row'>
+        <div class='flex-between'>
+          <label for="{$key}">{$label}</label>
+          <input type='{$type}' pattern="{$pattern}" class='form__input' name='{$key}' placeholder=' '/>
+        </div>
+      </div>
+    HTML;
+  }
+
   public function FieldWithPattern(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null, ?string $pattern = "") {
     return <<<HTML
       <div class="form__div block {$extra_class}">
@@ -201,6 +212,14 @@ class Forms extends Input {
     HTML;
   }
 
+  protected function draw_section(string $title): string {
+    return <<<HTML
+      <div class='full title-section'>
+        <span class="underline color-choice__title">{$title}</span>
+      </div>
+    HTML;
+  }
+
   /**
    * Génère la fenêtre modale pour ajouter ou modifier un évennements au 
    * calendrier hebdomadaire
@@ -317,6 +336,16 @@ class Forms extends Input {
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}
       {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
       {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}
+
+      {$this->draw_section("Édition des congés")}
+      <div id='employee-leave' class='grid full'>
+        {$this->FieldRowWithLabel('Congé mobile', 'mobile', 'number')}
+        {$this->FieldRowWithLabel('Heures maladie', 'maladie', 'number')}
+        {$this->FieldRowWithLabel('Congé parental', 'parental', 'number')}
+        {$this->FieldRowWithLabel('Temps accumulé', 'accumule', 'number')}
+        {$this->FieldRowWithLabel('Vacances', 'vacance', 'number')}
+        {$this->FieldRowWithLabel('Congé férié', 'ferie', 'number')}
+      </div>
     HTML;
   }
 

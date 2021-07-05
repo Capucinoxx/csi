@@ -529,7 +529,16 @@
 
       form.querySelector('input[name="rate"]').value = data.rate
       form.querySelector('input[name="rate_amc"]').value = data.rate_AMC
-      form.querySelector('input[name="rate_csi"]').value =data.rate_CSI
+      form.querySelector('input[name="rate_csi"]').value =data.rate_CSI;
+
+      console.log(data)
+
+      form.querySelector('#employee-leave').querySelectorAll('.field-row').forEach(
+        (field) => {
+          console.log(field.textContent.trim())
+          data.leaves.forEach((leave) => leave.title_event == field.textContent.trim() && (field.querySelector('input').value = leave.max_hours) || (field.querySelector('input').value = 0) )
+        }
+      )
       break;
   }
  }

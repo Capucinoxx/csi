@@ -17,6 +17,11 @@
     transform: translate(-50%, -50%);
   }
 
+  .manage__wrapper {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+
   &-title {
     color: white;
     font-size: 2.1rem;
@@ -152,4 +157,15 @@
 #ajout-timesheet {
   top: 50%;
   transform: translateY(-50%) translateX(8em);
+}
+
+.field-row {
+  label {
+    flex: none;
+    font-size: 1.4rem;
+  }
+  input {
+    max-width: 297px;
+    position: relative !important;
+  }
 }

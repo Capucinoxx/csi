@@ -56,6 +56,8 @@ class Actions {
 
   private function getUserById() {
     $rep = ($this->IEmployee)->getById($_POST['id']);
+    $rep['leaves'] = ($this->IEvent)->getByType(true, $_POST['id']);
+
     echo json_encode($rep);
     die();
   }
