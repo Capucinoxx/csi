@@ -24,7 +24,7 @@ class Employee extends DataBase {
     return ($this->select(false))->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  private function getId($username) {
+  public function getId($username) {
     $sql = "SELECT id FROM Employees WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
     $query->execute([':username' => $username]);

@@ -331,7 +331,7 @@ class Forms extends Input {
 
     $leaveshtml = [];
     foreach($leaves as $leave) {
-      $leaveshtml[] = $this->FieldRowWithLabel($leave['title_event'], $leave['id_event'], 'number');
+      $leaveshtml[] = $this->FieldRowWithLabel($leave['title_event'], str_replace(' ', '_', $leave['title_event']), 'number');
     }
 
 

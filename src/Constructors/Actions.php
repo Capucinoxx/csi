@@ -165,6 +165,7 @@ class Actions {
    * et la partie logique en ce qui attrait à l'ajout d'employée
    */
   private function addUser() {
+    var_dump($_POST);
     $rep = ($this->IEmployee)->createEmployee([
       'username' => $_POST['username'],
       'first_name' => $_POST['first_name'],
@@ -179,6 +180,22 @@ class Actions {
     ]);
 
     $this->check($rep);
+    if (!isset($rep['error'])) {
+      $id = ($this->IEmployee)->getId($_POST['username']);
+      $leaves = ($this->IEvent)->getByType(true, $id);
+
+      foreach($leaves as $leave) {
+        $arr = [
+          'id' => $leave['id_event'],
+          'max_hours' => floatval($_POST[str_replace(' ', '_', $leave['title_event'])])
+        ];
+        $rep = ($this->IEvent)->update($arr);
+        if (isset($rep['error'])) {
+          $this->check($rep);
+          break;
+        }
+      }
+    }
     var_dump($rep);
     die();
   }
@@ -203,6 +220,25 @@ class Actions {
     ]);
 
     $this->check($rep);
+
+    if (!isset($rep['error'])) {
+      
+      $leaves = ($this->IEvent)->getByType(true, $_POST['id']);
+      var_dump($leaves);
+
+      foreach($leaves as $leave) {
+        $arr = [
+          'id' => $leave['id_event'],
+          'max_hours' => floatval($_POST[str_replace(' ', '_', $leave['title_event'])])
+        ];
+        $rep = ($this->IEvent)->update($arr);
+        if (isset($rep['error'])) {
+          $this->check($rep);
+          break;
+        }
+      }
+    }
+
     var_dump($rep);
     die();
   }
