@@ -1,11 +1,11 @@
 <?php 
 
 namespace App\Constructors;
-use \App\Constructors\Forms;
+use App\Constructors\Forms;
+use App\Internal\Timesheet;
+use DateTime;
 
 class Calendar {
-  
-
   private $days = [
     'Dim', 
     'Lun', 
@@ -35,6 +35,7 @@ class Calendar {
   public $week;
   public $year;
   public $forms;
+  public $timesheet;
 
   /**
    * Calendar contructor
@@ -42,12 +43,25 @@ class Calendar {
    * @param int $year L'année
    * @param array $proejcts Liste des projets de la semaine en cours
    */
-  public function __construct(Forms $forms, ?int $week = null, ?int $year = null, ?array $projects = null) {
+  public function __construct(Timesheet $timesheet, Forms $forms, ?int $week = null, ?int $year = null, ?array $projects = null) {
     $this->projects = $projects === null ? [[],[],[],[],[],[],[]] : $projects;
 
+    $this->timesheet = $timesheet;
     $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
+
+  }
+
+  public function dump(): string {
+    $start = $this->getStartingWeeklyDay()->format('U');
+    $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('U');
+    $dump = print_r($this->timesheet->get($_SESSION['id'], $start, $end));
+    return <<<HTML
+      <div style="overflow:hidden; max-height: 400px">
+        <pre>{$dump}</pre>
+      </div>
+    HTML;
   }
 
   /**
@@ -138,7 +152,7 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('next month') : $date->modify('+8 days');
 
-    return new Calendar($this->forms, $date->format('W'), $date->format('o'));
+    return new Calendar($this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
   }
 
   /**
@@ -150,16 +164,28 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('last month') : $date;
 
-    return new Calendar($this->forms, $date->format('W'), $date->format('o'));
+    return new Calendar($this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
+  }
+
+  private function setupEvents() {
+    $start = $this->getStartingWeeklyDay()->format('U');
+    $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('U');
+    $events = $this->timesheet->get($_SESSION['id'], $start, $end);
+    foreach($events as $timesheet) {
+      $pos = ((new DateTime)->setTimeStamp(intval($timesheet['at'])/1000)->format('N')) % 7;
+
+      if (isset($this->projects[$pos])) {
+        array_push($this->projects[$pos], $timesheet);
+      }
+    }
   }
 
 
-
-
-
   public function draw_monthly_calendar(): string {
-    $prev_href = "/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
-    $next_href = "/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
+    $this->setupEvents();
+    
+    $prev_href = dirname(__DIR__)."/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
+    $next_href = dirname(__DIR__)."/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
 
     return "
       <div class='flex-between'>
@@ -209,21 +235,26 @@ class Calendar {
 
 
   public function draw_weekly_calendar(): string {
-    $prev_href = "/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
-    $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
-
+    $prev_href = dirname(__DIR__)."/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
+    $next_href = dirname(__DIR__)."/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
 
     return "
-      <div class='wrapper-hidden'>
-        <div class='flex-align-center'>
-          <h2>{$this->getWeeklyDate()}</h2>
-          <div class='flex ml-2'>
-            <a href='{$prev_href}' class='arrow left'><i></i></a>
-            <a href='{$next_href}' class='arrow'><i></i></a>
+      <div style='position: relative'>
+        <div class='wrapper-hidden'>
+          <div class='flex-align-center'>
+            <h2>{$this->getWeeklyDate()}</h2>
+            <div class='flex ml-2'>
+              <a href='{$prev_href}' class='arrow left'><i></i></a>
+              <a href='{$next_href}' class='arrow'><i></i></a>
+            </div>
           </div>
-        </div>
 
-        {$this->draw_weekly_days()}
+          {$this->draw_weekly_days()}
+        </div>
+        <div id='print-btn'>
+          <i class='fas fa-print'></i>
+        </div>
+        {$this->forms->draw_timesheet_form('ajout-timesheet')}
       </div>
     ";
   }
@@ -240,18 +271,22 @@ class Calendar {
 
     $html_days = "";
     $start = $this->getStartingWeeklyDay();
+
     foreach (range(0, 6) as $day) {
       $html_daily_events = "";
       foreach($this->projects[$day] as $project) {
         $html_daily_events .= "
           <li
             class='event-card'
-            style='{$this->generate_style_event($project->start, $project->end, $project->color)}'
-          
+            style='{$this->generate_style_event(floatval($project['start']), floatval($project['end']), $project['color'])}'
+            data-id='{$project['id']}'
           >
-            {$project->title}<br/>
-            {$this->format_date($project->start)}
-            {$this->format_date($project->end)}
+            <div class='event-card-wrapper'>
+              {$project['event_title']}<br/>
+              {$this->format_date($project['start'], true)}-
+              {$this->format_date($project['end'], true)}
+              <i class='delete-btn fas fa-ban'></i>
+            </div>
           </li>
         ";
       }
@@ -275,17 +310,15 @@ class Calendar {
 
     // $form = ob_get_contents(); 
 
-    $form = $this->forms->draw_timesheet_form("ajout-timesheet");
-
     return <<<HTML
       <div class='schedule__events'>
         <div class='scroll'>
+        
           <div style='position: relative'>
             <ul class='py-30'>
               {$html_hours}
             </ul>
             <ul id="week-calendar" class='ml-60 z-10' style='align-items: stretch'>
-              {$form}
               <div class='cursor'></div>
               {$html_days}
             </ul>
@@ -307,16 +340,20 @@ class Calendar {
    * de l'évennement ciblé
    */
   function generate_style_event(float $start_time, float $end_time, string $color = ""): string {
+    $color = str_replace("O", "0", $color);
     $top_position = (string)(($start_time - 6.0) * 100.0 / (24.0 - 6.0));
     $height = (string)(($end_time - $start_time) * 100.0 / (24.0 - 6.0));
 
+    $elapsed_time = $end_time - $start_time;
+    
     $style = "
-      box-shadow: 
-        {$this->rgba($color, .62)} 0px 1px 5px 0px,
-        {$this->rgba($color, .15)} 0px 0px 0px 2px,
-        inset 0 -14px {$this->rgba($color, 6)};
+      background: radial-gradient(1019.19% 203.34% at 50% -6.24%, #FEFEFE 29.91%, {$color} 100%), #F0F0F0;
       top: {$top_position}%;
       height: {$height}%;
+      box-shadow: 0px 7px 24px rgba(0, 0, 0, 0.24);
+      border-radius: 5px 5px 14px 14px;
+
+      --color-triangle: {$color};
     ";
     
     return $style;
@@ -335,10 +372,17 @@ class Calendar {
   }
 
   // formatte l'heure pour retourner sour format hh:mm
-  function format_date($date) {
+  function format_date($date, ?bool $is24Hours = false) {
     $hour = floor($date) < 10 ? '0'.floor($date) : floor($date);
     $minute = ($date - $hour) * 60 < 10 ? '0'.round(($date - $hour) * 60) : round(($date - $hour) * 60);
 
+    if ($is24Hours) {
+      $fix = $hour >= 12 ? 'PM' : 'AM';
+
+      $hour = $hour > 12 ? $hour - 12 : $hour;
+
+      return $hour.":".$minute." ".$fix;
+    }
     return $hour.":".$minute;
   }
 }

@@ -3,6 +3,7 @@ namespace App\Internal;
 use App\Internal\DataBase;
 use App\Internal\Employee;
 use App\Internal\FiscalYear;
+use App\Internal\Timesheet;
 use \PDO;
 
 
@@ -53,12 +54,39 @@ class Leave extends DataBase {
     );
   }
 
+  public function get($id_employee) {
+    $sql = "
+    SELECT 
+      events.id as id_event, 
+      id_employee, 
+      events.title as title_event, 
+      events.created_at,
+      events.deleted_at, 
+      max_hours
+    FROM Events events
+    LEFT JOIN Labels labels
+      ON events.id_label = labels.id
+    WHERE 
+      events.deleted_at IS NULL AND
+      events.id_employee = :id_employee;
+    ";
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute(
+      [
+        ":id_employee" => $id_employee
+      ]
+    );
+    
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   private function getIDLeave($id_event) {
     $sql = "SELECT id_leave FROM Events WHERE id = :id_event";
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
-        ':id' => $id_event
+        ':id_event' => $id_event
       ]
     );
 
@@ -93,8 +121,10 @@ class Leave extends DataBase {
       $query = $this->db_connection->prepare($sql);
       $query->execute(
         [
-          ':start_fiscal_year' => $start_fiscal_year,
-          ':end_fiscal_year' => $end_fiscal_year
+          ':id_event' => $id_event,
+          ':id_employee' => $id_employee,
+          ':start_fiscal_year' => $fiscal_year_data['start_fiscal_year'],
+          ':end_fiscal_year' => $fiscal_year_data['end_fiscal_year']
         ]
       );
     }
@@ -163,9 +193,16 @@ class Leave extends DataBase {
     }
   }
 
-  public function validateLeave($data) {
-    extract($data);
+  public function getHoursInserted($params) {
+    $timesheet = new Timesheet();
+    $data = $timesheet->getByID($params['id']);
 
+    return $data['hours_invested'];
+  }
+
+  public function validateLeave($data, $isUpdate) {
+    extract($data);
+    
     # Get ID du leave
     $id_leave = $this->getIDLeave($id_event);
 
@@ -174,16 +211,16 @@ class Leave extends DataBase {
       return true;
     }
 
-    # Get statut de l'employé
-    $employee = new Employee();
-    $employee_status = $employee->getEmployeeStatus($id_employee);
-
     # Nombre d'heures prises à date
     $current_hours = $this->getCurrentHours($id_event, $id_employee, $id_leave);
     
-    # Nombre d'heures totales si on tient en compte les nouvelles heures rentrées
-    $total_hours = $hours_invested + $current_hours; 
+    # Si c'est un update, get le nombre d'heures inserted
+    $hours_inserted = 0;
+    if($isUpdate) $hours_inserted = $this->getHoursInserted($data); 
 
+    # Nombre d'heures totales si on tient en compte les nouvelles heures rentrées
+    $total_hours = $hours_invested + $current_hours - $hours_inserted; 
+    
     if ($id_leave == 4) { // Temps accumulé
       # Vérifier que le temps accumulé ne soit pas plus petit que -14 si on lui aditionne le nouveau temps
       if($total_hours < -14){
@@ -191,31 +228,37 @@ class Leave extends DataBase {
           "error" => "Impossible de rentrer les heures : le temps accumulé total ne peut pas dépasser -14 heures."
         ];
       }
-
+      return true;
     } 
+
+    # Get statut de l'employé
+    $employee = new Employee();
+    $employee_status = $employee->getEmployeeStatus($id_employee);
+    
     if($employee_status == 1) { // regular employee
       # Vérifier que ca dépasse pas le nombre d'heures dispo.
-      $max_hours = $this->getLeaveMaxHours($id_employee, $id_event);
+      $max_hours = floatval($this->getLeaveMaxHours($id_employee, $id_event));
 
       if($total_hours > $max_hours) {
-
         return [
           "error" => "Impossible de rentrer les heures."
         ];
       }
-    } 
-    # Au prorata employee
-    # Calculer le nombre d'heures dispo et vérifier si la somme des heures courantes et les heures rentrées les dépassent 
-    $max_hours = $this->getRegularLeaveMaxHours($id_leave);
-    $weeks_worked = $this->getWeeksWorked($id_employee);
-    $hours_permitted = ($max_hours/52) * $weeks_worked;
-    
-    if($total_hours > $hours_permitted) {
-      return [
-        "error" => "Impossible de rentrer les heures. Les heures permises sont : " . $hours_permitted . ".\n"
-      ]; 
+
+    } else {
+      # Au prorata employee
+      # Calculer le nombre d'heures dispo et vérifier si la somme des heures courantes et les heures rentrées les dépassent 
+      $max_hours = $this->getRegularLeaveMaxHours($id_leave);
+      $weeks_worked = $this->getWeeksWorked($id_employee);
+      $hours_permitted = ($max_hours/52) * $weeks_worked;
+      
+      if($total_hours > $hours_permitted) {
+        return [
+          "error" => "Impossible de rentrer les heures. Les heures permises sont : " . $hours_permitted . ".\n"
+        ]; 
+      }
     }
-    
+  
     return true;
   }
   

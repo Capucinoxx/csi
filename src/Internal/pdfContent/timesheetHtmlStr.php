@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+</head>
 
-  <?php
+
+<body>
+<?php
     date_default_timezone_set('EST');
   ?>
-  <style>
+<style>
     td {
       text-align: center;
     }
@@ -114,10 +116,6 @@
       margin-bottom: 70px; 
     }
   </style>
-</head>
-
-
-<body>
   <table style="border-spacing: 0px;">
     <col>
     <colgroup span="8"></colgroup>
@@ -141,7 +139,7 @@
           <span class="fs-smaller fw-normal" style="display: flex; justify-content: center;">
           <?php echo "Du: " . $data['from'];?>
           </span>
-          <span class="fs-smaller fw-normal" style="display: flex; justify-content: center;">
+          <span class="fs-smaller fw-normal" style="display: flex; justify-content: center; margin-bottom: 20px">
           <?php echo "Au: " . $data['to'];?>
         </span>
         </div>
@@ -308,7 +306,7 @@
     </col>
   </table>
 
-  <table>
+  <table style="margin-top: 60px;">
     <tr>
       <td style="min-width: 400px;">
           <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature vérification</span>

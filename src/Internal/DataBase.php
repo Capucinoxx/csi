@@ -71,7 +71,6 @@ class DataBase {
   }
 
   protected function insert($params) {
-
     $sql = sprintf(
       "INSERT INTO {$this->table_name} (%s) VALUES (%s)", 
       implode(', ', array_keys($params)),

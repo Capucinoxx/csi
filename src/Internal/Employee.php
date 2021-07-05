@@ -12,9 +12,11 @@ class Employee extends DataBase {
     $this->table_name = 'Employees';
   }
 
+
+
   public function getByID($id) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id))->fetchAll(PDO::FETCH_ASSOC);
+    return ($this->select($id))->fetch(PDO::FETCH_ASSOC);
   }
 
   public function get() {
@@ -22,7 +24,7 @@ class Employee extends DataBase {
     return ($this->select(false))->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  private function getId($username) {
+  public function getId($username) {
     $sql = "SELECT id FROM Employees WHERE username = :username";
     $query = $this->db_connection->prepare($sql);
     $query->execute([':username' => $username]);
@@ -38,6 +40,11 @@ class Employee extends DataBase {
     # Suppression des congés de l'employé
     $leaves = new Leave();
     $leaves->deleteByEmployeesID($id);
+  }
+
+  public function updateEmployee($params) {
+    $params['password'] = password_hash($params['password'], PASSWORD_DEFAULT);
+    $this->update($params);
   }
 
   public function createEmployee($params) {
@@ -124,7 +131,7 @@ class Employee extends DataBase {
       ]
     );
 
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+    return $query->fetch(PDO::FETCH_ASSOC);
   }
 
   private function deleted($username) {

@@ -3,6 +3,7 @@ use App\Internal\Employee;
 use App\Internal\Label;
 use App\Internal\Event;
 use App\Internal\Timesheet;
+use App\Internal\FiscalYear;
 
 $employee = new Employee();
 
@@ -17,7 +18,7 @@ $employee_info = [
     'first_name' => 'Robert',
     'last_name' => 'Masson',
     'password' => '1234',
-    'role' => 0,
+    'role' => 1,
     'regular' => true,
     'rate' => 45.48,
     'rate_AMC' => 44.25,
@@ -26,15 +27,12 @@ $employee_info = [
     'deleted_at' => null
 ];
 // var_dump($employee_info);
-var_dump($employee->createEmployee($employee_info));
-
-
+// var_dump($employee->createEmployee($employee_info));
 
 ## Tests suppression de l'employé ##
 
 // $employee->deleteEmployee(11);
 // var_dump($employee->getByID(11));
-
 
 ## Tests login ##
 /*
@@ -122,10 +120,10 @@ $timesheet = new Timesheet();
 
 ## Tests get timesheet ##
 # Get By id_employee, from, to
+//var_dump($timesheet->get(1, 152394900, 1623949600));
 // var_dump($timesheet->get(100, 1, 2));
 # Get employee by id
 // var_dump($timesheet->getByID(1));
-//var_dump($timesheet->get(1, 152394900, 1623949600));
 
 ## Tests timesheet creation ##
 # Project
@@ -175,6 +173,14 @@ $data_print = [
 ]; 
 $timesheet->print($data_print);
 */
+
+$fiscal_year = new FiscalYear();
+$new_year = [
+    'start' => 1625350444,
+    'end' => 1656886444
+]; 
+// var_dump($fiscal_year->restartYear($new_year));
+
 ?>
 
  <section class="test-data-dump">

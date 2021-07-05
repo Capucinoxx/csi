@@ -16,20 +16,35 @@ class Timesheet extends DataBase {
   }
 
   public function getByID($id) {
-    return ($this->selectByID($id))->fetchAll(PDO::FETCH_ASSOC);
+    return ($this->selectByID($id))->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function deleteTimesheet($id) {
+    $this->delete($id);
   }
 
   public function createTimesheet($params) {
     $params['at'] *= 1000;
-    $response = $this->validateInsertion($params);
+    $response = $this->validateInsertion($params, false);
 
     if(isset($response['error'])) {
       return $response;
     }
     
-    // var_dump($params);
-    
     $this->insert($params);
+    return true;
+  }
+
+  public function updateTimesheet($params) {
+    $params['at'] *= 1000;
+
+    $response = $this->validateInsertion($params, true);
+
+    if(isset($response['error'])) {
+      return $response;
+    }
+    
+    $this->update($params);
     return true;
   }
 
@@ -42,8 +57,6 @@ class Timesheet extends DataBase {
     fclose($fh);
     
     return $content;
-    // $content = $this->getEventsInfo($data);
-    // var_dump($content->fetch(PDO::FETCH_ASSOC));
   }
 
   ## QUERIES ##
@@ -57,10 +70,11 @@ class Timesheet extends DataBase {
       amc, 
       id_label, 
       labels.title as title_label
-    FROM timesheets 
-    JOIN events ON id_event = events.id 
-    JOIN labels ON id_label = labels.id
-    WHERE timesheets.id_employee =  :id_employee AND
+    FROM Timesheets 
+    JOIN Events events ON id_event = events.id 
+    JOIN Labels labels ON id_label = labels.id
+    WHERE Timesheets.id_employee =  :id_employee AND
+          Timesheets.deleted_at IS NULL AND
           at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
           UNIX_TIMESTAMP(:to)*1000
     GROUP BY id_event
@@ -83,8 +97,9 @@ class Timesheet extends DataBase {
       DAY(FROM_UNIXTIME(at/1000, '%Y-%m-%d')) as day, 
       SUM(hours_invested) as hours, 
       description 
-    FROM timesheets
+    FROM Timesheets
     WHERE id_employee = :id_employee AND 
+          deleted_at IS NULL AND
           at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
           UNIX_TIMESTAMP(:to)*1000 AND 
           id_event = :id_event
@@ -107,7 +122,7 @@ class Timesheet extends DataBase {
   public function getTotalHours($at, $id_employee) {
     $sql = "
     SELECT SUM(hours_invested) as total_hours 
-    FROM timesheets
+    FROM Timesheets
     WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = :at AND 
           id_employee = :id_employee;";
 
@@ -124,22 +139,35 @@ class Timesheet extends DataBase {
 
   public function getEmployeeInfo($id_employee) {
     $sql = "
-    SELECT first_name, last_name FROM employees
-    WHERE id = {$id_employee};";
+    SELECT first_name, last_name FROM Employees
+    WHERE id = :id_employee;";
 
     $query = $this->db_connection->prepare($sql);
-    $query->execute();
+    $query->execute(
+      [
+        ':id_employee' => $id_employee
+      ]
+    );
 
     return $query;
   }
 
   public function getAMCHours($at, $id_employee, $id_label) {
-    $sql = "SELECT SUM(hours_invested) as hours FROM timesheets
-              JOIN events ON events.id = id_event
-              JOIN labels ON labels.id = id_label
-                WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = '{$at}' AND timesheets.id_employee = {$id_employee} AND id_label = {$id_label};";
+    $sql = "
+      SELECT SUM(hours_invested) as hours FROM Timesheets
+        LEFT JOIN events ON events.id = id_event
+        LEFT JOIN labels ON labels.id = id_label
+          WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = :at AND 
+                timesheets.id_employee = :id_employee AND
+                id_label = :id_label;";
     $query = $this->db_connection->prepare($sql);
-    $query->execute();
+    $query->execute(
+      [
+        ':at' => $at,
+        ':id_employee' => $id_employee,
+        ':id_label' => $id_label
+      ]
+    );
 
     return $query;
   }
@@ -174,10 +202,12 @@ class Timesheet extends DataBase {
         color,
         events.created_at AS event_created_at
       FROM Timesheets timesheets
-        JOIN Events events ON (timesheets.id_event = events.id)
-        JOIN Employees employees ON (timesheets.id_employee = employees.id)
-        JOIN Labels labels ON (events.id_label = labels.id)
-      WHERE timesheets.id_employee = :id AND at BETWEEN (:from)*1000 AND (:to)*1000
+        LEFT JOIN Events events ON (timesheets.id_event = events.id)
+        LEFT JOIN Employees employees ON (timesheets.id_employee = employees.id)
+        LEFT JOIN Labels labels ON (events.id_label = labels.id)
+      WHERE timesheets.id_employee = :id AND 
+            at BETWEEN (:from)*1000 AND (:to)*1000 AND
+            timesheets.deleted_at IS NULL
         ORDER BY id_employee ASC;
     ";
 
@@ -200,7 +230,7 @@ class Timesheet extends DataBase {
     return (($query->errorCode() == "23000") ? false : $query);
  }
 
-  public function validateInsertion($data) {
+  public function validateInsertion($data, $isUpdate) {
     # Validation de l'évènement
     $event = new Event();
 
@@ -221,7 +251,7 @@ class Timesheet extends DataBase {
       ];
     }
 
-    $response = $event->validateHours($data);
+    $response = $event->validateHours($data, $isUpdate);
     if(isset($response['error'])) {
       return $response;
     }

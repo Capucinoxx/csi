@@ -25,8 +25,9 @@ class Label extends DataBase {
         ":id" => $id_event
       ]
     );
-
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+    $row = $query->fetch(PDO::FETCH_ASSOC);
+    
+    return intval($row['id_label']);
   }
 
   public function createLabel($params) {
@@ -63,7 +64,7 @@ class Label extends DataBase {
 
   ## QUERIES ##
   private function select() {
-    $sql = "SELECT * FROM Labels;";
+    $sql = "SELECT * FROM Labels WHERE deleted_at IS NULL AND id != 15;";
 
     $query = $this->db_connection->prepare($sql);
     $query->execute();
@@ -81,6 +82,18 @@ class Label extends DataBase {
     $query->execute([':title' => $title]);
 
     return ($query->rowCount() > 0);
+  }
+
+  public function getByID($id) {
+    $sql = "
+    SELECT *  
+    FROM Labels
+    WHERE id = :id";
+
+    $query = $this->db_connection->prepare($sql);
+    $query->execute([':id' => $id]);
+
+    return $query->fetch(PDO::FETCH_ASSOC);
   }
 
 }

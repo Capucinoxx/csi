@@ -1,19 +1,54 @@
 <?php 
 
 namespace App\Constructors;
+use App\Internal\Event;
 
 class Input {
+  private $colors = [
+    "#FF1493", "#FF4500", "#FFA500", "#FFD700", "#EE82EE", "#FF00FF", "#8A2BE2", "#7B68EE", "#ADFF2F", "#20B2AA", "#1E90FF", "#4169E1" 
+  ];
+
   public function __construct() {}
 
   public function FieldWithLabel(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null) {
-    $input = ($type === 'textarea')
-      ? "<textarea  class='form__input' name='{$key}'></textarea>"
-      : "<input type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
-    
+    $id = $this->generateRandomString();
+    switch($type) {
+      case 'textarea':
+        $input = "<textarea  id='{$id}' class='form__input' name='{$key}'></textarea>";
+        break;
+      case 'time':
+        $input = "<input id='{$id}' type='{$type}' class='form__input' name='{$key}' max='23:59' placeholder=' '/>";
+        break;
+      case 'checkbox':
+        $input = "{$label} <input id='{$id}' type='{$type}' pattern='{$pattern}' class='form__input' name='{$key}' placeholder=' '/>";
+        break;
+      default:
+        $input = "<input id='{$id}' type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
+    }
 
     return <<<HTML
       <div class="form__div block {$extra_class}">
         {$input}
+        <label for="{$id}"  class="form__label">{$label}</label>
+      </div>
+    HTML;
+  }
+
+  public function FieldRowWithLabel(string $label, string $key, string $type) {
+    return <<<HTML
+      <div class='form__div block full field-row'>
+        <div class='flex-between'>
+          <label for="{$key}">{$label}</label>
+          <input type='{$type}' pattern="{$pattern}" class='form__input' name='{$key}' placeholder=' '/>
+        </div>
+      </div>
+    HTML;
+  }
+
+  public function FieldWithPattern(string $label, string $key, string $type, ?string $extra_class = "", ?string $value = null, ?string $pattern = "") {
+    return <<<HTML
+      <div class="form__div block {$extra_class}">
+        <input type='{$type}' pattern="{$pattern}" class='form__input' name='{$key}' placeholder=' '/>
         <label for="{$key}"  class="form__label">{$label}</label>
       </div>
     HTML;
@@ -28,7 +63,28 @@ class Input {
         <div class="flex-y-center">
           <span>{$title}</span>
         </div>
+        <div class="flex110">
+          <i class="delete-btn flex-y-center fas fa-ban"></i>
+        </div>
       </li>
+    HTML;
+  }
+
+  protected function ColorsChoice(): string {
+    $html = "";
+    
+    foreach($this->colors as $color) {
+      $data_color = str_replace("#", "", $color);
+      $html .= "<div data-color='{$color}' style='background: {$color}' class='color__choices'></div>";
+    }
+
+    return <<<HTML
+      <div class="full title-section colors-choice">
+        <span class="underline color-choice__title">Selection de couleur rapide</span>
+        <div class="flex">
+          {$html}
+        </div>
+      </div>
     HTML;
   }
 
@@ -43,17 +99,18 @@ class Input {
       <div class="flex-align-center h-45">
         <label for="" class="mr-2 fz-14">{$label}</label>
         <div class="input-color-container">
-          <input type="color"/>
+          <input name="{$key}" type="color"/>
         </div>
       </div>
     HTML;
   }
 
-  protected function Dropdown(string $label, string $key, ?array $options = [], string $k): string {
+  protected function Dropdown(string $label, string $key, ?array $options = [], ?string $k = ""): string {
     $optionsHTML = [];
 
     foreach($options as $option) {
-      $optionsHTML[] = "<li><span>{$option[$k]}</span></li>";
+      $id_event = $option['id_event'] ?? '';
+      $optionsHTML[] = "<li><span data-id='{$id_event}'>{$option[$k]}</span></li>";
     }
     $optionsHTML = implode('', $optionsHTML);
     
@@ -67,6 +124,10 @@ class Input {
       </div>
     HTML;
   }
+
+  private function generateRandomString($length = 10) {
+    return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+  }
 }
 
 class Forms extends Input {
@@ -78,6 +139,19 @@ class Forms extends Input {
     $this->employees = $employees;
     $this->labels = $labels;
     $this->events = $events;
+  }
+
+  /**
+   * Fonction imprimant la fenêtre comportant les erreurs
+   */
+  public function draw_alert(string $message): string {
+    return <<<HTML
+      <div class="alert-notice">
+        {$message}
+        <span onclick="this.parentElement.style.display='none';">&times;</span>
+        
+      </div>
+    HTML;
   }
 
   /**
@@ -103,37 +177,47 @@ class Forms extends Input {
     }
 
     return <<<HTML
-      <section id="{$id}" class="manage__container">
-        {$this->draw_header()}
-        <div class="flex-end mt-2">
-          <span class="notice">
-            Veuillez sélectionner un {$type} pour pouvoir l'éditer, si jamais vous voulez 
-            ajouter un {$type}, veuillez aller dans la section ajouter en haut de cette fenêtre
-          </span>
-        </div>
-        <div class="manage__wrapper">
-          {$this->FieldWithLabel("Recherche de {$type}", "key", "text")}
-          <div class="flex-wrapper">
-            <div class="choices ml-4">
-              <ul class="scroll">
-                {$this->draw_list($options, $type)}
-              </ul>
-            
+      <div class="modal">
+        <section id="{$id}" class="manage__container">
+          {$this->draw_header()}
+          <div class="flex-end mt-2">
+            <span class="notice">
+              Veuillez sélectionner un {$type} pour pouvoir l'éditer, si jamais vous voulez 
+              ajouter un {$type}, veuillez aller dans la section ajouter en haut de cette fenêtre
+            </span>
+          </div>
+          <div class="manage__wrapper">
+            {$this->FieldWithLabel("Recherche de {$type}", "key", "text")}
+            <div class="flex-wrapper">
+              <div class="choices ml-4">
+                <ul class="scroll">
+                  {$this->draw_list($options, $type)}
+                </ul>
+              
+              </div>
+              {$this->draw_form($type)}
             </div>
-            {$this->draw_form($type)}
+            <div class="full flex-end mt-2 panel-option">
+              <button class="save-btn mr-2">
+                <i class="fas fa-check-circle"></i>
+                Sauvegarder
+              </button>
+              <button class="close-btn">
+                <i class="fas fa-times-circle"></i>
+                Fermeture
+              </button>
+            </div>
           </div>
-          <div class="full flex-end mt-2 panel-option">
-            <button class="save-btn mr-2">
-              <i class="fas fa-check-circle"></i>
-              Sauvegarder
-            </button>
-            <button class="close-btn">
-              <i class="fas fa-times-circle"></i>
-              Fermeture
-            </button>
-          </div>
-        </div>
-      </section>
+        </section>
+      </div>
+    HTML;
+  }
+
+  protected function draw_section(string $title): string {
+    return <<<HTML
+      <div class='full title-section'>
+        <span class="underline">{$title}</span>
+      </div>
     HTML;
   }
 
@@ -145,9 +229,13 @@ class Forms extends Input {
   public function draw_timesheet_form(string $id): string {
     return <<<HTML
       <div id="{$id}" class="manage__container">
+        <!-- <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper"> -->
         <div class="grid manage__wrapper">
+          <input name="id_event" type="hidden" />
           {$this->Dropdown("Projet", "project", $this->events, "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
+          <div></div>
+          {$this->FieldWithLabel("Nombre d'heures", "hours_invested", "number")}
           {$this->FieldWithLabel("Heure de début", "start", "time")}
           {$this->FieldWithLabel("Heure de fin", "end", "time")}
           {$this->FieldWithLabel("Description", "description", "textarea", "full grid-height")}
@@ -161,6 +249,7 @@ class Forms extends Input {
               Fermeture
             </button>
           </div>
+        <!-- </form> -->
         </div>
       </div>
     HTML;
@@ -173,11 +262,11 @@ class Forms extends Input {
   private function draw_header(): string {
     return <<<HTML
       <div class="flex">
-        <div class="manage__title flex-center is-active">
+        <div class="manage__title flex-center is-active" data-ctx="edit">
           <i class="fas fa-pen edit-btn"></i>
           Éditer
         </div>
-        <div class="manage__title flex-center">
+        <div class="manage__title flex-center" data-ctx="add">
           <i class="fas fa-plus add-btn"></i>
           Ajouter
         </div>
@@ -227,6 +316,9 @@ class Forms extends Input {
     return <<<HTML
       {$this->FieldWithLabel("Nom", "name", "text")}
       {$this->FieldColor("Couleur du libellé", "color", null)}
+      {$this->FieldWithLabel("affaires mondiales Canada", "amc", "checkbox", "full flex-y-center-imp flex-between fz-14")}
+      {$this->ColorsChoice()}
+      
     HTML;
   }
 
@@ -235,10 +327,30 @@ class Forms extends Input {
    * @return string
    */
   private function draw_form_employee(): string {
+    $leaves = (new Event())->getByType(true, $_SESSION['id']);
+
+    $leaveshtml = [];
+    foreach($leaves as $leave) {
+      $leaveshtml[] = $this->FieldRowWithLabel($leave['title_event'], str_replace(' ', '_', $leave['title_event']), 'number');
+    }
+
+
+    $leaveshtml = implode('', $leaveshtml);
     return <<<HTML
       {$this->FieldWithLabel("Nom d'utilisateur", "username", "text", "full")}
       {$this->FieldWithLabel("Prénom", "first_name", "text")}
       {$this->FieldWithLabel("Nom de famille", "last_name", "text")}
+      {$this->FieldWithLabel("Mot de passe", "password", "password")}
+      {$this->FieldWithLabel("Cet utilisateur est adminisatrateur", "role", "checkbox", "full flex-y-center-imp flex-between fz-14")}
+      {$this->FieldWithLabel("Cet utilisateur est régulier", "regular", "checkbox", "full flex-y-center-imp flex-between fz-14")}
+      {$this->FieldWithLabel("Taux régulier", "rate", "number")}
+      {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
+      {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}
+
+      {$this->draw_section("Édition des congés")}
+      <div id='employee-leave' class='grid full'>
+        {$leaveshtml}
+      </div>
     HTML;
   }
 
@@ -247,8 +359,13 @@ class Forms extends Input {
    * @return string
    */
   private function draw_form_event(): string {
+    // var_dump($this->labels);
     return <<<HTML
       {$this->Dropdown("Libellé", "label", $this->labels, "title")}
+      {$this->FieldWithPattern("Référence", "ref", "text", null, null, "[A-Z]{2}[0-9]{2}[0-9]{4}")}
+      {$this->FieldWithLabel("Titre", "title", "text", "full")}
+      {$this->FieldWithLabel("Heures maximum par jour", "max_hours_per_day", "number", "full")}
+      {$this->FieldWithLabel("Heures maximum par semaine", "max_hours_per_week", "number", "full")}
     HTML;
   }
 
@@ -279,6 +396,7 @@ class Forms extends Input {
             <span class="name"></span>
           </div>
         </div>
+        <input name="id" type="hidden" />
         <div class="grid px-1 mb-4">
           {$form}
         </div>

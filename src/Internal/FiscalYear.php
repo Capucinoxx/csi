@@ -5,7 +5,7 @@ use App\Internal\Employee;
 use \PDO;
 
 
-class Leave extends DataBase {
+class FiscalYear extends DataBase {
 
   public function __construct() {
     parent::__construct();
@@ -13,7 +13,6 @@ class Leave extends DataBase {
   }
 
   public function get() {
-
     return ($this->select())->fetch(PDO::FETCH_ASSOC);
   }
 
@@ -24,7 +23,7 @@ class Leave extends DataBase {
     return $event->updateRef();
   }
 
-  public function newFiscalYear($params) {
+  private function newFiscalYear($params) {
     if($params['end'] < $params['start']) {
       return [
         "error" => "La date de fin d'année fiscale est plus grande que la date de début d'année fiscale."

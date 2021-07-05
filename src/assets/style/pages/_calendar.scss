@@ -22,6 +22,7 @@ tbody td {
 }
 
 .calendar__weekday {
+  font-size: .8em;
   font-weight: 700;
 }
 
@@ -29,6 +30,7 @@ tbody td {
   text-align: center;
   cursor: pointer;
   position: relative;
+  font-size: .8em;
 
   &:hover:not(:has(.is-today)) {
     color: var(--blue-bg) !important;
@@ -121,10 +123,66 @@ tbody td {
   padding: 3rem;
 }
 
-.manage__container {
+.modal ,.manage__container {
   display: none;
 
   &.visible-modal {
     display: block;
+  }
+}
+
+.event-card {
+  .event-card-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .delete-btn {
+    position: absolute;
+    color: var(--alert);
+    // top: -1.15em;
+    // right: -1.15em;
+    top: -.25em;
+    right: -.25em;
+    font-weight: 700;
+    display: none;
+    font-size: 1.2em;
+  }
+
+  &:hover {
+    .delete-btn {
+      display: block;
+
+      &:hover {
+        cursor: pointer;
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+#print-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 10;
+
+  &:hover {
+    i {
+      transform: scale(1.1);
+    }
+  }
+  i {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--blue-active);
+    margin-right: 1rem;
+    border: 1px solid #d0d0e9;
+    border-radius: 50%;
+    padding: 4px;
+    transform: scale(1);
+    transition: all .2s ease;
+    transition-timing-function: cubic-bezier(0.05, 1.8, 1, 1.57);
   }
 }

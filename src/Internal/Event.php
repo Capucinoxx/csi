@@ -2,6 +2,7 @@
 namespace App\Internal;
 use App\Internal\DataBase;
 use App\Internal\Employee;
+use App\Internal\Leave;
 use \PDO;
 
 
@@ -12,6 +13,39 @@ class Event extends DataBase {
     $this->table_name = 'Events';
   }
 
+  public function getByType($isLeave, $id_employee) {
+    if($isLeave) {
+      $leave = new Leave();
+      return $leave->get($id_employee);
+    }
+
+    $sql = "
+    SELECT 
+      events.id as id_event, 
+      id_label,
+      ref, 
+      events.title as title_event, 
+      events.created_at,
+      events.deleted_at, 
+      max_hours_per_day, 
+      max_hours_per_week, 
+      labels.title as title_label, 
+      color
+    FROM Events events
+    LEFT JOIN Labels labels
+      ON events.id_label = labels.id
+    WHERE 
+      events.deleted_at IS NULL AND
+      events.id_label != 1
+    ORDER BY labels.id ASC;
+    ";
+    
+    $query = $this->db_connection->prepare($sql);
+    $query->execute();
+    
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
   public function get($id_employee) {
     # Retourne le résultat en format dictionnaire
     return ($this->select($id_employee, false))->fetchAll(PDO::FETCH_ASSOC);
@@ -19,16 +53,33 @@ class Event extends DataBase {
 
   public function getByID($id) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id, true))->fetchAll(PDO::FETCH_ASSOC);
+    return ($this->select($id, true))->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function updateEvent($params) {
+    $pattern = "/[A-Z]{2}[0-9]{2}[0-9]{4}$/i";
+    if(preg_match($pattern, $params['ref']) == 0) {
+      return [
+        "error" => "La référence du projet ne respecte pas le format."
+      ];
+    }
+
+    $this->update($params);
   }
 
   public function createEvent($params) {
     $params['created_at'] = time()*1000;
+    $pattern = "/[A-Z]{2}[0-9]{2}[0-9]{4}$/i";
+    if(preg_match($pattern, $params['ref']) == 0) {
+      return [
+        "error" => "La référence du projet ne respecte pas le format."
+      ];
+    }
+
     $result = $this->insert($params);
 
     if(($result->errorCode() == "23000")) {
     # Retourner une erreur si le libellé n'existe pas
-
       return [
         "error" => "Ce libellé n'a pas été créé."
       ];
@@ -89,7 +140,7 @@ class Event extends DataBase {
     if($id_label != 1) {
       $sql = "
       UPDATE Events 
-      SET id_label = null
+      SET id_label = 15
       WHERE id_label = :id_label";
 
       $query = $this->db_connection->prepare($sql);
@@ -173,15 +224,26 @@ class Event extends DataBase {
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function validateProject($data) {
+  public function getHoursInserted($params) {
+      $timesheet = new Timesheet();
+      $data = $timesheet->getByID($params['id']);
+
+      return $data['hours_invested'];
+  }
+
+  public function validateProject($data, $isUpdate) {
     extract($data);
 
     # Get nombre limite d'heures par jour et par semaine
     $limit_hours = $this->getLimitHours($id_event);
 
+    # Si c'est un update, get le nombre d'heures inserted
+    $hours_inserted = 0;
+    if($isUpdate) $hours_inserted = $this->getHoursInserted($data); 
+
     # Get nombre d'heures travaillées par jour et par semaine
-    $hours_per_day = $this->getCurrentHoursPerDay($id_event, $id_employee, $at);
-    $hours_per_week = $this->getCurrentHoursPerWeek($id_event, $id_employee, $at);
+    $hours_per_day = $this->getCurrentHoursPerDay($id_event, $id_employee, $at) - $hours_inserted;
+    $hours_per_week = $this->getCurrentHoursPerWeek($id_event, $id_employee, $at) - $hours_inserted;
 
     # Vérifier si le total des heures rentrées dépassent la limite d'heures par jour
     if(($hours_invested + $hours_per_day) > $limit_hours['max_hours_per_day']) {
@@ -201,34 +263,46 @@ class Event extends DataBase {
     return true;
   }
 
-  public function validateHours($data) {
+  public function validateHours($data, $isUpdate) {
     extract($data);
 
     $label = new Label();
     $id_label = $label->getIDByEvent($id_event);
 
-    if($id_label != 1) {
+    if($id_label == 15) {
+      return [
+        "error" => "Le libellé de ce projet a été supprimé. Veillez associer ce projet à un autre libellé."
+      ];
+    }
+
+    if($id_label == 1) {
+      // c'est un leave
+      $leave = new Leave();
+      $response = $leave->validateLeave($data, $isUpdate);
+
+      if(isset($response['error'])) {
+
+        return $response;
+      }
+    } else {
       // c'est un projet
-      $response = $this->validateProject($data);
+      $response = $this->validateProject($data, $isUpdate);
       if(isset($response['error'])) {
         
         return $response;
       }
-    } else {
-      // c'est un leave
-      $leave = new Leave();
-      $response = $leave->validateLeave($data);
-
-      if(isset($response['error'])) {
-
-        return $response;
-      }
     }
     
-    if($start > $end) {
+    if($start > $end || $hours_invested < 0) {
       return [
         "error" => "Impossible de rentrer les heures : l'heure du début de l'activité est plus grande que l'heure de fin."
       ];  
+    }
+
+    if($start == $end) {
+      return [
+        "error" => "Impossible de rentrer les heures : l'heure du début de l'activité est égale à l'heure de fin."
+      ]; 
     }
     
     return true;
@@ -250,7 +324,7 @@ class Event extends DataBase {
         $newRef = $newRef . $array[$i]; 
       }
       
-      $sql = "UPDATE events SET ref = :newRef WHERE id = :id;";
+      $sql = "UPDATE Events SET ref = :newRef WHERE id = :id;";
       $query = $this->db_connection->prepare($sql);
       $query->execute(
         [
