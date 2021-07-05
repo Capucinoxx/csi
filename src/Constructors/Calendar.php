@@ -50,6 +50,7 @@ class Calendar {
     $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
+
   }
 
   public function dump(): string {
@@ -237,6 +238,7 @@ class Calendar {
     $prev_href = "/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
     $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
 
+    $path = dirname(__DIR__) . "/Internal/pdfContent/timesheetHtmlStr.php";
 
     return "
       <div class='wrapper-hidden'>
@@ -250,6 +252,9 @@ class Calendar {
 
         {$this->draw_weekly_days()}
       </div>
+      <a id='print-btn' href='{$path}'>
+        <i class='fas fa-print'></i>
+      </a>
     ";
   }
 
