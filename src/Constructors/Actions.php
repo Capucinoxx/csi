@@ -298,10 +298,12 @@ class Actions {
   }
 
   private function generatePrint() {
-    $rep = ($this->ITimesheet)->print(
-      $_SESSION['id'],
-      $_POST['start'], $_POST['end']
-    );
+
+    $rep = ($this->ITimesheet)->print([
+      'id_employee' => $_SESSION['id'],
+      'from' => $_POST['start'], 
+      'to' => $_POST['end']
+    ]);
 
     $this->check($rep);
     print_r($rep);
