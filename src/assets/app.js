@@ -575,6 +575,9 @@ document.getElementById('print-btn').addEventListener('click', (e) => {
     ifrm.appendChild(i)
 
     ifrm.classList.add('visible-modal')
+    ifrm.querySelector("iframe").focus()
+    ifrm.querySelector("iframe").print()
+
   })
   // .then((html) => {
   //   let i = document.createElement('iframe')

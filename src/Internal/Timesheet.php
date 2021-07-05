@@ -74,6 +74,7 @@ class Timesheet extends DataBase {
     JOIN Events events ON id_event = events.id 
     JOIN Labels labels ON id_label = labels.id
     WHERE Timesheets.id_employee =  :id_employee AND
+          Timesheets.deleted_at IS NULL AND
           at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
           UNIX_TIMESTAMP(:to)*1000
     GROUP BY id_event
@@ -98,6 +99,7 @@ class Timesheet extends DataBase {
       description 
     FROM Timesheets
     WHERE id_employee = :id_employee AND 
+          deleted_at IS NULL AND
           at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
           UNIX_TIMESTAMP(:to)*1000 AND 
           id_event = :id_event
