@@ -579,7 +579,7 @@ document.getElementById('print-btn').addEventListener('click', (e) => {
     ifrm.appendChild(i)
     console.log(data)
     i = ifrm.querySelector('iframe')
-    i.src = "data:text/html;charset=utf-8," + escape(data)
+    i.src = "data:text/html;charset=utf-8," + data
 
     ifrm.appendChild(i)
 
