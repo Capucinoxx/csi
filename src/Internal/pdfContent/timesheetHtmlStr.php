@@ -139,7 +139,7 @@
           <span class="fs-smaller fw-normal" style="display: flex; justify-content: center;">
           <?php echo "Du: " . $data['from'];?>
           </span>
-          <span class="fs-smaller fw-normal" style="display: flex; justify-content: center;">
+          <span class="fs-smaller fw-normal" style="display: flex; justify-content: center; margin-bottom: 20px">
           <?php echo "Au: " . $data['to'];?>
         </span>
         </div>
@@ -306,7 +306,7 @@
     </col>
   </table>
 
-  <table>
+  <table style="margin-top: 60px;">
     <tr>
       <td style="min-width: 400px;">
           <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature vérification</span>
