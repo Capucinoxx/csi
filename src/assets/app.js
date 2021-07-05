@@ -163,6 +163,7 @@
               const formData = new FormData()
               formData.append('context', 'delete')
               formData.append('ctx-el', ctx)
+              console.log(ctx)
               formData.append('id', choice.getAttribute('data-id'))
 
               fetch(window.location,
