@@ -21,3 +21,6 @@ vendor/
 
 # timesheet généré
 timesheet.html
+
+# photo des signatures
+images/

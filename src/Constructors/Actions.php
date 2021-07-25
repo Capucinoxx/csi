@@ -33,6 +33,28 @@ class Actions {
     }
   }
 
+  private function upload_file(?string $name = "", ?string $type = "", $img_tmp) {
+    var_dump($type);
+    if ($type == "" || ($type != "jpg" && $type != "png" && $type != "jpeg" && $type != "gif")) {
+      return ["error" => "La photo peut seulement être de format .jpg, .png, .jpeg ou .gif."];
+    }
+
+    $image_path = "images/";
+
+    $image_error = $_FILES['file_to_upload']['error'];
+    if ($image_error) {
+      return ["error" => $image_error];
+    }
+
+    if (is_uploaded_file($_FILES['file_to_upload']['tmp_name'])) {
+      if (!move_uploaded_file($_FILES['file_to_upload']['tmp_name'], $image_path . $name . '.' . $type)) {
+        return ["error" => "le fichier ne peut être télécharger"];
+      }
+    }
+
+    return null;
+  }
+
   private function getTimesheetById() {
     $rep = ($this->ITimesheet)->getByID($_POST['id']);
 
@@ -165,7 +187,11 @@ class Actions {
    * et la partie logique en ce qui attrait à l'ajout d'employée
    */
   private function addUser() {
-    var_dump($_POST);
+    $target_dir = "uploads/";
+    
+    var_dump($_FILES);
+
+    // var_dump($_POST);
     $rep = ($this->IEmployee)->createEmployee([
       'username' => $_POST['username'],
       'first_name' => $_POST['first_name'],
@@ -184,6 +210,19 @@ class Actions {
       $id = ($this->IEmployee)->getId($_POST['username']);
       $leaves = ($this->IEvent)->getByType(true, $id);
 
+      // if (is_uploaded_file($_FILES['file_to_upload']['tmp_name'])) {
+      //   $target_file = $target_dir . $id . '.' . $imgFileType;
+      //   var_dump(move_uploaded_file($_FILES['file_to_upload']['tmp_name'], $target_file));
+      // }
+
+      // $target_file = $target_dir . $id . '.' . $imgFileType;
+      // if (!move_uploaded_file($_FILES['file_to_upload']['tmp_name'], $target_file)) {
+      //   $this->check(['error' => 'seul les fichier ']);
+      //   return;
+      // }
+
+
+
       foreach($leaves as $leave) {
         $arr = [
           'id' => $leave['id_event'],
@@ -195,7 +234,16 @@ class Actions {
           break;
         }
       }
+
+      if (!isset($rep['error'])) {
+        // upload signature
+        var_dump(pathinfo($_FILES['file_to_upload']['name'], PATHINFO_EXTENSION));
+        $this->check(
+          $this->upload_file("signature_" . $id, ltrim($_FILES['file_to_upload']['type'], '/'), $_FILES['file_to_upload']['tmp_name'])
+        );
+      }
     }
+
     var_dump($rep);
     die();
   }
@@ -237,6 +285,13 @@ class Actions {
           break;
         }
       }
+    }
+
+    if (!isset($rep['error'])) {
+      // upload signature
+      $this->check(
+        $this->upload_file("signature_" . $_POST['id'], pathinfo($_FILES['file_to_upload']['name'], PATHINFO_EXTENSION), $_FILES['file_to_upload']['tmp_name'])
+      );
     }
 
     var_dump($rep);
