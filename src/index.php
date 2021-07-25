@@ -47,8 +47,6 @@ if (isset($_SESSION['error'])) {
   unset($_SESSION['error']);
 }
 
-var_dump( $IEvent->getByType(true, $_SESSION['id']));
-
 echo '<div id="iframe" class="modal"></div>';
 // require_once(dirname(__DIR__).'/src/Views/test.php');
 require_once(dirname(__DIR__).'/src/Views/footer.html');
