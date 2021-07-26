@@ -48,6 +48,8 @@ if (isset($_SESSION['error'])) {
 }
 
 echo '<div id="iframe" class="modal"></div>';
-// require_once(dirname(__DIR__).'/src/Views/test.php');
+
 require_once(dirname(__DIR__).'/src/Views/footer.html');
+
+// require_once(dirname(__DIR__).'/src/Views/test.php');
 ?>

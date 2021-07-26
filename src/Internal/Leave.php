@@ -62,6 +62,7 @@ class Leave extends DataBase {
       events.title as title_event, 
       events.created_at,
       events.deleted_at, 
+      id_leave,
       max_hours
     FROM Events events
     LEFT JOIN Labels labels
@@ -95,27 +96,61 @@ class Leave extends DataBase {
     return $data['id_leave'];
   }
 
+  public function getRemainingHours($id_employee) {
+    # Aller chercher le début et la fin de l'année fiscale en cours
+    $fiscal_year = new FiscalYear();
+    $fiscal_year_data = $fiscal_year->get();
+
+    # Aller chercher l'identifiant de tous les leaves d'un employee
+    // $sql = "
+    // SELECET id, id_leave, max_hours
+    // FROM Events
+    // WHERE id_employee = :id_employee";
+    // $query = $this->db_connection->prepare($sql);
+    // $query->execute( 
+    //   [
+    //     ':id_employee' => $id_employee
+    //   ]
+    // );
+
+    $leaves_array = $this->get($id_employee);
+    foreach($leaves_array as $leave) {
+      $hours_left = '-';
+      
+      $leave_taken =  floatval($this->getCurrentHours($leave['id_event'], $id_employee, $leave['id_leave']));
+      if($leave['id_leave'] != 4 && $leave['id_leave'] != 6) 
+        $hours_left = floatval($leave['max_hours']) - $leave_taken;
+
+      $total_hours[$leave['title_event']] = [
+        'Heures prises' => $leave_taken,
+        'Heures restantes' => $hours_left
+      ];
+    }
+
+    return $total_hours;
+  }
+
   private function getCurrentHours($id_event, $id_employee, $id_leave) {
     # Aller chercher le début et la fin de l'année fiscale en cours
     $fiscal_year = new FiscalYear();
     $fiscal_year_data = $fiscal_year->get();
 
     $sql = "
-    SELECT SUM(hours_invested) as total_hours_invested
+    SELECT COALESCE(SUM(hours_invested), 0) as total_hours_invested
     FROM Timesheets 
     WHERE id_event = :id_event AND
           id_employee = :id_employee";
                   
     if($id_leave == 4) { // Temps accumulé
-      $sql .= ";";
-      $query = $this->db_connection->prepare($sql);
-      $query->execute(
-        [
-          ':id_event' => $id_event,
-          ':id_employee' => $id_employee
-        ]
-      );
-
+      // $sql .= ";";
+      // $query = $this->db_connection->prepare($sql);
+      // $query->execute(
+      //   [
+      //     ':id_event' => $id_event,
+      //     ':id_employee' => $id_employee
+      //   ]
+      // );
+      return 0;
     } else {
       $sql .= " AND at BETWEEN :start_fiscal_year AND :end_fiscal_year;";
       $query = $this->db_connection->prepare($sql);
