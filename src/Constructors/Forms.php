@@ -20,7 +20,7 @@ class Input {
         $input = "<input id='{$id}' type='{$type}' class='form__input' name='{$key}' max='23:59' placeholder=' '/>";
         break;
       case 'checkbox':
-        $input = "{$label} <input id='{$id}' type='{$type}' pattern='{$pattern}' class='form__input' name='{$key}' placeholder=' '/>";
+        $input = "{$label} <input id='{$id}' type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
         break;
       default:
         $input = "<input id='{$id}' type='{$type}' class='form__input' name='{$key}' placeholder=' '/>";
@@ -39,7 +39,7 @@ class Input {
       <div class='form__div block full field-row'>
         <div class='flex-between'>
           <label for="{$key}">{$label}</label>
-          <input type='{$type}' pattern="{$pattern}" class='form__input' name='{$key}' placeholder=' '/>
+          <input type='{$type}' class='form__input' name='{$key}' placeholder=' '/>
         </div>
       </div>
     HTML;
@@ -346,7 +346,6 @@ class Forms extends Input {
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}
       {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
       {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}
-
       {$this->draw_section("Édition des congés")}
       <div id='employee-leave' class='grid full'>
         {$leaveshtml}

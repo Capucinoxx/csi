@@ -224,6 +224,32 @@ class Event extends DataBase {
     return $query->fetch(PDO::FETCH_ASSOC);
   }
 
+  // public function getTotalWeekHours($id_employee, $at) {
+  //   # Aller chercher le nombre d'heures à date cette semaine
+  //   $sql = "
+  //   SELECT 
+  //     SUM(hours_invested) AS hours_per_week 
+  //   FROM Timesheets
+  //   WHERE 
+  //     AND id_employee = :id_employee
+  //     AND week(from_unixtime(at/1000)) = week(from_unixtime({$at}/1000));
+  //   ";
+
+  //   $query = $this->db_connection->prepare($sql);
+  //   $query->execute(
+  //     [
+  //       ':id_employee' => $id_employee,
+  //     ]
+  //   );
+
+  //   if($query->rowCount() == 0) {
+  //     return 0;
+  //   }
+  //   $row = $query->fetch(PDO::FETCH_ASSOC);
+
+  //   return $row['total_hours_per_week'];
+  // }
+
   public function getHoursInserted($params) {
       $timesheet = new Timesheet();
       $data = $timesheet->getByID($params['id']);
@@ -259,6 +285,37 @@ class Event extends DataBase {
         "error" => "Impossible de rentrer les heures : la limite d'heures par semaine a été dépassée."
       ];
     }
+
+    // # Vérifier si temps accumulé
+    // $total_week_hours = $this->getTotalWeekHours();
+    // if(($total_week_hours + $hours_invested) > 35 && $total_week_hours < 40) {
+    //   $sql = "
+    //   SELECT max_hours, id_event
+    //   FROM events WHERE id_employee = :id_employee AND id_leave = :id_leave";
+
+    //   $query = $this->db_connection->prepare($sql);
+    //   $query->execute(
+    //     [
+    //       ':id_employee' => $id_employee,
+    //       ':id_leave' => 4
+    //     ]
+    //   );
+    //   $data = $query->fetch(PDO::FETCH_ASSOC);
+    //   if(total_week_hours < 35) {
+    //     $accumulated_hours = $hours_invested - (35 - total_week_hours);
+    //   } else {
+    //     $accumulated_hours = 40 - total_week_hours;
+    //   }
+
+    //   if($accumulated_hours > 5) $accumulated_hours = 5;
+
+    //   $data_to_update = [
+    //     'id' => $id_event,
+    //     'max_hours' => $data['max_hours'] + $accumulated_hours
+    //   ];
+
+    //   $this->update($data_to_update);
+    // }
 
     return true;
   }
