@@ -21,3 +21,8 @@ vendor/
 
 # timesheet généré
 timesheet.html
+
+images/
+
+# package nodes
+node_modules/
