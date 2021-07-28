@@ -139,7 +139,7 @@ class Timesheet extends DataBase {
 
   public function getEmployeeInfo($id_employee) {
     $sql = "
-    SELECT first_name, last_name FROM Employees
+    SELECT first_name, last_name, signature_link FROM Employees
     WHERE id = :id_employee;";
 
     $query = $this->db_connection->prepare($sql);

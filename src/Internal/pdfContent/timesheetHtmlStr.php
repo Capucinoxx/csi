@@ -131,6 +131,7 @@
           $calendar = array();
           $query = $this->getEmployeeInfo($data['id_employee']);
           $stmt = $query->fetch(PDO::FETCH_ASSOC);
+          $signature_link = $stmt['signature_link'];
         ?>
         <div>
           <h2 class="fs-small" style="text-align: center; padding-bottom: 0px; margin-bottom: 0px;">
@@ -306,17 +307,21 @@
     </col>
   </table>
 
-  <table style="margin-top: 60px;">
-    <tr>
-      <td style="min-width: 400px;">
-          <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature vérification</span>
-      </td>
-
-      <td style="min-width: 400px;">
+  <div style="display: table; padding-top: 60px;">
+    <div style="display: table-cell;">
+      <div style="display: flex; flex-direction: column; align-items: center; margin-left: 50px">
+        <img style="width: 100px;" src=""/>
         <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature employé.e</span>
-      </td>
-    </tr>
-  </table>
+      </div>    
+    </div>
+
+    <div style="display: table-cell;">
+      <div style="display: flex; flex-direction: column; align-items: center; margin-left: 50px">
+        <img style="width: 100px;" src="<?= '../../' . $signature_link ?>"/>
+        <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature employé.e</span>
+      </div>    
+    </div>
+  </div>
 </body>
 
 </html>
