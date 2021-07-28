@@ -4,6 +4,7 @@ use App\Internal\Label;
 use App\Internal\Event;
 use App\Internal\Timesheet;
 use App\Internal\FiscalYear;
+use App\Internal\Leave;
 
 $employee = new Employee();
 
@@ -181,10 +182,24 @@ $new_year = [
 ]; 
 // var_dump($fiscal_year->restartYear($new_year));
 
+$leave = new Leave();
+
+$timsheet_info = [
+    'id_event' => 106,
+    'id_employee' => 14,
+    'start' => 8,
+    'end' => 15,
+    'at' => 1627357658,
+    'hours_invested' => 7,
+    'description' => 'test'
+];
+
+// var_dump($timesheet->createTimesheet($timsheet_info));
+var_dump($leave->getRemainingHours(14));
 ?>
 
  <section class="test-data-dump">
-  <pre><?php //print_r($timesheet->get(1, 1623557201, 1623949600)); ?></pre>
+  <pre><?php //print_r($leave->getRemainingHours(14)); ?></pre>
 </section>
 
 <style>

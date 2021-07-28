@@ -20,6 +20,28 @@ class Timesheet extends DataBase {
   }
 
   public function deleteTimesheet($id) {
+    // $timesheet = $this->getByID($id);
+    // $sql = "
+    // SELECT id_leave, max_hours
+    // FROM Events
+    // WHERE id_event = :id_event";
+
+    
+    // $query = $this->db_connection->prepare($sql);
+    // $query->execute(
+    //   [
+    //     ':id_event' => $timesheet['id_event']
+    //   ]
+    // );
+    // $event_data = $query->fetch(PDO::FETCH_ASSOC);
+
+    // if($event_data['id_leave'] == 4) {
+    //   $data_to_update = [
+    //     'id' => $timesheet['id_event'],
+    //     'max_hours' => 
+    //   ];
+    // }
+
     $this->delete($id);
   }
 
