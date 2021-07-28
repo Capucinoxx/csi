@@ -182,7 +182,8 @@ class Employee extends DataBase {
       role, regular, 
       rate, rate_AMC, 
       rate_CSI, created_at, 
-      deleted_at 
+      deleted_at,
+      signature_link
     FROM Employees WHERE deleted_at IS NULL";
 
     if(!$isOne) {

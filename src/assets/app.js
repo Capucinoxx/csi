@@ -534,7 +534,7 @@
       form.querySelector('input[name="rate_amc"]').value = data.rate_AMC
       form.querySelector('input[name="rate_csi"]').value = data.rate_CSI;
 
-      form.querySelector('input[name="file_to_upload"]').src = data.file_to_upload || '#'
+      form.querySelector('img[alt="signature preview"]').src = data.signature_link || '#'
 
       console.log(data)
 
