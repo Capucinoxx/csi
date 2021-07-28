@@ -187,11 +187,6 @@ class Actions {
    * et la partie logique en ce qui attrait à l'ajout d'employée
    */
   private function addUser() {
-    $target_dir = "uploads/";
-    
-    var_dump($_FILES);
-
-    // var_dump($_POST);
     $rep = ($this->IEmployee)->createEmployee([
       'username' => $_POST['username'],
       'first_name' => $_POST['first_name'],
@@ -209,19 +204,35 @@ class Actions {
     if (!isset($rep['error'])) {
       $id = ($this->IEmployee)->getId($_POST['username']);
       $leaves = ($this->IEvent)->getByType(true, $id);
+     
+      if (isset($_FILES['file_to_upload'])) {
+        $rep = $this->upload_file(
+          "signature_" . $id,
+          pathinfo($_FILES['file_to_upload']['name'], PATHINFO_EXTENSION),
+          $_FILES['file_to_upload']['tmp_name']
+        );
+      }
+  
+      if (isset($rep['error'])) {
+        $this->check($rep);
+        var_dump($rep);
+        die();
+        return;
+      }
+  
+      $file_path = isset($rep['path']) ? $rep['path'] : '';
 
-      // if (is_uploaded_file($_FILES['file_to_upload']['tmp_name'])) {
-      //   $target_file = $target_dir . $id . '.' . $imgFileType;
-      //   var_dump(move_uploaded_file($_FILES['file_to_upload']['tmp_name'], $target_file));
-      // }
-
-      // $target_file = $target_dir . $id . '.' . $imgFileType;
-      // if (!move_uploaded_file($_FILES['file_to_upload']['tmp_name'], $target_file)) {
-      //   $this->check(['error' => 'seul les fichier ']);
-      //   return;
-      // }
-
-
+      $rep = ($this->IEmployee)->updateEmployee([
+        'id' => intval($id),
+        'signature_link' => $file_path
+      ]);
+      if (isset($rep['error'])) {
+        $this->check($rep);
+        var_dump($rep);
+        die();
+        return;
+      }
+      
 
       foreach($leaves as $leave) {
         $arr = [
@@ -233,14 +244,6 @@ class Actions {
           $this->check($rep);
           break;
         }
-      }
-
-      if (!isset($rep['error'])) {
-        // upload signature
-        var_dump(pathinfo($_FILES['file_to_upload']['name'], PATHINFO_EXTENSION));
-        $this->check(
-          $this->upload_file("signature_" . $id, ltrim($_FILES['file_to_upload']['type'], '/'), $_FILES['file_to_upload']['tmp_name'])
-        );
       }
     }
 
