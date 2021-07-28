@@ -17,7 +17,7 @@ class FiscalYear extends DataBase {
   }
 
   public function getMatchedTime($at) {
-    return ($this->selectMatchedID($id))->fetch(PDO::FETCH_ASSOC);
+    return ($this->selectMatchedTime($at))->fetch(PDO::FETCH_ASSOC);
   }
 
   public function restartYear($params) {
@@ -63,7 +63,7 @@ class FiscalYear extends DataBase {
 
   private function selectMatchedTime($at) {
     $sql = "
-    SELECET *
+    SELECT *
     FROM FiscalYears
     WHERE (:at * 1000) BETWEEN start AND end";
     $query = $this->db_connection->prepare($sql);

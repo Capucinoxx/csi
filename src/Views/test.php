@@ -195,11 +195,11 @@ $timsheet_info = [
 ];
 
 // var_dump($timesheet->createTimesheet($timsheet_info));
-var_dump($leave->getRemainingHours(14));
+var_dump($leave->getRemainingHours(14, 1627357658));
 ?>
 
  <section class="test-data-dump">
-  <pre><?php //print_r($leave->getRemainingHours(14)); ?></pre>
+  <pre><?php //print_r($leave->getRemainingHours(14, 1627357658)); ?></pre>
 </section>
 
 <style>

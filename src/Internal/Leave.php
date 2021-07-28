@@ -143,8 +143,8 @@ class Leave extends DataBase {
         [
           ':id_event' => $id_event,
           ':id_employee' => $id_employee,
-          ':start_fiscal_year' => $fiscal_year_data['start_fiscal_year'],
-          ':end_fiscal_year' => $fiscal_year_data['end_fiscal_year']
+          ':start_fiscal_year' => $fiscal_year_data['start'],
+          ':end_fiscal_year' => $fiscal_year_data['end']
         ]
       );
     }
