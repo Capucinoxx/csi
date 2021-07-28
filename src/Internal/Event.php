@@ -46,14 +46,57 @@ class Event extends DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function get($id_employee) {
+  public function get($id_employee, $at) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id_employee, false))->fetchAll(PDO::FETCH_ASSOC);
+    $events = ($this->select($id_employee, false))->fetchAll(PDO::FETCH_ASSOC);
+    return $this->getEventByYear($events, $at, false);
   }
 
-  public function getByID($id) {
+  public function getByID($id, $at) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id, true))->fetch(PDO::FETCH_ASSOC);
+    $event = ($this->select($id, true))->fetch(PDO::FETCH_ASSOC);
+    return $this->getEventByYear($event, $at, true);
+  }
+
+  private function getYearNumber($at) {
+    $fiscal_year = new FiscalYear();
+    $current_fiscal_year = ($fiscal_year->getMatchingFiscalYear($at));
+    $year = date("Y", ($current_fiscal_year['end']/1000));
+    $year_array = str_split($year);
+
+    return $year_array[2] . $year_array[3];
+  }
+
+  private function getNewRef($ref, $year_number) {
+    if(isset($ref)) {
+      $array = str_split($ref);
+      $new_ref = $array[0] . $array[1] . $year_number;
+
+      for($j = 4; $j < count($array); $j++) {
+        $new_ref = $new_ref . $array[$j]; 
+      }
+
+      return $new_ref;
+    }
+  }
+
+  private function getEventByYear($events, $at, $isOne) {
+    # Get year number
+    $year_number = $this->getYearNumber($at);
+
+    # Replace year number
+    if($isOne) {
+      # One event
+      $events['ref'] = $this->getNewRef($events['ref'], $year_number);
+    } else {
+      # All events
+      for($i = 0; $i < count($events); $i++) {
+        $events[$i]['ref'] = $this->getNewRef($events[$i]['ref'], $year_number);
+      }
+    }
+    
+
+    return $events;
   }
 
   public function updateEvent($params) {

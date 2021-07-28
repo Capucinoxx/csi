@@ -16,15 +16,15 @@ class FiscalYear extends DataBase {
     return ($this->select($id))->fetch(PDO::FETCH_ASSOC);
   }
 
-  public function getMatchedTime($at) {
+  public function getMatchingFiscalYear($at) {
     return ($this->selectMatchedTime($at))->fetch(PDO::FETCH_ASSOC);
   }
 
   public function restartYear($params) {
     $this->newFiscalYear($params);
 
-    $event = new Event();
-    return $event->updateRef();
+    // $event = new Event();
+    // return $event->updateRef();
   }
 
   private function newFiscalYear($params) {
@@ -63,7 +63,11 @@ class FiscalYear extends DataBase {
 
   private function selectMatchedTime($at) {
     $sql = "
-    SELECT *
+    SELECT 
+      id, 
+      start, 
+      end, 
+      FROM_UNIXTIME(end, '%Y') AS year
     FROM FiscalYears
     WHERE (:at * 1000) BETWEEN start AND end";
     $query = $this->db_connection->prepare($sql);

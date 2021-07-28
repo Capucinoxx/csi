@@ -118,7 +118,7 @@ class Leave extends DataBase {
   private function getCurrentHours($id_event, $id_employee, $id_leave, $at) {
     # Aller chercher le début et la fin de l'année fiscale en cours
     $fiscal_year = new FiscalYear();
-    $fiscal_year_data = $fiscal_year->getMatchedTime($at);
+    $fiscal_year_data = $fiscal_year->getMatchingFiscalYear($at);
 
     $sql = "
     SELECT COALESCE(SUM(hours_invested), 0) as total_hours_invested

@@ -86,11 +86,12 @@ $label->update($label_update);
 ## Test suppression des labels ##
 // $label->deleteLabel(1);
 
-$event =  new Event();
+$event = new Event();
 
 ## Tests select events ##
-// var_dump($event->get(1));
-// var_dump($event->getByID(49));
+// var_dump($event->get(1, time()));
+// $event->get(1, time());
+var_dump($event->getByID(49, time()));
 
 ## Tests events creation ##
 /*
@@ -195,7 +196,7 @@ $timsheet_info = [
 ];
 
 // var_dump($timesheet->createTimesheet($timsheet_info));
-var_dump($leave->getRemainingHours(14, 1627357658));
+// var_dump($leave->getRemainingHours(14, 1627357658));
 ?>
 
  <section class="test-data-dump">
