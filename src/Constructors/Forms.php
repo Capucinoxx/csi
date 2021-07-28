@@ -70,6 +70,16 @@ class Input {
     HTML;
   }
 
+  protected function FieldFile(string $label, string $key, ?string $value = null): string {
+    return <<<HTML
+      <div class="full flex-x">
+        <input type="file" name="{$key}"/>
+        <label for="{$key}">{$label}</label>
+        <img src="#" alt="signature preview" />
+      </div>
+    HTML;
+  }
+
   protected function ColorsChoice(): string {
     $html = "";
     
@@ -346,6 +356,7 @@ class Forms extends Input {
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}
       {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
       {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}
+      {$this->FieldFile("Signature électronique de l'employée", "file_to_upload")}
       {$this->draw_section("Édition des congés")}
       <div id='employee-leave' class='grid full'>
         {$leaveshtml}

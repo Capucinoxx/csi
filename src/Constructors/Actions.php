@@ -33,6 +33,28 @@ class Actions {
     }
   }
 
+  private function upload_file(?string $name = "", ?string $type = "", $img_tmp) {
+    var_dump($type);
+    if ($type == "" || ($type != "jpg" && $type != "png" && $type != "jpeg" && $type != "gif")) {
+      return ["error" => "La photo peut seulement être de format .jpg, .png, .jpeg ou .gif."];
+    }
+
+    $image_path = "images/";
+
+    $image_error = $_FILES['file_to_upload']['error'];
+    if ($image_error) {
+      return ["error" => $image_error];
+    }
+
+    if (is_uploaded_file($_FILES['file_to_upload']['tmp_name'])) {
+      if (!move_uploaded_file($_FILES['file_to_upload']['tmp_name'], $image_path . $name . '.' . $type)) {
+        return ["error" => "le fichier ne peut être télécharger"];
+      }
+    }
+
+    return ["path" => ($image_path . $name . '.' . $type)];
+  }
+
   private function getTimesheetById() {
     $rep = ($this->ITimesheet)->getByID($_POST['id']);
 
@@ -165,7 +187,6 @@ class Actions {
    * et la partie logique en ce qui attrait à l'ajout d'employée
    */
   private function addUser() {
-    var_dump($_POST);
     $rep = ($this->IEmployee)->createEmployee([
       'username' => $_POST['username'],
       'first_name' => $_POST['first_name'],
@@ -183,6 +204,35 @@ class Actions {
     if (!isset($rep['error'])) {
       $id = ($this->IEmployee)->getId($_POST['username']);
       $leaves = ($this->IEvent)->getByType(true, $id);
+     
+      if (isset($_FILES['file_to_upload'])) {
+        $rep = $this->upload_file(
+          "signature_" . $id,
+          pathinfo($_FILES['file_to_upload']['name'], PATHINFO_EXTENSION),
+          $_FILES['file_to_upload']['tmp_name']
+        );
+      }
+  
+      if (isset($rep['error'])) {
+        $this->check($rep);
+        var_dump($rep);
+        die();
+        return;
+      }
+  
+      $file_path = isset($rep['path']) ? $rep['path'] : '';
+
+      $rep = ($this->IEmployee)->updateEmployee([
+        'id' => intval($id),
+        'signature_link' => $file_path
+      ]);
+      if (isset($rep['error'])) {
+        $this->check($rep);
+        var_dump($rep);
+        die();
+        return;
+      }
+      
 
       foreach($leaves as $leave) {
         $arr = [
@@ -196,6 +246,7 @@ class Actions {
         }
       }
     }
+
     var_dump($rep);
     die();
   }
@@ -205,6 +256,23 @@ class Actions {
    * et la partie logique en ce qui attrait à la modification d'employée
    */
   private function editUser() {
+    if (isset($_FILES['file_to_upload'])) {
+      $rep = $this->upload_file(
+        "signature_" . $_POST['id'],
+        pathinfo($_FILES['file_to_upload']['name'], PATHINFO_EXTENSION),
+        $_FILES['file_to_upload']['tmp_name']
+      );
+    }
+
+    if (isset($rep['error'])) {
+      $this->check($rep);
+      var_dump($rep);
+      die();
+      return;
+    }
+
+    $file_path = isset($rep['path']) ? $rep['path'] : '';
+
     $rep = ($this->IEmployee)->updateEmployee([
       'id' => $_POST['id'],
       'username' => $_POST['username'],
@@ -216,7 +284,8 @@ class Actions {
       'rate' => floatval($_POST['rate']),
       'rate_AMC' => floatval($_POST['rate_amc']),
       'rate_CSI' => floatval($_POST['rate_csi']),
-      'updated_at' => intval((new Datetime())->format('U')) * 1000
+      'updated_at' => intval((new Datetime())->format('U')) * 1000,
+      'signature_link' => $file_path
     ]);
 
     $this->check($rep);
@@ -224,7 +293,6 @@ class Actions {
     if (!isset($rep['error'])) {
       
       $leaves = ($this->IEvent)->getByType(true, $_POST['id']);
-      var_dump($leaves);
 
       foreach($leaves as $leave) {
         $arr = [

@@ -211,9 +211,6 @@
       )
   
      // gestion du bouton de sauvegarde
-     
-
- 
      container.querySelector('.save-btn').addEventListener('click', () => {
        const formData = new FormData()
        
@@ -222,10 +219,12 @@
          (field) => {
            if (field.getAttribute('type') === 'checkbox') {
             formData.append(field.getAttribute('name'), field.checked)
+           } else if (field.getAttribute('type') === 'file') {
+            formData.append(field.getAttribute('name'), field.files[0])
            } else {
             formData.append(field.getAttribute('name'), field.value)
            }
-           
+
          }
        )
  
@@ -233,7 +232,10 @@
         console.log(pair[0]+ ', ' + pair[1]); 
       }
        fetch(window.location, 
-         { method: 'post', body: formData }
+         { 
+           method: 'post', 
+           body: formData
+          }
        ).then(async (res) => await res.text())
        .then((data) => console.log(data))
        .then(() =>  window.location = window.location)
@@ -530,7 +532,9 @@
 
       form.querySelector('input[name="rate"]').value = data.rate
       form.querySelector('input[name="rate_amc"]').value = data.rate_AMC
-      form.querySelector('input[name="rate_csi"]').value =data.rate_CSI;
+      form.querySelector('input[name="rate_csi"]').value = data.rate_CSI;
+
+      form.querySelector('img[alt="signature preview"]').src = data.signature_link || '#'
 
       console.log(data)
 
@@ -594,40 +598,22 @@ document.getElementById('print-btn').addEventListener('click', (e) => {
     ifrm.appendChild(i)
     console.log(data)
     i = ifrm.querySelector('iframe')
-    i.src = "data:text/html;charset=utf-8," + data
+    i.src = "/Internal/pdfContent/timesheet.html"
 
     ifrm.appendChild(i)
 
     ifrm.classList.add('visible-modal')
     ifrm.querySelector("iframe").focus()
-    ifrm.querySelector("iframe").print()
 
   })
-  // .then((html) => {
-  //   let i = document.createElement('iframe')
-  //   i.style = "width: 100vw; height: 100vh; background: white";
-    
-  //   const ifrm = document.getElementById('iframe')
-  //   ifrm.appendChild(i)
-
-  //   console.log(html)
-
-    
-  //   ifrm.querySelector('iframe').contentWindow.document.write = html
-
-
-  //   ifrm.classList.add('visible-modal')
-  // })
-
-  
-
-  // i.setAttribute('src', window.location + '/Internal/pdfContent/')
-  // document.getElementById('iframe').innerHTML = i
-
-  // let frm = i.contentWindow
-  // frm.focus()
-  // frm.print()
-  
-
-  // document.getElementById('iframe').classList.add('visible-modal')
 })
+
+document.querySelectorAll('input[type="file"]').forEach(
+  (input) => {
+    input.onchange = (e) => {
+      const [file] = input.files
+      const img = input.parentNode.querySelector('img')
+      img && (img.src = URL.createObjectURL(file))
+    }
+  }
+)

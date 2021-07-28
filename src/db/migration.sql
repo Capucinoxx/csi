@@ -1,0 +1,1 @@
+ALTER TABLE Employees ADD COLUMN signature_link VARCHAR(200) DEFAULT NULL;
