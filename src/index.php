@@ -11,11 +11,13 @@ use App\Internal\Event;
 use App\Constructors\Actions;
 use App\Internal\Timesheet;
 use App\Internal\FiscalYear;
+use App\Internal\Leave;
 
 $IEvent = new Event();
 $ILabel = new Label();
 $IEmployee = new Employee();
 $ITimesheet = new Timesheet();
+$ILeave = new Leave();
 
 date_default_timezone_set('America/Los_Angeles');
 

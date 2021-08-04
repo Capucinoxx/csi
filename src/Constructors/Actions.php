@@ -24,7 +24,10 @@ class Actions {
   public function execute() {
     switch($_SERVER["REQUEST_METHOD"]) {
       case "POST":
-        isset($_POST["context"]) && $this->{$_POST["context"]}();
+        if ($this->prevent_multi_submit()) {
+          isset($_POST["context"]) && $this->{$_POST["context"]}();
+        }
+        
       break;
 
       case "GET":
@@ -32,6 +35,27 @@ class Actions {
       break;
     }
   }
+
+  private function prevent_multi_submit($excl = "validator") {
+    $string = "";
+    foreach ($_POST as $key => $val) {
+    // this test is to exclude a single variable, f.e. a captcha value
+    if ($key != $excl) {
+        $string .= $key . $val;
+    }
+    }
+    if (isset($_SESSION['last'])) {
+    if ($_SESSION['last'] === md5($string)) {
+        return false;
+    } else {
+        $_SESSION['last'] = md5($string);
+        return true;
+    }
+    } else {
+    $_SESSION['last'] = md5($string);
+    return true;
+    }
+}
 
   private function upload_file(?string $name = "", ?string $type = "", $img_tmp) {
     var_dump($type);
