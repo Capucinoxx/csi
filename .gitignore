@@ -24,3 +24,6 @@ timesheet.html
 
 # photo des signatures
 images/
+
+# database dump
+.mysql-dump
