@@ -35,7 +35,8 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
   $forms = new Forms(
     $ILabel->get(),
     $IEvent->getByType(false, $_SESSION['id']),
-    $IEmployee->get()
+    $IEmployee->get(),
+    $IEvent->getByType(true, $_SESSION['id'])
   );
   $calendar = new Calendar($ITimesheet, $forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
   require_once('./Views/Calendar.php');
