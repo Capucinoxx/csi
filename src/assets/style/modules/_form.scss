@@ -49,7 +49,7 @@
   overflow: hidden;
 
   &.editing-mode {
-    max-height: 1000px;
+    max-height: 20000px;
     transition: max-height 1.5s ease-in;
     display: block !important;
   }

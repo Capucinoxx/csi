@@ -145,10 +145,11 @@ class Forms extends Input {
   private $labels;
   private $events;
 
-  public function __construct(?array $labels = [], ?array $events = [], ?array $employees = []) {
+  public function __construct(?array $labels = [], ?array $events = [], ?array $employees = [], ?array $leaveEvents = []) {
     $this->employees = $employees;
     $this->labels = $labels;
     $this->events = $events;
+    $this->leaves = $leaveEvents;
   }
 
   /**
@@ -242,7 +243,7 @@ class Forms extends Input {
         <!-- <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper"> -->
         <div class="grid manage__wrapper">
           <input name="id_event" type="hidden" />
-          {$this->Dropdown("Projet", "project", $this->events, "title_event")}
+          {$this->Dropdown("Projet", "project", array_merge($this->events, $this->leaves), "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
           <div></div>
           {$this->FieldWithLabel("Nombre d'heures", "hours_invested", "number")}

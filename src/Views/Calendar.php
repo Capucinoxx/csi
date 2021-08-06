@@ -33,6 +33,18 @@
     </div>
       <span class="employee-name">
         <?= $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?>
+        <div class="remaining-hours">
+          <?php 
+            foreach($ILeave->getRemainingHours($_SESSION['id']) as $key => $value) {
+              echo <<<HTML
+               <div>
+                  <div>{$key}</div>
+                  <div>{$value['Heures restantes']} h</div>
+               </div>
+              HTML;
+            }
+          ?>
+        </div>
       </span>
     <div class="flex-y-end" style="flex: 1 1 auto">
       <div class="panel-option">
