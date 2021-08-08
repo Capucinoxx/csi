@@ -35,7 +35,7 @@
         <?= $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?>
         <div class="remaining-hours">
           <?php 
-            foreach($ILeave->getRemainingHours($_SESSION['id']) as $key => $value) {
+            foreach($ILeave->getRemainingHours($_SESSION['id'], $calendar->getStartingWeeklyDay()->format('U')) as $key => $value) {
               echo <<<HTML
                <div>
                   <div>{$key}</div>
