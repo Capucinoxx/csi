@@ -135,6 +135,9 @@
           $employee = new Employee();
           $employee_info = $employee->getByID($data['id_employee']);
           $signature_link = $stmt['signature_link'];
+          if ($signature_link == "") {
+            $signature_link = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+          }
 
         ?>
         <div>
@@ -318,7 +321,7 @@
   <div style="display: table; padding-top: 60px;">
     <div style="display: table-cell;">
       <div style="display: flex; flex-direction: column; align-items: center; margin-left: 50px">
-        <img style="width: 100px;" src=""/>
+        <img style="width: 100px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="/>
         <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature employé.e</span>
       </div>    
     </div>
