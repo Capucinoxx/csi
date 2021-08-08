@@ -70,6 +70,16 @@ class Input {
     HTML;
   }
 
+  protected function FieldFile(string $label, string $key, ?string $value = null): string {
+    return <<<HTML
+      <div class="full flex-x">
+        <input type="file" name="{$key}"/>
+        <label for="{$key}">{$label}</label>
+        <img src="#" alt="signature preview" />
+      </div>
+    HTML;
+  }
+
   protected function ColorsChoice(): string {
     $html = "";
     
@@ -135,10 +145,11 @@ class Forms extends Input {
   private $labels;
   private $events;
 
-  public function __construct(?array $labels = [], ?array $events = [], ?array $employees = []) {
+  public function __construct(?array $labels = [], ?array $events = [], ?array $employees = [], ?array $leaveEvents = []) {
     $this->employees = $employees;
     $this->labels = $labels;
     $this->events = $events;
+    $this->leaves = $leaveEvents;
   }
 
   /**
@@ -232,7 +243,7 @@ class Forms extends Input {
         <!-- <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper"> -->
         <div class="grid manage__wrapper">
           <input name="id_event" type="hidden" />
-          {$this->Dropdown("Projet", "project", $this->events, "title_event")}
+          {$this->Dropdown("Projet", "project", array_merge($this->events, $this->leaves), "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
           <div></div>
           {$this->FieldWithLabel("Nombre d'heures", "hours_invested", "number")}
@@ -346,6 +357,7 @@ class Forms extends Input {
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}
       {$this->FieldWithLabel("Taux AMC", "rate_amc", "number")}
       {$this->FieldWithLabel("Taux CSI", "rate_csi", "number")}
+      {$this->FieldFile("Signature électronique de l'employée", "file_to_upload")}
       {$this->draw_section("Édition des congés")}
       <div id='employee-leave' class='grid full'>
         {$leaveshtml}

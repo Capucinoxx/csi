@@ -541,3 +541,24 @@
     display: none;
   }
 }
+
+.remaining-hours {
+  color: var(--gray-dark);
+  font-weight: 500;
+  display: flex;
+  width: 100%;
+  margin-top: 15px;
+  margin-left: 10px;
+  flex-direction: column;
+
+  & > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &:nth-last-child() {
+      min-width: 50px;
+      text-align: left;
+    }
+  }
+}
