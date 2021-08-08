@@ -1,6 +1,8 @@
 <?php
 namespace App\Internal;
 use App\Internal\DataBase;
+use App\Internal\Employee;
+use App\Internal\Event;
 use \PDO;
 
 class Timesheet extends DataBase {
@@ -93,12 +95,12 @@ class Timesheet extends DataBase {
       id_label, 
       labels.title as title_label
     FROM Timesheets 
-    JOIN Events events ON id_event = events.id 
-    JOIN Labels labels ON id_label = labels.id
-    WHERE Timesheets.id_employee =  :id_employee AND
-          Timesheets.deleted_at IS NULL AND
-          at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND 
-          UNIX_TIMESTAMP(:to)*1000
+    LEFT JOIN Events events ON id_event = events.id 
+    LEFT JOIN Labels labels ON id_label = labels.id
+    WHERE 
+      Timesheets.id_employee = :id_employee AND
+      at BETWEEN UNIX_TIMESTAMP(:from)*1000 AND UNIX_TIMESTAMP(:to)*1000
+      AND Timesheets.deleted_at IS NULL
     GROUP BY id_event
     ORDER BY id_event ASC;";
     $query = $this->db_connection->prepare($sql);
@@ -146,28 +148,14 @@ class Timesheet extends DataBase {
     SELECT SUM(hours_invested) as total_hours 
     FROM Timesheets
     WHERE FROM_UNIXTIME(at/1000, '%Y-%m-%d') = :at AND 
-          id_employee = :id_employee;";
+          id_employee = :id_employee AND 
+          deleted_at IS NULL;";
 
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
         ':id_employee' => $id_employee,
         ':at' => $at,
-      ]
-    );
-
-    return $query;
-  }
-
-  public function getEmployeeInfo($id_employee) {
-    $sql = "
-    SELECT first_name, last_name FROM Employees
-    WHERE id = :id_employee;";
-
-    $query = $this->db_connection->prepare($sql);
-    $query->execute(
-      [
-        ':id_employee' => $id_employee
       ]
     );
 

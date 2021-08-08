@@ -89,9 +89,9 @@ $label->update($label_update);
 $event = new Event();
 
 ## Tests select events ##
-// var_dump($event->get(1, time()));
+var_dump($event->get(1, time()));
 // $event->get(1, time());
-var_dump($event->getByID(49, time()));
+// var_dump($event->getByID(49, time()));
 
 ## Tests events creation ##
 /*

@@ -48,17 +48,17 @@ class Event extends DataBase {
 
   public function get($id_employee, $at) {
     # Retourne le résultat en format dictionnaire
-    $events = ($this->select($id_employee, false))->fetchAll(PDO::FETCH_ASSOC);
+    $events = ($this->select($id_employee, $at, false))->fetchAll(PDO::FETCH_ASSOC);
     return $this->getEventByYear($events, $at, false);
   }
 
   public function getByID($id, $at) {
     # Retourne le résultat en format dictionnaire
-    $event = ($this->select($id, true))->fetch(PDO::FETCH_ASSOC);
+    $event = ($this->select($id, $at, true))->fetch(PDO::FETCH_ASSOC);
     return $this->getEventByYear($event, $at, true);
   }
 
-  private function getYearNumber($at) {
+  public function getYearNumber($at) {
     $fiscal_year = new FiscalYear();
     $current_fiscal_year = ($fiscal_year->getMatchingFiscalYear($at));
     $year = date("Y", ($current_fiscal_year['end']/1000));
@@ -67,7 +67,7 @@ class Event extends DataBase {
     return $year_array[2] . $year_array[3];
   }
 
-  private function getNewRef($ref, $year_number) {
+  public function getNewRef($ref, $year_number) {
     if(isset($ref)) {
       $array = str_split($ref);
       $new_ref = $array[0] . $array[1] . $year_number;
@@ -94,7 +94,6 @@ class Event extends DataBase {
         $events[$i]['ref'] = $this->getNewRef($events[$i]['ref'], $year_number);
       }
     }
-    
 
     return $events;
   }
@@ -136,7 +135,7 @@ class Event extends DataBase {
   }
 
   ## QUERIES ##
-  private function select($id, $isOne) {
+  private function select($id, $at, $isOne) {
     $sql = "
     SELECT 
       events.id as id_event, 
@@ -150,12 +149,13 @@ class Event extends DataBase {
       max_hours_per_week, 
       max_hours, 
       labels.title as title_label, 
-      color
+      color,
+      amc
     FROM Events events
     LEFT JOIN Labels labels
       ON events.id_label = labels.id
     WHERE 
-      events.deleted_at IS NULL 
+      events.deleted_at IS NULL OR events.deleted_at > :at
     ";
 
     if ($isOne) {
@@ -172,7 +172,8 @@ class Event extends DataBase {
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
-        ":id" => $id
+        ":id" => $id,
+        ":at" => $at*1000
       ]
     );
     
