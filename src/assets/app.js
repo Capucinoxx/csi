@@ -598,7 +598,7 @@ document.getElementById('print-btn').addEventListener('click', (e) => {
     ifrm.appendChild(i)
     console.log(data)
     i = ifrm.querySelector('iframe')
-    i.src = "/Internal/pdfContent/timesheet.html"
+    i.src = "/csi/src/Internal/pdfContent/timesheet.html"
 
     ifrm.appendChild(i)
 
