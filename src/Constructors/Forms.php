@@ -2,6 +2,7 @@
 
 namespace App\Constructors;
 use App\Internal\Event;
+use DateTime;
 
 class Input {
   private $colors = [
@@ -237,13 +238,13 @@ class Forms extends Input {
    * calendrier hebdomadaire
    * @return string
    */
-  public function draw_timesheet_form(string $id): string {
+  public function draw_timesheet_form(string $id, array $events): string {
     return <<<HTML
       <div id="{$id}" class="manage__container">
         <!-- <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper"> -->
         <div class="grid manage__wrapper">
           <input name="id_event" type="hidden" />
-          {$this->Dropdown("Projet", "project", array_merge($this->events, $this->leaves), "title_event")}
+          {$this->Dropdown("Projet", "project", $events, "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
           <div></div>
           {$this->FieldWithLabel("Nombre d'heures", "hours_invested", "number")}
