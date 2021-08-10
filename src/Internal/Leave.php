@@ -124,7 +124,8 @@ class Leave extends DataBase {
     SELECT COALESCE(SUM(hours_invested), 0) as total_hours_invested
     FROM Timesheets 
     WHERE id_event = :id_event AND
-          id_employee = :id_employee";
+          id_employee = :id_employee AND
+          deleted_at IS NULL";
                   
     if($id_leave == 4) { // Temps accumulé
       $sql .= ";";
@@ -132,7 +133,7 @@ class Leave extends DataBase {
       $query->execute(
         [
           ':id_event' => $id_event,
-          ':id_employee' => $id_employee
+          ':id_employee' => $id_employee,
         ]
       );
       // return 0;
