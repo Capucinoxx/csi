@@ -167,14 +167,14 @@ $timsheet_info = [
 
 var_dump($timesheet->createTimesheet($timsheet_info));
 */
-/*
+
 $data_print = [
     'id_employee' => 1,
     'from' => '2021-06-13',
     'to' => '2021-06-19'
 ]; 
-$timesheet->print($data_print);
-*/
+var_dump($timesheet->print($data_print));
+
 
 $fiscal_year = new FiscalYear();
 $new_year = [
@@ -201,7 +201,7 @@ $timsheet_info = [
 ?>
 
  <section class="test-data-dump">
-  <pre><?php print_r($leave->getRemainingHours(7, 1628573588)); ?></pre>
+  <pre><?php //print_r($leave->getRemainingHours(7, 1628573588)); ?></pre>
 </section>
 
 <style>

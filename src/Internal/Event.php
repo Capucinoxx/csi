@@ -70,6 +70,7 @@ class Event extends DataBase {
   public function getNewRef($ref, $year_number) {
     if(isset($ref)) {
       $array = str_split($ref);
+      // var_dump($array[0] . $array[1] . $year_number);
       $new_ref = $array[0] . $array[1] . $year_number;
 
       for($j = 4; $j < count($array); $j++) {

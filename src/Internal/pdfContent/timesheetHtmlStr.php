@@ -185,11 +185,12 @@
       $year_number = $event->getYearNumber(strtotime($data['from']));
 
       while($stmt = $query->fetch(PDO::FETCH_ASSOC)) {
-        $new_ref = $event->getNewRef($stmt['ref'], $year_number);
+        if(intval($stmt['id_label']) != 1)
+        $stmt['ref'] = $event->getNewRef($stmt['ref'], $year_number);
     ?>
     <tr>
       <th class="fw-300 color-grey-700 d-inline mw-120 fs-small" scope="row" style="text-align: left;">
-        <?php echo $new_ref;?>
+        <?php echo $stmt['ref'];?>
       </th>
         
       <th class="d-inline border-top fw-normal mw-300 max-w-300 fs-small" scope="row" style="text-align: left;">
