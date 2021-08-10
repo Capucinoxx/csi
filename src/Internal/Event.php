@@ -377,6 +377,7 @@ class Event extends DataBase {
     }
 
     if($id_label == 1) {
+      var_dump($data);
       // c'est un leave
       $leave = new Leave();
       $response = $leave->validateLeave($data, $isUpdate);

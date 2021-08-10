@@ -232,7 +232,7 @@ class Leave extends DataBase {
     }
 
     # Nombre d'heures prises à date
-    $current_hours = $this->getCurrentHours($id_event, $id_employee, $id_leave);
+    $current_hours = $this->getCurrentHours($id_event, $id_employee, $id_leave, $data['at']);
     
     # Si c'est un update, get le nombre d'heures inserted
     $hours_inserted = 0;

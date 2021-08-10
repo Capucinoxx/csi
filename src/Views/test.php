@@ -89,7 +89,7 @@ $label->update($label_update);
 $event = new Event();
 
 ## Tests select events ##
-var_dump($event->get(1, time()));
+// var_dump($event->get(1, time()));
 // $event->get(1, time());
 // var_dump($event->getByID(49, time()));
 
@@ -190,12 +190,12 @@ $timsheet_info = [
     'id_employee' => 14,
     'start' => 8,
     'end' => 15,
-    'at' => 1627357658,
-    'hours_invested' => 7,
+    'at' => 1628573588,
+    'hours_invested' => 1,
     'description' => 'test'
 ];
 
-// var_dump($timesheet->createTimesheet($timsheet_info));
+var_dump($timesheet->createTimesheet($timsheet_info));
 // var_dump($leave->getRemainingHours(14, 1627357658));
 ?>
 
