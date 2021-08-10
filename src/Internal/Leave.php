@@ -96,28 +96,13 @@ class Leave extends DataBase {
     return $data['id_leave'];
   }
 
-  public function getRemainingHours($id_employee) {
-    # Aller chercher le début et la fin de l'année fiscale en cours
-    $fiscal_year = new FiscalYear();
-    $fiscal_year_data = $fiscal_year->get();
-
-    # Aller chercher l'identifiant de tous les leaves d'un employee
-    // $sql = "
-    // SELECET id, id_leave, max_hours
-    // FROM Events
-    // WHERE id_employee = :id_employee";
-    // $query = $this->db_connection->prepare($sql);
-    // $query->execute( 
-    //   [
-    //     ':id_employee' => $id_employee
-    //   ]
-    // );
+  public function getRemainingHours($id_employee, $at) {
 
     $leaves_array = $this->get($id_employee);
     foreach($leaves_array as $leave) {
       $hours_left = '-';
       
-      $leave_taken =  floatval($this->getCurrentHours($leave['id_event'], $id_employee, $leave['id_leave']));
+      $leave_taken =  floatval($this->getCurrentHours($leave['id_event'], $id_employee, $leave['id_leave'], $at));
       if($leave['id_leave'] != 4 && $leave['id_leave'] != 6) 
         $hours_left = floatval($leave['max_hours']) - $leave_taken;
 
@@ -130,27 +115,28 @@ class Leave extends DataBase {
     return $total_hours;
   }
 
-  private function getCurrentHours($id_event, $id_employee, $id_leave) {
+  private function getCurrentHours($id_event, $id_employee, $id_leave, $at) {
     # Aller chercher le début et la fin de l'année fiscale en cours
     $fiscal_year = new FiscalYear();
-    $fiscal_year_data = $fiscal_year->get();
+    $fiscal_year_data = $fiscal_year->getMatchingFiscalYear($at);
 
     $sql = "
     SELECT COALESCE(SUM(hours_invested), 0) as total_hours_invested
     FROM Timesheets 
     WHERE id_event = :id_event AND
-          id_employee = :id_employee";
+          id_employee = :id_employee AND
+          deleted_at IS NULL";
                   
     if($id_leave == 4) { // Temps accumulé
-      // $sql .= ";";
-      // $query = $this->db_connection->prepare($sql);
-      // $query->execute(
-      //   [
-      //     ':id_event' => $id_event,
-      //     ':id_employee' => $id_employee
-      //   ]
-      // );
-      return 0;
+      $sql .= ";";
+      $query = $this->db_connection->prepare($sql);
+      $query->execute(
+        [
+          ':id_event' => $id_event,
+          ':id_employee' => $id_employee,
+        ]
+      );
+      // return 0;
     } else {
       $sql .= " AND at BETWEEN :start_fiscal_year AND :end_fiscal_year;";
       $query = $this->db_connection->prepare($sql);
@@ -158,8 +144,8 @@ class Leave extends DataBase {
         [
           ':id_event' => $id_event,
           ':id_employee' => $id_employee,
-          ':start_fiscal_year' => $fiscal_year_data['start_fiscal_year'],
-          ':end_fiscal_year' => $fiscal_year_data['end_fiscal_year']
+          ':start_fiscal_year' => $fiscal_year_data['start'],
+          ':end_fiscal_year' => $fiscal_year_data['end']
         ]
       );
     }
@@ -247,7 +233,7 @@ class Leave extends DataBase {
     }
 
     # Nombre d'heures prises à date
-    $current_hours = $this->getCurrentHours($id_event, $id_employee, $id_leave);
+    $current_hours = $this->getCurrentHours($id_event, $id_employee, $id_leave, $data['at']);
     
     # Si c'est un update, get le nombre d'heures inserted
     $hours_inserted = 0;

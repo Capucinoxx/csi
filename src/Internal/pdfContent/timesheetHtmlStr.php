@@ -9,8 +9,10 @@
 
 <body>
 <?php
-    date_default_timezone_set('EST');
-  ?>
+  use App\Internal\Employee;
+  use App\Internal\Event;
+  date_default_timezone_set('EST');
+?>
 <style>
     td {
       text-align: center;
@@ -129,13 +131,20 @@
           $total = 0;
           $day_array = array();
           $calendar = array();
-          $query = $this->getEmployeeInfo($data['id_employee']);
-          $stmt = $query->fetch(PDO::FETCH_ASSOC);
-          $signature_link = $stmt['signature_link'];
+          
+          $employee = new Employee();
+          $employee_info = $employee->getByID($data['id_employee']);
+          $signature_link = $employee_info['signature_link'];
+          if ($signature_link == "") {
+            $signature_link = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+          } else {
+            $signature_link = "../../" . $signature_link;
+          }
+
         ?>
         <div>
           <h2 class="fs-small" style="text-align: center; padding-bottom: 0px; margin-bottom: 0px;">
-          <?php echo $stmt['first_name'] . " " . $stmt['last_name'];?>
+          <?php echo $employee_info['first_name'] . " " . $employee_info['last_name'];?>
           </h2>
           <span class="fs-smaller fw-normal" style="display: flex; justify-content: center;">
           <?php echo "Du: " . $data['from'];?>
@@ -171,12 +180,16 @@
       $cpt = 0;
       $aside = array();
       $query = $this->getEventsInfo($data); 
+      
+      $event = new Event();
+      $year_number = $event->getYearNumber(strtotime($data['from']));
+
       while($stmt = $query->fetch(PDO::FETCH_ASSOC)) {
-        
+        $new_ref = $event->getNewRef($stmt['ref'], $year_number);
     ?>
     <tr>
       <th class="fw-300 color-grey-700 d-inline mw-120 fs-small" scope="row" style="text-align: left;">
-        <?php echo $stmt['ref'];?>
+        <?php echo $new_ref;?>
       </th>
         
       <th class="d-inline border-top fw-normal mw-300 max-w-300 fs-small" scope="row" style="text-align: left;">
@@ -310,14 +323,14 @@
   <div style="display: table; padding-top: 60px;">
     <div style="display: table-cell;">
       <div style="display: flex; flex-direction: column; align-items: center; margin-left: 50px">
-        <img style="width: 100px;" src=""/>
+        <img style="width: 100px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="/>
         <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature employé.e</span>
       </div>    
     </div>
 
     <div style="display: table-cell;">
       <div style="display: flex; flex-direction: column; align-items: center; margin-left: 50px">
-        <img style="width: 100px;" src="<?= '../../' . $signature_link ?>"/>
+        <img style="width: 100px;" src="<?=$signature_link ?>"/>
         <span class="fs-small" style="border-top: 1px solid black; padding-right: 30px; padding-left: 100px;">Signature employé.e</span>
       </div>    
     </div>

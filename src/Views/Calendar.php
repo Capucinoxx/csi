@@ -34,8 +34,10 @@
       <span class="employee-name">
         <?= $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?>
         <div class="remaining-hours">
+          <span style="margin-left: -10px; font-weight: 600;">Heures restantes</span>
+          <div style="margin-left: -10px; height: 1px; width: 90%; background: currentColor;"></div>
           <?php 
-            foreach($ILeave->getRemainingHours($_SESSION['id']) as $key => $value) {
+            foreach($ILeave->getRemainingHours($_SESSION['id'], $calendar->getStartingWeeklyDay()->format('U')) as $key => $value) {
               echo <<<HTML
                <div>
                   <div>{$key}</div>

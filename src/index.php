@@ -38,7 +38,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     $IEmployee->get(),
     $IEvent->getByType(true, $_SESSION['id'])
   );
-  $calendar = new Calendar($ITimesheet, $forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
+  $calendar = new Calendar($IEvent, $ITimesheet, $forms, $_GET['week'] ?? null, $_GET['year'] ?? null, null);
   require_once('./Views/Calendar.php');
 } else {  
   $forms = new Forms([], [], []);
@@ -53,4 +53,6 @@ if (isset($_SESSION['error'])) {
 echo '<div id="iframe" class="modal"></div>';
 
 require_once(dirname(__DIR__).'/html/Views/footer.html');
+
+// require_once(dirname(__DIR__).'/html/Views/test.php');
 ?>

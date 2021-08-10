@@ -2,6 +2,7 @@
 
 namespace App\Constructors;
 use App\Constructors\Forms;
+use App\Internal\Event;
 use App\Internal\Timesheet;
 use DateTime;
 
@@ -36,6 +37,7 @@ class Calendar {
   public $year;
   public $forms;
   public $timesheet;
+  public $event;
 
   /**
    * Calendar contructor
@@ -43,10 +45,11 @@ class Calendar {
    * @param int $year L'année
    * @param array $proejcts Liste des projets de la semaine en cours
    */
-  public function __construct(Timesheet $timesheet, Forms $forms, ?int $week = null, ?int $year = null, ?array $projects = null) {
+  public function __construct(Event $event, Timesheet $timesheet, Forms $forms, ?int $week = null, ?int $year = null, ?array $projects = null) {
     $this->projects = $projects === null ? [[],[],[],[],[],[],[]] : $projects;
 
     $this->timesheet = $timesheet;
+    $this->event = $event;
     $this->forms = $forms;
     $this->week = $week === null ? intval(date('W')) : $week;
     $this->year = $year === null ? intval(date('o')) : $year; 
@@ -152,7 +155,7 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('next month') : $date->modify('+8 days');
 
-    return new Calendar($this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
+    return new Calendar($this->event, $this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
   }
 
   /**
@@ -164,7 +167,7 @@ class Calendar {
     $date = $this->getStartingWeeklyDay();
     $isMonth ? $date->modify('last month') : $date;
 
-    return new Calendar($this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
+    return new Calendar($this->event, $this->timesheet, $this->forms, $date->format('W'), $date->format('o'));
   }
 
   private function setupEvents() {
@@ -184,8 +187,8 @@ class Calendar {
   public function draw_monthly_calendar(): string {
     $this->setupEvents();
     
-    $prev_href = dirname(__DIR__)."/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
-    $next_href = dirname(__DIR__)."/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
+    $prev_href = "/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
+    $next_href = "/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
 
     return "
       <div class='flex-between'>
@@ -235,8 +238,8 @@ class Calendar {
 
 
   public function draw_weekly_calendar(): string {
-    $prev_href = dirname(__DIR__)."/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
-    $next_href = dirname(__DIR__)."/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
+    $prev_href = "/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
+    $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
 
     return "
       <div style='position: relative'>
@@ -254,7 +257,7 @@ class Calendar {
         <div id='print-btn'>
           <i class='fas fa-print'></i>
         </div>
-        {$this->forms->draw_timesheet_form('ajout-timesheet')}
+        {$this->forms->draw_timesheet_form('ajout-timesheet', $this->event->get($_SESSION['id'], $this->getStartingWeeklyDay()->format('U')))}
       </div>
     ";
   }
@@ -319,7 +322,7 @@ class Calendar {
               {$html_hours}
             </ul>
             <ul id="week-calendar" class='ml-60 z-10' style='align-items: stretch'>
-              <div class='cursor'></div>
+              <!-- <div class='cursor'></div> -->
               {$html_days}
             </ul>
           </div>

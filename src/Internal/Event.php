@@ -46,14 +46,56 @@ class Event extends DataBase {
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  public function get($id_employee) {
+  public function get($id_employee, $at) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id_employee, false))->fetchAll(PDO::FETCH_ASSOC);
+    $events = ($this->select($id_employee, $at, false))->fetchAll(PDO::FETCH_ASSOC);
+    return $this->getEventByYear($events, $at, false);
   }
 
-  public function getByID($id) {
+  public function getByID($id, $at) {
     # Retourne le résultat en format dictionnaire
-    return ($this->select($id, true))->fetch(PDO::FETCH_ASSOC);
+    $event = ($this->select($id, $at, true))->fetch(PDO::FETCH_ASSOC);
+    return $this->getEventByYear($event, $at, true);
+  }
+
+  public function getYearNumber($at) {
+    $fiscal_year = new FiscalYear();
+    $current_fiscal_year = ($fiscal_year->getMatchingFiscalYear($at));
+    $year = date("Y", ($current_fiscal_year['end']/1000));
+    $year_array = str_split($year);
+
+    return $year_array[2] . $year_array[3];
+  }
+
+  public function getNewRef($ref, $year_number) {
+    if(isset($ref)) {
+      $array = str_split($ref);
+      $new_ref = $array[0] . $array[1] . $year_number;
+
+      for($j = 4; $j < count($array); $j++) {
+        $new_ref = $new_ref . $array[$j]; 
+      }
+
+      return $new_ref;
+    }
+  }
+
+  private function getEventByYear($events, $at, $isOne) {
+    # Get year number
+    $year_number = $this->getYearNumber($at);
+
+    # Replace year number
+    if($isOne) {
+      # One event
+      $events['ref'] = $this->getNewRef($events['ref'], $year_number);
+    } else {
+      # All events
+      for($i = 0; $i < count($events); $i++) {
+        $events[$i]['ref'] = $this->getNewRef($events[$i]['ref'], $year_number);
+      }
+    }
+
+    return $events;
   }
 
   public function updateEvent($params) {
@@ -93,7 +135,7 @@ class Event extends DataBase {
   }
 
   ## QUERIES ##
-  private function select($id, $isOne) {
+  private function select($id, $at, $isOne) {
     $sql = "
     SELECT 
       events.id as id_event, 
@@ -107,12 +149,13 @@ class Event extends DataBase {
       max_hours_per_week, 
       max_hours, 
       labels.title as title_label, 
-      color
+      color,
+      amc
     FROM Events events
     LEFT JOIN Labels labels
       ON events.id_label = labels.id
     WHERE 
-      events.deleted_at IS NULL 
+      (events.deleted_at IS NULL OR events.deleted_at > :at)
     ";
 
     if ($isOne) {
@@ -129,7 +172,8 @@ class Event extends DataBase {
     $query = $this->db_connection->prepare($sql);
     $query->execute(
       [
-        ":id" => $id
+        ":id" => $id,
+        ":at" => $at*1000
       ]
     );
     
@@ -333,6 +377,7 @@ class Event extends DataBase {
     }
 
     if($id_label == 1) {
+      var_dump($data);
       // c'est un leave
       $leave = new Leave();
       $response = $leave->validateLeave($data, $isUpdate);
