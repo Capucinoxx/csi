@@ -17,7 +17,9 @@ class FiscalYear extends DataBase {
   }
 
   public function getMatchingFiscalYear($at) {
-    return ($this->selectMatchedTime($at))->fetch(PDO::FETCH_ASSOC);
+    // var_dump("ALLLL")
+    $temp = ($this->selectMatchedTime($at))->fetch(PDO::FETCH_ASSOC);
+    return $temp;
   }
 
   public function restartYear($params) {

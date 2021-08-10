@@ -186,21 +186,22 @@ $new_year = [
 $leave = new Leave();
 
 $timsheet_info = [
-    'id_event' => 106,
-    'id_employee' => 14,
+    'id_event' => 76,
+    // 'id_employee' => 14,
+    'id_employee' => 7,
     'start' => 8,
-    'end' => 15,
+    'end' => 9,
     'at' => 1628573588,
     'hours_invested' => 1,
     'description' => 'test'
 ];
 
-var_dump($timesheet->createTimesheet($timsheet_info));
-// var_dump($leave->getRemainingHours(14, 1627357658));
+// var_dump($timesheet->createTimesheet($timsheet_info));
+// var_dump($leave->getRemainingHours(7, 1628573588));
 ?>
 
  <section class="test-data-dump">
-  <pre><?php //print_r($leave->getRemainingHours(14, 1627357658)); ?></pre>
+  <pre><?php print_r($leave->getRemainingHours(7, 1628573588)); ?></pre>
 </section>
 
 <style>
