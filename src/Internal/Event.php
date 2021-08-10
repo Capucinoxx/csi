@@ -155,7 +155,7 @@ class Event extends DataBase {
     LEFT JOIN Labels labels
       ON events.id_label = labels.id
     WHERE 
-      events.deleted_at IS NULL OR events.deleted_at > :at
+      (events.deleted_at IS NULL OR events.deleted_at > :at)
     ";
 
     if ($isOne) {
