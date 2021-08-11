@@ -178,7 +178,7 @@ class Employee extends DataBase {
     $sql = "
     SELECT 
       id, username, 
-      first_name, last_name, 
+      first_name, last_name,
       role, regular, 
       rate, rate_AMC, 
       rate_CSI, created_at, 

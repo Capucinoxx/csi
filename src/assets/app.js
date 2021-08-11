@@ -525,8 +525,7 @@
       form.querySelector('input[name="username"]').value = data.username 
       form.querySelector('input[name="first_name"]').value = data.first_name
       form.querySelector('input[name="last_name"]').value = data.last_name
-      form.querySelector('input[name="password"]').value = data.password
-
+      
       form.querySelector('input[name="role"]').checked = data.role == "1" || data.role == "true" ? 1 : 0
       form.querySelector('input[name="regular"]').checked = data.regular == "1" || data.regular == "true" ? 1 : 0
 

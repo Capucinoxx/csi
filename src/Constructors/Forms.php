@@ -346,13 +346,12 @@ class Forms extends Input {
       $leaveshtml[] = $this->FieldRowWithLabel($leave['title_event'], str_replace(' ', '_', $leave['title_event']), 'number');
     }
 
-
     $leaveshtml = implode('', $leaveshtml);
     return <<<HTML
       {$this->FieldWithLabel("Nom d'utilisateur", "username", "text", "full")}
       {$this->FieldWithLabel("Prénom", "first_name", "text")}
       {$this->FieldWithLabel("Nom de famille", "last_name", "text")}
-      {$this->FieldWithLabel("Mot de passe", "password", "password")}
+      {$this->FieldWithLabel("Nouveau mot de passe", "password", "text")}
       {$this->FieldWithLabel("Cet utilisateur est adminisatrateur", "role", "checkbox", "full flex-y-center-imp flex-between fz-14")}
       {$this->FieldWithLabel("Cet utilisateur est régulier", "regular", "checkbox", "full flex-y-center-imp flex-between fz-14")}
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}

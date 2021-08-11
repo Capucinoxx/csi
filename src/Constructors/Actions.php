@@ -24,14 +24,18 @@ class Actions {
   public function execute() {
     switch($_SERVER["REQUEST_METHOD"]) {
       case "POST":
-        if ($this->prevent_multi_submit()) {
-          isset($_POST["context"]) && $this->{$_POST["context"]}();
+        if ( isset($_POST["context"])) {
+          return $this->{$_POST["context"]}();
         }
-        
+        die();
       break;
 
       case "GET":
-        isset($_GET["context"]) && $this->{$_GET["context"]}();
+        if (isset($_GET["context"])) {
+          return $this->{$_GET["context"]}();
+        }
+        
+        die();
       break;
     }
   }
