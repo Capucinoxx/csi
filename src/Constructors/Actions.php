@@ -446,6 +446,7 @@ class Actions {
   }
 
   private function changeFiscalYear() {
+    var_dump('toto');
     $rep = (new FiscalYear())->restartYear([
       'start' => $_POST['start'],
       'end' => $_POST['end']
