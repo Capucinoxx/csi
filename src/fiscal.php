@@ -1,9 +1,9 @@
 <?php
-require_once(dirname(__DIR__).'/html/vendor/autoload.php');
+require_once(dirname(__DIR__).'/src/vendor/autoload.php');
 header("Access-Control-Allow-Origin: *");
 session_start();
 
-require_once(dirname(__DIR__).'/html/Views/head.html');
+require_once(dirname(__DIR__).'/src/Views/head.html');
 
 use \App\Constructors\Forms;
 use App\Internal\FiscalYear;

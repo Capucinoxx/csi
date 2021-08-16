@@ -373,7 +373,7 @@ class Event extends DataBase {
 
     if($id_label == 15) {
       return [
-        "error" => "Le libellé de ce projet a été supprimé. Veillez associer ce projet à un autre libellé."
+        "error" => "Le libellé de ce projet a été supprimé. Veuillez associer ce projet à un autre libellé."
       ];
     }
 
