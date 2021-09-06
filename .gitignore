@@ -23,4 +23,7 @@ vendor/
 timesheet.html
 
 # photo des signatures
-images/
+src/images/signature*.*
+
+# database dump
+.mysql-dump

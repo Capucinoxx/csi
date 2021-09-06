@@ -2,6 +2,7 @@
 
 namespace App\Constructors;
 use App\Internal\Event;
+use DateTime;
 
 class Input {
   private $colors = [
@@ -145,10 +146,11 @@ class Forms extends Input {
   private $labels;
   private $events;
 
-  public function __construct(?array $labels = [], ?array $events = [], ?array $employees = []) {
+  public function __construct(?array $labels = [], ?array $events = [], ?array $employees = [], ?array $leaveEvents = []) {
     $this->employees = $employees;
     $this->labels = $labels;
     $this->events = $events;
+    $this->leaves = $leaveEvents;
   }
 
   /**
@@ -236,13 +238,13 @@ class Forms extends Input {
    * calendrier hebdomadaire
    * @return string
    */
-  public function draw_timesheet_form(string $id): string {
+  public function draw_timesheet_form(string $id, array $events): string {
     return <<<HTML
       <div id="{$id}" class="manage__container">
         <!-- <form method="POST" onsubmit="sendTimesheetEvent(event,this)" class="grid manage__wrapper"> -->
         <div class="grid manage__wrapper">
           <input name="id_event" type="hidden" />
-          {$this->Dropdown("Projet", "project", $this->events, "title_event")}
+          {$this->Dropdown("Projet", "project", $events, "title_event")}
           {$this->FieldWithLabel("Journée", "date", "date", "full")}
           <div></div>
           {$this->FieldWithLabel("Nombre d'heures", "hours_invested", "number")}
@@ -344,13 +346,12 @@ class Forms extends Input {
       $leaveshtml[] = $this->FieldRowWithLabel($leave['title_event'], str_replace(' ', '_', $leave['title_event']), 'number');
     }
 
-
     $leaveshtml = implode('', $leaveshtml);
     return <<<HTML
       {$this->FieldWithLabel("Nom d'utilisateur", "username", "text", "full")}
       {$this->FieldWithLabel("Prénom", "first_name", "text")}
       {$this->FieldWithLabel("Nom de famille", "last_name", "text")}
-      {$this->FieldWithLabel("Mot de passe", "password", "password")}
+      {$this->FieldWithLabel("Nouveau mot de passe", "password", "text")}
       {$this->FieldWithLabel("Cet utilisateur est adminisatrateur", "role", "checkbox", "full flex-y-center-imp flex-between fz-14")}
       {$this->FieldWithLabel("Cet utilisateur est régulier", "regular", "checkbox", "full flex-y-center-imp flex-between fz-14")}
       {$this->FieldWithLabel("Taux régulier", "rate", "number")}

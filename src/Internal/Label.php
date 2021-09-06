@@ -31,18 +31,21 @@ class Label extends DataBase {
   }
 
   public function createLabel($params) {
+    $params['created_at'] = time()*1000;
+    $this->insert($params);
+    
     # Vérifier si le label existe déjà
-    if(!$this->exists($params['title'])) {
+    /* if(!$this->exists($params['title'])) {
       # Création du label
       $params['created_at'] = time()*1000;
       $this->insert($params);
 
       return true;
-    }
+    } */
 
-    return [
-      "error" => "Un libellé existe déjà avec le titre {$params['title']}."
-    ];
+    // return [
+    //  "error" => "Un libellé existe déjà avec le titre {$params['title']}."
+    // ];
   }
 
   public function deleteLabel($id) {
@@ -72,7 +75,7 @@ class Label extends DataBase {
     return $query;
   }
 
-  private function exists($title) {
+  /*private function exists($title) {
     # Vérifier si le titre du label existe déjà
     $sql = "
     SELECT id  
@@ -82,7 +85,7 @@ class Label extends DataBase {
     $query->execute([':title' => $title]);
 
     return ($query->rowCount() > 0);
-  }
+  }*/
 
   public function getByID($id) {
     $sql = "

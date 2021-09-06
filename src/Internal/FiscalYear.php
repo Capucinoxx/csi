@@ -12,15 +12,21 @@ class FiscalYear extends DataBase {
     $this->table_name = "FiscalYears";
   }
 
-  public function get() {
-    return ($this->select())->fetch(PDO::FETCH_ASSOC);
+  public function get($id) {
+    return ($this->select($id))->fetch(PDO::FETCH_ASSOC);
+  }
+
+  public function getMatchingFiscalYear($at) {
+    // var_dump("ALLLL")
+    $temp = ($this->selectMatchedTime($at))->fetch(PDO::FETCH_ASSOC);
+    return $temp;
   }
 
   public function restartYear($params) {
     $this->newFiscalYear($params);
 
-    $event = new Event();
-    return $event->updateRef();
+    // $event = new Event();
+    // return $event->updateRef();
   }
 
   private function newFiscalYear($params) {
@@ -30,6 +36,9 @@ class FiscalYear extends DataBase {
       ];
     } 
     $params['created_at'] = time()*1000;
+    $params['start'] *= 1000;
+    $params['end'] *= 1000;
+
     $this->insert($params);
 
     return true;
@@ -37,16 +46,38 @@ class FiscalYear extends DataBase {
 
   ## QUERIES ## 
 
-  private function select() {
+  private function select($id) {
     $sql = "
     SELECT 
       start as start_fiscal_year, 
       end as end_fiscal_year 
     FROM FiscalYears 
-    ORDER BY id DESC 
-    LIMIT 1;";
+    WHERE id = :id;";
     $query = $this->db_connection->prepare($sql);
-    $query->execute();
+    $query->execute(
+      [
+        ':id' => $id
+      ]
+    );
+
+    return $query;
+  }
+
+  private function selectMatchedTime($at) {
+    $sql = "
+    SELECT 
+      id, 
+      start, 
+      end, 
+      FROM_UNIXTIME(end, '%Y') AS year
+    FROM FiscalYears
+    WHERE (:at * 1000) BETWEEN start AND end";
+    $query = $this->db_connection->prepare($sql);
+    $query->execute( 
+      [
+        ':at' => $at
+      ]
+    );
 
     return $query;
   }

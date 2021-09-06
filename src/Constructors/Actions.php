@@ -24,14 +24,42 @@ class Actions {
   public function execute() {
     switch($_SERVER["REQUEST_METHOD"]) {
       case "POST":
-        isset($_POST["context"]) && $this->{$_POST["context"]}();
+        if ( isset($_POST["context"])) {
+          return $this->{$_POST["context"]}();
+        }
+        die();
       break;
 
       case "GET":
-        isset($_GET["context"]) && $this->{$_GET["context"]}();
+        if (isset($_GET["context"])) {
+          return $this->{$_GET["context"]}();
+        }
+        
+        die();
       break;
     }
   }
+
+  private function prevent_multi_submit($excl = "validator") {
+    $string = "";
+    foreach ($_POST as $key => $val) {
+    // this test is to exclude a single variable, f.e. a captcha value
+    if ($key != $excl) {
+        $string .= $key . $val;
+    }
+    }
+    if (isset($_SESSION['last'])) {
+    if ($_SESSION['last'] === md5($string)) {
+        return false;
+    } else {
+        $_SESSION['last'] = md5($string);
+        return true;
+    }
+    } else {
+    $_SESSION['last'] = md5($string);
+    return true;
+    }
+}
 
   private function upload_file(?string $name = "", ?string $type = "", $img_tmp) {
     var_dump($type);
@@ -70,7 +98,9 @@ class Actions {
   }
 
   private function getProjectById() {
-    $rep = ($this->IEvent)->getById($_POST['id']);
+    $rep = ($this->IEvent)->getById($_POST['id'], $_POST['at']);
+    
+    $_SESSION['error'] = serialize($rep);
 
     echo json_encode($rep);
     die();
@@ -378,7 +408,7 @@ class Actions {
       case 'label':
         $rep = ($this->ILabel)->deleteLabel(intval($_POST['id']));
         break;
-      case 'event':
+      case 'project':
         $rep = ($this->IEvent)->deleteEvent(intval($_POST['id']));
         break;
       case 'user':
@@ -418,6 +448,7 @@ class Actions {
   }
 
   private function changeFiscalYear() {
+    var_dump('toto');
     $rep = (new FiscalYear())->restartYear([
       'start' => $_POST['start'],
       'end' => $_POST['end']
