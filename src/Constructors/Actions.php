@@ -98,9 +98,7 @@ class Actions {
   }
 
   private function getProjectById() {
-    $rep = ($this->IEvent)->getById($_POST['id'], $_POST['at']);
-    
-    $_SESSION['error'] = serialize($rep);
+    $rep = ($this->IEvent)->getById($_POST['id']);
 
     echo json_encode($rep);
     die();
@@ -408,7 +406,7 @@ class Actions {
       case 'label':
         $rep = ($this->ILabel)->deleteLabel(intval($_POST['id']));
         break;
-      case 'project':
+      case 'event':
         $rep = ($this->IEvent)->deleteEvent(intval($_POST['id']));
         break;
       case 'user':

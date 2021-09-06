@@ -36,11 +36,9 @@
 
          // gestion du retrait d'un évennement 
         //  const deleteBtn = console.log(card.querySelector('.delete-btn'))
-         console.log(card.querySelector('.delete-btn'))
          card.querySelector('.delete-btn').addEventListener('click', (e) => {
-             console.log('del')
             e.stopPropagation()
-            //e.preventDefault()
+            e.preventDefault()
             let ok = confirm(`êtes vous certains de vouloir effacer l\'insertion de temps ?`)
             if (ok == true) {
               const id = card.getAttribute('data-id')
@@ -60,7 +58,7 @@
 
 
          card.addEventListener('click', (e) => {
-           e.stopPropagation()
+          e.stopPropagation()
           e.preventDefault()
          //  const date = new Date(y, m-1,d)
           
@@ -130,9 +128,7 @@
  document.querySelectorAll('.manage__container').forEach(
    (container) => {
     // on va chercher le contexte de la modale
-    let ctx = (container.getAttribute('id') || '').split('-')[1]
-    ctx = ctx.endsWith('s') ? ctx.slice(0, -1) : ctx
-    console.log(ctx)
+    const ctx = (container.getAttribute('id') || '').split('-')[1].slice(0, -1)
 
      if (container.getAttribute('id') !== 'ajout-timesheet') {
 
@@ -201,12 +197,10 @@
             const formData = new FormData()
             formData.append('context', 'get' + ctx.charAt(0).toUpperCase() + ctx.slice(1) + 'ById')
             formData.append('id', choice.getAttribute('data-id'))
-            formData.append('at', document.getElementById("calendar").getAttribute('data-date'))
             fetch(window.location,
               { method: 'post', body: formData }
             ).then(async (resp) => await resp.json())
             .then((data) => fillValue(ctx, form, data))
-.cath((e) => console.log(e))
   
             form.style.maxHeight = ""
           })
@@ -228,7 +222,7 @@
            } else if (field.getAttribute('type') === 'file') {
             formData.append(field.getAttribute('name'), field.files[0])
            } else {
-            formData.append(field.getAttribute('name'), field.value.replaceAll(/'/g, "&#039"))
+            formData.append(field.getAttribute('name'), field.value)
            }
 
          }
@@ -514,23 +508,23 @@
   switch(ctx) {
 
      case 'label':
-      form.querySelector('input[name="name"]').value = data.title.replaceAll("&#039", "'")
+      form.querySelector('input[name="name"]').value = data.title
       form.querySelector('input[name="color"]').value = data.color
       form.querySelector('input[name="amc"]').checked = !!(+data.amc)
       break;
 
     case 'project':
-      form.querySelector('input[name="label"]').value = data.title_label.replaceAll("&#039", "'")
+      form.querySelector('input[name="label"]').value = data.title_label
       form.querySelector('input[name="ref"]').value = data.ref
-      form.querySelector('input[name="title"]').value = data.title_event.replaceAll("&#039", "'")
+      form.querySelector('input[name="title"]').value = data.title_event
       form.querySelector('input[name="max_hours_per_day"]').value = data.max_hours_per_day || 0
       form.querySelector('input[name="max_hours_per_week"]').value = data.max_hours_per_week || 0
       break;
     
     case 'user':
-      form.querySelector('input[name="username"]').value = data.username.replaceAll("&#039", "'")
-      form.querySelector('input[name="first_name"]').value = data.first_name.replaceAll("&#039", "'")
-      form.querySelector('input[name="last_name"]').value = data.last_name.replaceAll("&#039", "'")
+      form.querySelector('input[name="username"]').value = data.username 
+      form.querySelector('input[name="first_name"]').value = data.first_name
+      form.querySelector('input[name="last_name"]').value = data.last_name
       
       form.querySelector('input[name="role"]').checked = data.role == "1" || data.role == "true" ? 1 : 0
       form.querySelector('input[name="regular"]').checked = data.regular == "1" || data.regular == "true" ? 1 : 0
@@ -603,7 +597,7 @@ document.getElementById('print-btn').addEventListener('click', (e) => {
     ifrm.appendChild(i)
     console.log(data)
     i = ifrm.querySelector('iframe')
-    i.src = "/Internal/pdfContent/timesheet.html"
+    i.src = "/csi/src/Internal/pdfContent/timesheet.html"
 
     ifrm.appendChild(i)
 

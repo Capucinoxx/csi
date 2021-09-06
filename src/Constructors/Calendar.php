@@ -175,7 +175,7 @@ class Calendar {
     $end = $this->getStartingWeeklyDay()->modify('+6 day -1 minute')->format('U');
     $events = $this->timesheet->get($_SESSION['id'], $start, $end);
     foreach($events as $timesheet) {
-      $pos = ((date("N", substr($timesheet['at'],0,10))) % 7);
+      $pos = ((new DateTime)->setTimeStamp(intval($timesheet['at'])/1000)->format('N')) % 7;
 
       if (isset($this->projects[$pos])) {
         array_push($this->projects[$pos], $timesheet);
@@ -189,7 +189,6 @@ class Calendar {
     
     $prev_href = "/index.php?week={$this->prev(true)->week}&year={$this->prev(true)->year}";
     $next_href = "/index.php?week={$this->next(true)->week}&year={$this->next(true)->year}";
-    
 
     return "
       <div class='flex-between'>
@@ -241,10 +240,9 @@ class Calendar {
   public function draw_weekly_calendar(): string {
     $prev_href = "/index.php?week={$this->prev(false)->week}&year={$this->prev(false)->year}";
     $next_href = "/index.php?week={$this->next(false)->week}&year={$this->next(false)->year}";
-    $date_epoch = $this->getStartingWeeklyDay()->format('U');
-    var_dump($date_epoch);
+
     return "
-      <div style='position: relative'  id='calendar' data-date='{$date_epoch}'>
+      <div style='position: relative'>
         <div class='wrapper-hidden'>
           <div class='flex-align-center'>
             <h2>{$this->getWeeklyDate()}</h2>
