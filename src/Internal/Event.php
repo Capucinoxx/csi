@@ -100,7 +100,7 @@ class Event extends DataBase {
   }
 
   public function updateEvent($params) {
-    $pattern = "/[A-Z]{2}[0-9]{2}[0-9]{4}$/i";
+    $pattern = "/[A-Z]{2}[0-9]{6}+((?=$)|(?=(\-[0-9]$)))/i";
     if(preg_match($pattern, $params['ref']) == 0) {
       return [
         "error" => "La référence du projet ne respecte pas le format."
@@ -112,7 +112,7 @@ class Event extends DataBase {
 
   public function createEvent($params) {
     $params['created_at'] = time()*1000;
-    $pattern = "/[A-Z]{2}[0-9]{2}[0-9]{4}$/i";
+    $pattern = "/[A-Z]{2}[0-9]{6}+((?=$)|(?=(\-[0-9]$)))/i";
     if(preg_match($pattern, $params['ref']) == 0) {
       return [
         "error" => "La référence du projet ne respecte pas le format."
