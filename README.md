@@ -1,15 +1,16 @@
 # csi
-gestionnaire de projet pour https://www.csisher.com/
+
+Gestionnaire de projet pour https://www.csisher.com/
 
 ## Configuration
 
-La modification des variables d'environnements peuvent se faire dans le fichier `.env`. Lorsque la branche est clonée, on créer un fichier   `.env` avec certaines valuers par défaut de la manière suivante:
+La modification des variables d'environnements peut se faire dans le fichier `.env`. Lorsque la branche est clonée, on crée un fichier `.env` avec certaines valuers par défaut de la manière suivante:
 
 ```bash
 $ cp .env.dist .env
 ```
 
-Après modification, exécuter la commande suivante
+Après modification, exécuter la commande suivante:
 
 ```bash
 $ docker-compose build
